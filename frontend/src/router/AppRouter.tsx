@@ -1,0 +1,151 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+
+// Public pages
+import LandingPage from "../pages/public/Landing";
+import Login from "../features/auth/pages/Login";
+import Register from "../features/auth/pages/Register";
+import ForgotPassword from "../features/auth/pages/ForgotPassword";
+import Unauthorized from "../pages/public/Unauthorized";
+import NotFound from "../pages/public/NotFound";
+import PlacementTest from "../features/auth/pages/PlacementTest";
+
+// Student pages
+import StudentDashboard from "../features/student/pages/Dashboard";
+import Roadmap from "../features/student/pages/Roadmap";
+import StudyHub from "../features/student/pages/StudyHub";
+import StudyRoom from "../features/student/pages/StudyRoom";
+import Exams from "../features/student/pages/Exams";
+import StudentProfile from "../features/student/pages/StudentProfile";
+import Subject from "../features/student/pages/Subject";
+import StudentLayout from "../layouts/StudentLayout";
+
+// Instructor pages
+import InstructorDashboard from "../features/instructor/pages/Dashboard";
+import MyCourses from "../features/instructor/pages/MyCourses";
+import Students from "../features/instructor/pages/Students";
+import Grades from "../features/instructor/pages/Grades";
+import Quizzes from "../features/instructor/pages/Quizzes";
+import LiveSession from "../features/instructor/pages/LiveSession";
+import InstructorLayout from "../layouts/InstructorLayout";
+
+// Mentor pages
+import MentorDashboard from "../features/mentor/pages/Dashboard";
+import MyStudents from "../features/mentor/pages/MyStudents";
+import Alerts from "../features/mentor/pages/Alerts";
+import CheckIns from "../features/mentor/pages/CheckIns";
+import Progress from "../features/mentor/pages/Progress";
+import MentorLayout from "../layouts/MentorLayout";
+
+// Admin pages
+import AdminDashboard from "../features/admin/pages/Dashboard";
+import Users from "../features/admin/pages/Users";
+import Batches from "../features/admin/pages/Batches";
+import Courses from "../features/admin/pages/Courses";
+import Reports from "../features/admin/pages/Reports";
+import Settings from "../features/admin/pages/Settings";
+import AdminLayout from "../layouts/AdminLayout";
+
+// Guards and hooks
+import AuthGuard from "../guards/AuthGuard";
+import RoleGuard from "../guards/RoleGuard";
+import { useAuth } from "../hooks/useAuth";
+
+// After login, redirect each role to its dashboard
+const roleRedirects = {
+  student: "/student/dashboard",
+  instructor: "/instructor/dashboard",
+  mentor: "/mentor/dashboard",
+  admin: "/admin/dashboard",
+};
+
+const AppRouter = () => {
+  const { user } = useAuth();
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/placement-test" element={<PlacementTest />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        {/* Protected routes (authentication required) */}
+        <Route element={<AuthGuard />}>
+          {/* Redirect /home to the correct dashboard based on user role */}
+          <Route
+            path="/home"
+            element={
+              user ? (
+                <Navigate to={roleRedirects[user.role] ?? "/"} replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Student routes */}
+          <Route element={<RoleGuard allowedRoles={["student"]} />}>
+            <Route element={<StudentLayout />}>
+              <Route path="/student/dashboard" element={<StudentDashboard />} />
+              <Route path="/student/roadmap" element={<Roadmap />} />
+              <Route path="/student/study-hub" element={<StudyHub />} />
+              <Route path="/student/study-room/:id" element={<StudyRoom />} />
+              <Route path="/student/exams" element={<Exams />} />
+              <Route path="/student/profile" element={<StudentProfile />} />
+              <Route path="/student/subject/:id" element={<Subject />} />
+            </Route>
+          </Route>
+
+          {/* Instructor routes */}
+          <Route element={<RoleGuard allowedRoles={["instructor"]} />}>
+            <Route element={<InstructorLayout />}>
+              <Route
+                path="/instructor/dashboard"
+                element={<InstructorDashboard />}
+              />
+              <Route path="/instructor/my-courses" element={<MyCourses />} />
+              <Route path="/instructor/students" element={<Students />} />
+              <Route path="/instructor/grades" element={<Grades />} />
+              <Route path="/instructor/quizzes" element={<Quizzes />} />
+              <Route
+                path="/instructor/live-session"
+                element={<LiveSession />}
+              />
+            </Route>
+          </Route>
+
+          {/* Mentor routes */}
+          <Route element={<RoleGuard allowedRoles={["mentor"]} />}>
+            <Route element={<MentorLayout />}>
+              <Route path="/mentor/dashboard" element={<MentorDashboard />} />
+              <Route path="/mentor/my-students" element={<MyStudents />} />
+              <Route path="/mentor/alerts" element={<Alerts />} />
+              <Route path="/mentor/check-ins" element={<CheckIns />} />
+              <Route path="/mentor/progress/:id" element={<Progress />} />
+            </Route>
+          </Route>
+
+          {/* Admin routes */}
+          <Route element={<RoleGuard allowedRoles={["admin"]} />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<Users />} />
+              <Route path="/admin/batches" element={<Batches />} />
+              <Route path="/admin/courses" element={<Courses />} />
+              <Route path="/admin/reports" element={<Reports />} />
+              <Route path="/admin/settings" element={<Settings />} />
+            </Route>
+          </Route>
+        </Route>
+
+        {/* 404 Not Found route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default AppRouter;
