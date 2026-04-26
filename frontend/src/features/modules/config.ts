@@ -22,9 +22,9 @@ export type ModuleConfig = {
 export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   users: {
     key: "users",
-    title: "Users",
+    title: "User Management",
     eyebrow: "Admin users and roles",
-    description: "Create and manage internal admin users, trainer accounts, role access, and locale preferences.",
+    description: "Manage university instructors, mentors, and their assigned batches with active faculty access.",
     createLabel: "Add user",
     statuses: ["active", "invited"],
     columns: [
@@ -44,9 +44,9 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   students: {
     key: "students",
-    title: "Students",
-    eyebrow: "Enrollment and attendance",
-    description: "Manage student enrollment, attendance performance, academic level, and exportable attendance records.",
+    title: "Student Performance Directory",
+    eyebrow: "Rankings and engagement",
+    description: "Comprehensive overview of academic rankings, attendance, and engagement metrics across all batches.",
     createLabel: "Add student",
     statuses: ["active", "inactive"],
     columns: [
@@ -67,10 +67,10 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   groups: {
     key: "groups",
-    title: "Groups",
+    title: "Batch Management",
     eyebrow: "Cohorts and staffing",
-    description: "Create groups, assign trainer and admin owners, and track the student load and timeline per cohort.",
-    createLabel: "Create group",
+    description: "Create batches, assign instructors and mentors, and track participation across course cohorts.",
+    createLabel: "Add batch",
     statuses: ["active", "upcoming"],
     columns: [
       { key: "name", label: "Group" },
@@ -90,9 +90,9 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   sessions: {
     key: "sessions",
-    title: "Sessions",
+    title: "Session Management",
     eyebrow: "Delivery calendar",
-    description: "Track scheduled, live, and finished sessions with attendance status and trainer ownership.",
+    description: "Track lecture sessions, mentor appointments, attendance status, and live meeting links.",
     createLabel: "Add session",
     statuses: ["scheduled", "live", "finished"],
     columns: [
@@ -113,10 +113,10 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   community: {
     key: "community",
-    title: "Community",
-    eyebrow: "Posts and announcements",
-    description: "Publish announcements, moderate community posts, and monitor comment activity across batches.",
-    createLabel: "Create post",
+    title: "Educational Resource Center",
+    eyebrow: "Resources and announcements",
+    description: "Organize learning resources, community updates, and shared course materials for active batches.",
+    createLabel: "Add resource",
     statuses: ["published", "flagged"],
     columns: [
       { key: "title", label: "Title" },
@@ -136,10 +136,10 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   tickets: {
     key: "tickets",
-    title: "Tickets",
+    title: "Feedback and Complaints",
     eyebrow: "Support workflow",
-    description: "Handle support tickets from students and internal teams with reply threads and resolution tracking.",
-    createLabel: "Create ticket",
+    description: "Handle student feedback, complaints, reply threads, and resolution tracking from one queue.",
+    createLabel: "Create complaint",
     statuses: ["in_progress", "resolved", "reopened"],
     columns: [
       { key: "title", label: "Subject" },
@@ -158,7 +158,7 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   surveys: {
     key: "surveys",
-    title: "Surveys",
+    title: "Feedback Surveys",
     eyebrow: "Feedback and analytics",
     description: "Create, publish, and analyze surveys across cohorts with audience targeting and response tracking.",
     createLabel: "Create survey",
@@ -180,9 +180,9 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   quizzes: {
     key: "quizzes",
-    title: "Quizzes",
+    title: "Quiz Management",
     eyebrow: "Learning checks",
-    description: "Track quiz lifecycle, submission volume, and average scores for academic performance review.",
+    description: "Manage quizzes, pass rates, fail rates, and student quiz results across batches.",
     createLabel: "Create quiz",
     statuses: ["draft", "published"],
     columns: [
@@ -202,10 +202,10 @@ export const moduleConfigs: Record<ModuleKey, ModuleConfig> = {
   },
   assessments: {
     key: "assessments",
-    title: "Assessments",
+    title: "Assignment Tracking",
     eyebrow: "Assignments and projects",
-    description: "Manage assessment release, due dates, grading checkpoints, and submission counts by type.",
-    createLabel: "Create assessment",
+    description: "Manage assignments, due dates, grading checkpoints, and submission counts by type.",
+    createLabel: "Create assignment",
     statuses: ["draft", "published"],
     columns: [
       { key: "title", label: "Assessment" },

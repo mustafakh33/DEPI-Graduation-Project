@@ -27,8 +27,8 @@ const config: Config = {
         info: "hsl(var(--info))"
       },
       boxShadow: {
-        panel: "0 10px 30px rgba(15, 23, 42, 0.08)",
-        float: "0 22px 40px rgba(15, 23, 42, 0.12)"
+        panel: "0 18px 40px rgba(0, 0, 0, 0.24)",
+        float: "0 26px 70px rgba(0, 0, 0, 0.35)"
       },
       borderRadius: {
         xl2: "1.5rem"
@@ -39,7 +39,7 @@ const config: Config = {
       },
       backgroundImage: {
         "hero-mesh":
-          "radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%), radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 34%), linear-gradient(180deg, rgba(255,255,255,0.98), rgba(244,247,251,1))"
+          "radial-gradient(circle at top left, rgba(19, 91, 236, 0.22), transparent 32%), radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.16), transparent 34%), linear-gradient(180deg, rgba(16,22,34,1), rgba(8,13,24,1))"
       }
     }
   },

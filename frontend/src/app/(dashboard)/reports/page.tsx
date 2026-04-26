@@ -41,7 +41,7 @@ export default function ReportsPage() {
               </div>
               <h3 className="mt-5 text-xl font-semibold">{item.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{item.description}</p>
-              <button className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-border bg-white px-4 py-3 text-sm font-medium shadow-panel">
+              <button className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-panel shadow-primary/20 transition hover:bg-primary/90">
                 <Download className="h-4 w-4" />
                 Export now
               </button>

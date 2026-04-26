@@ -1,13 +1,14 @@
 "use client";
 
+import { PageHeader } from "@/components/layout/page-header";
 import { EntityFormDialog } from "@/components/modules/entity-form-dialog";
 import { EntityTable } from "@/components/modules/entity-table";
-import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api";
 import { EntityRecord, ModuleResponse } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Database, Filter, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { moduleConfigs } from "./config";
 
@@ -88,11 +89,11 @@ export function ModulePage({ moduleKey }: { moduleKey: keyof typeof moduleConfig
   }
 
   if (query.isLoading) {
-    return <div className="rounded-[28px] bg-white p-8 shadow-panel">Loading {config.title.toLowerCase()}...</div>;
+    return <div className="rounded-xl border border-border bg-card p-8 shadow-panel">Loading {config.title.toLowerCase()}...</div>;
   }
 
   if (query.isError || !query.data) {
-    return <div className="rounded-[28px] bg-rose-50 p-8 text-rose-700 shadow-panel">Failed to load {config.title.toLowerCase()}.</div>;
+    return <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-8 text-rose-200 shadow-panel">Failed to load {config.title.toLowerCase()}.</div>;
   }
 
   return (
@@ -101,25 +102,42 @@ export function ModulePage({ moduleKey }: { moduleKey: keyof typeof moduleConfig
         eyebrow={config.eyebrow}
         title={config.title}
         description={config.description}
-        actions={
-          <Button variant="secondary" onClick={() => setDialogOpen(true)}>
-            {config.createLabel}
-          </Button>
-        }
+        actions={<Button onClick={() => setDialogOpen(true)}>{config.createLabel}</Button>}
       />
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="p-5">
-          <p className="text-sm text-muted-foreground">Visible records</p>
-          <p className="mt-3 text-3xl font-semibold">{query.data.total}</p>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Visible records</p>
+              <p className="mt-3 text-3xl font-black text-white">{query.data.total}</p>
+            </div>
+            <div className="rounded-lg bg-primary/15 p-3 text-primary">
+              <Database className="h-5 w-5" />
+            </div>
+          </div>
         </Card>
         <Card className="p-5">
-          <p className="text-sm text-muted-foreground">Filtered status</p>
-          <p className="mt-3 text-3xl font-semibold">{status || "All"}</p>
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Filtered status</p>
+              <p className="mt-3 text-3xl font-black text-white">{status || "All"}</p>
+            </div>
+            <div className="rounded-lg bg-emerald-500/15 p-3 text-emerald-300">
+              <Filter className="h-5 w-5" />
+            </div>
+          </div>
         </Card>
         <Card className="p-5">
-          <p className="text-sm text-muted-foreground">Search term</p>
-          <p className="mt-3 text-3xl font-semibold">{search || "—"}</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Search term</p>
+              <p className="mt-3 truncate text-3xl font-black text-white">{search || "-"}</p>
+            </div>
+            <div className="rounded-lg bg-amber-500/15 p-3 text-amber-300">
+              <Search className="h-5 w-5" />
+            </div>
+          </div>
         </Card>
       </div>
 
