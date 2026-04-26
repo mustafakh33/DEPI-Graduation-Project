@@ -1,0 +1,703 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminUserStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+  DISABLED
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  GRADUATED
+  DROPPED
+  SUSPENDED
+}
+
+enum GroupStatus {
+  ACTIVE
+  UPCOMING
+  COMPLETED
+  ARCHIVED
+}
+
+enum GroupMembershipStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  REMOVED
+}
+
+enum GroupStaffRole {
+  OWNER
+  ADMIN
+  TRAINER
+  MODERATOR
+}
+
+enum SessionStatus {
+  DRAFT
+  SCHEDULED
+  LIVE
+  FINISHED
+  CANCELLED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  REOPENED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum CommunityPostType {
+  POST
+  ANNOUNCEMENT
+}
+
+enum CommunityPostStatus {
+  PUBLISHED
+  HIDDEN
+  FLAGGED
+  ARCHIVED
+}
+
+enum SurveyStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+enum SurveyQuestionType {
+  SHORT_TEXT
+  LONG_TEXT
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  RATING
+  YES_NO
+}
+
+enum QuizStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QuizQuestionType {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_TEXT
+}
+
+enum SubmissionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  SUBMITTED
+  GRADED
+  LATE
+}
+
+enum AssessmentType {
+  ASSIGNMENT
+  PROJECT
+  EXAM
+  PRACTICAL
+}
+
+enum AssessmentStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+enum ImportTarget {
+  ADMIN_USERS
+  STUDENTS
+  GROUPS
+  SESSIONS
+  ATTENDANCE
+  QUIZZES
+  ASSESSMENTS
+  SURVEYS
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExportTarget {
+  SESSIONS
+  ATTENDANCE
+  USERS
+  STUDENTS
+  GROUPS
+  TICKETS
+  SURVEYS
+  QUIZZES
+  ASSESSMENTS
+}
+
+model AdminUser {
+  id                     String                 @id @default(cuid())
+  email                  String                 @unique
+  username               String?                @unique
+  firstName              String
+  lastName               String
+  displayName            String?
+  phone                  String?
+  avatarUrl              String?
+  locale                 String                 @default("en")
+  timezone               String?
+  passwordHash           String
+  status                 AdminUserStatus        @default(ACTIVE)
+  isSuperAdmin           Boolean                @default(false)
+  lastLoginAt            DateTime?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  roles                  AdminUserRole[]
+  groupsManaged          GroupStaffAssignment[]
+  sessionsCreated        Session[]              @relation("SessionCreatedBy")
+  sessionsTrained        Session[]              @relation("SessionTrainer")
+  attendanceMarked       Attendance[]           @relation("AttendanceMarkedBy")
+  ticketsAssigned        Ticket[]               @relation("TicketAssignedTo")
+  ticketReplies          TicketReply[]
+  communityPosts         CommunityPost[]        @relation("CommunityPostAdminAuthor")
+  communityComments      CommunityComment[]     @relation("CommunityCommentAdminAuthor")
+  surveysCreated         Survey[]               @relation("SurveyCreatedBy")
+  quizzesCreated         Quiz[]                 @relation("QuizCreatedBy")
+  assessmentsCreated     Assessment[]           @relation("AssessmentCreatedBy")
+  fileImportLogs         FileImportLog[]
+  exportLogs             ExportLog[]
+}
+
+model Role {
+  id          String          @id @default(cuid())
+  name        String          @unique
+  key         String          @unique
+  description String?
+  isSystem    Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  users       AdminUserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  name        String
+  key         String           @unique
+  module      String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  roles       RolePermission[]
+
+  @@index([module])
+}
+
+model AdminUserRole {
+  adminUserId String
+  roleId      String
+  assignedAt  DateTime @default(now())
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([adminUserId, roleId])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  assignedAt   DateTime @default(now())
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model Student {
+  id                        String                   @id @default(cuid())
+  studentCode               String                   @unique
+  email                     String                   @unique
+  firstName                 String
+  lastName                  String
+  fullName                  String?
+  phone                     String?
+  avatarUrl                 String?
+  gender                    String?
+  dateOfBirth               DateTime?
+  city                      String?
+  country                   String?
+  status                    StudentStatus            @default(ACTIVE)
+  language                  String                   @default("en")
+  placementLevel            String?
+  attendanceRate            Decimal?                 @db.Decimal(5, 2)
+  averageQuizScore          Decimal?                 @db.Decimal(5, 2)
+  averageAssessmentScore    Decimal?                 @db.Decimal(5, 2)
+  enrolledAt                DateTime                 @default(now())
+  notes                     String?
+  createdAt                 DateTime                 @default(now())
+  updatedAt                 DateTime                 @updatedAt
+  memberships               GroupMembership[]
+  attendances               Attendance[]
+  quizSubmissions           QuizSubmission[]
+  assessmentSubmissions     AssessmentSubmission[]
+  surveyResponses           SurveyResponse[]
+  createdTickets            Ticket[]                 @relation("TicketCreatedByStudent")
+  assignedTickets           Ticket[]                 @relation("TicketAssignedStudent")
+  ticketReplies             TicketReply[]
+  communityPosts            CommunityPost[]          @relation("CommunityPostStudentAuthor")
+  communityComments         CommunityComment[]       @relation("CommunityCommentStudentAuthor")
+
+  @@index([status])
+  @@index([lastName, firstName])
+}
+
+model Group {
+  id                 String                 @id @default(cuid())
+  name               String
+  code               String                 @unique
+  slug               String                 @unique
+  description        String?
+  descriptionAr      String?
+  status             GroupStatus            @default(ACTIVE)
+  capacity           Int?
+  startDate          DateTime?
+  endDate            DateTime?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  memberships        GroupMembership[]
+  staffAssignments   GroupStaffAssignment[]
+  sessions           Session[]
+  quizzes            Quiz[]
+  assessments        Assessment[]
+  surveys            Survey[]
+  tickets            Ticket[]
+
+  @@index([status])
+}
+
+model GroupMembership {
+  id          String                @id @default(cuid())
+  studentId   String
+  groupId     String
+  status      GroupMembershipStatus @default(ACTIVE)
+  joinedAt    DateTime              @default(now())
+  leftAt      DateTime?
+  notes       String?
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, groupId])
+  @@index([groupId, status])
+}
+
+model GroupStaffAssignment {
+  id          String         @id @default(cuid())
+  groupId     String
+  adminUserId String
+  role        GroupStaffRole
+  assignedAt  DateTime       @default(now())
+
+  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, adminUserId, role])
+  @@index([adminUserId, role])
+}
+
+model Session {
+  id                    String         @id @default(cuid())
+  title                 String
+  titleAr               String?
+  description           String?
+  descriptionAr         String?
+  code                  String         @unique
+  status                SessionStatus  @default(DRAFT)
+  startsAt              DateTime
+  endsAt                DateTime
+  location              String?
+  meetingUrl            String?
+  attendanceOpenAt      DateTime?
+  attendanceCloseAt     DateTime?
+  isAttendanceExported  Boolean        @default(false)
+  exportedAt            DateTime?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  groupId               String
+  trainerId             String?
+  createdById           String
+  group                 Group          @relation(fields: [groupId], references: [id], onDelete: Restrict)
+  trainer               AdminUser?     @relation("SessionTrainer", fields: [trainerId], references: [id], onDelete: SetNull)
+  createdBy             AdminUser      @relation("SessionCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  attendanceRecords     Attendance[]
+
+  @@index([groupId, status])
+  @@index([startsAt])
+}
+
+model Attendance {
+  id             String           @id @default(cuid())
+  sessionId      String
+  studentId      String
+  status         AttendanceStatus
+  checkedInAt    DateTime?
+  checkedOutAt   DateTime?
+  minutesPresent Int?
+  notes          String?
+  markedAt       DateTime         @default(now())
+  markedById     String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  session        Session          @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student        Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  markedBy       AdminUser?       @relation("AttendanceMarkedBy", fields: [markedById], references: [id], onDelete: SetNull)
+
+  @@unique([sessionId, studentId])
+  @@index([studentId, status])
+}
+
+model Ticket {
+  id                    String         @id @default(cuid())
+  subject               String
+  subjectAr             String?
+  description           String
+  descriptionAr         String?
+  status                TicketStatus   @default(OPEN)
+  priority              TicketPriority @default(MEDIUM)
+  category              String?
+  tags                  String[]
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  resolvedAt            DateTime?
+  closedAt              DateTime?
+  groupId               String?
+  createdByStudentId    String?
+  assignedToAdminId     String?
+  assignedStudentId     String?
+  group                 Group?         @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  createdByStudent      Student?       @relation("TicketCreatedByStudent", fields: [createdByStudentId], references: [id], onDelete: SetNull)
+  assignedToAdmin       AdminUser?     @relation("TicketAssignedTo", fields: [assignedToAdminId], references: [id], onDelete: SetNull)
+  assignedStudent       Student?       @relation("TicketAssignedStudent", fields: [assignedStudentId], references: [id], onDelete: SetNull)
+  replies               TicketReply[]
+
+  @@index([status, priority])
+}
+
+model TicketReply {
+  id             String    @id @default(cuid())
+  ticketId       String
+  body           String
+  bodyAr         String?
+  isInternalNote Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  adminUserId    String?
+  studentId      String?
+  ticket         Ticket    @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  adminUser      AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+  student        Student?  @relation(fields: [studentId], references: [id], onDelete: SetNull)
+
+  @@index([ticketId, createdAt])
+}
+
+model CommunityPost {
+  id             String              @id @default(cuid())
+  title          String
+  titleAr        String?
+  body           String
+  bodyAr         String?
+  type           CommunityPostType   @default(POST)
+  status         CommunityPostStatus @default(PUBLISHED)
+  isPinned       Boolean             @default(false)
+  isModerated    Boolean             @default(false)
+  moderationNote String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  adminAuthorId  String?
+  studentAuthorId String?
+  adminAuthor    AdminUser?          @relation("CommunityPostAdminAuthor", fields: [adminAuthorId], references: [id], onDelete: SetNull)
+  studentAuthor  Student?            @relation("CommunityPostStudentAuthor", fields: [studentAuthorId], references: [id], onDelete: SetNull)
+  comments       CommunityComment[]
+
+  @@index([type, status])
+}
+
+model CommunityComment {
+  id              String      @id @default(cuid())
+  postId          String
+  body            String
+  bodyAr          String?
+  isModerated     Boolean     @default(false)
+  moderationNote  String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  adminAuthorId   String?
+  studentAuthorId String?
+  post            CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  adminAuthor     AdminUser?  @relation("CommunityCommentAdminAuthor", fields: [adminAuthorId], references: [id], onDelete: SetNull)
+  studentAuthor   Student?    @relation("CommunityCommentStudentAuthor", fields: [studentAuthorId], references: [id], onDelete: SetNull)
+
+  @@index([postId, createdAt])
+}
+
+model Survey {
+  id                String           @id @default(cuid())
+  title             String
+  titleAr           String?
+  description       String?
+  descriptionAr     String?
+  status            SurveyStatus     @default(DRAFT)
+  isAnonymous       Boolean          @default(false)
+  publishedAt       DateTime?
+  closedAt          DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  groupId           String?
+  createdById       String
+  group             Group?           @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  createdBy         AdminUser        @relation("SurveyCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  questions         SurveyQuestion[]
+  responses         SurveyResponse[]
+
+  @@index([status, publishedAt])
+}
+
+model SurveyQuestion {
+  id             String             @id @default(cuid())
+  surveyId       String
+  label          String
+  labelAr        String?
+  helpText       String?
+  helpTextAr     String?
+  type           SurveyQuestionType
+  options        Json?
+  isRequired     Boolean            @default(true)
+  order          Int
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  survey         Survey             @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  answers        SurveyAnswer[]
+
+  @@unique([surveyId, order])
+}
+
+model SurveyResponse {
+  id             String         @id @default(cuid())
+  surveyId       String
+  studentId      String?
+  submittedAt    DateTime       @default(now())
+  completionTime Int?
+  metadata       Json?
+  survey         Survey         @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  student        Student?       @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  answers        SurveyAnswer[]
+
+  @@index([surveyId, submittedAt])
+}
+
+model SurveyAnswer {
+  id               String         @id @default(cuid())
+  responseId       String
+  surveyQuestionId String
+  valueText        String?
+  valueNumber      Decimal?       @db.Decimal(8, 2)
+  valueBoolean     Boolean?
+  valueJson        Json?
+  response         SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  surveyQuestion   SurveyQuestion @relation(fields: [surveyQuestionId], references: [id], onDelete: Cascade)
+
+  @@unique([responseId, surveyQuestionId])
+}
+
+model Quiz {
+  id                  String            @id @default(cuid())
+  title               String
+  titleAr             String?
+  description         String?
+  descriptionAr       String?
+  status              QuizStatus        @default(DRAFT)
+  passingScore        Decimal?          @db.Decimal(5, 2)
+  maxAttempts         Int               @default(1)
+  startsAt            DateTime?
+  endsAt              DateTime?
+  durationMinutes     Int?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  groupId             String?
+  createdById         String
+  group               Group?            @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  createdBy           AdminUser         @relation("QuizCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  questions           QuizQuestion[]
+  submissions         QuizSubmission[]
+
+  @@index([status, startsAt])
+}
+
+model QuizQuestion {
+  id              String            @id @default(cuid())
+  quizId          String
+  prompt          String
+  promptAr        String?
+  type            QuizQuestionType
+  options         Json?
+  correctAnswer   Json?
+  points          Decimal           @default(1) @db.Decimal(8, 2)
+  order           Int
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  quiz            Quiz              @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers         QuizAnswer[]
+
+  @@unique([quizId, order])
+}
+
+model QuizSubmission {
+  id               String           @id @default(cuid())
+  quizId           String
+  studentId        String
+  status           SubmissionStatus @default(NOT_STARTED)
+  startedAt        DateTime?
+  submittedAt      DateTime?
+  attemptNumber    Int              @default(1)
+  score            Decimal?         @db.Decimal(8, 2)
+  percentage       Decimal?         @db.Decimal(5, 2)
+  passed           Boolean?
+  gradedAt         DateTime?
+  feedback         String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  quiz             Quiz             @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  student          Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  answers          QuizAnswer[]
+
+  @@index([quizId, status])
+  @@index([studentId, submittedAt])
+}
+
+model QuizAnswer {
+  id               String         @id @default(cuid())
+  submissionId     String
+  quizQuestionId   String
+  answerText       String?
+  answerJson       Json?
+  awardedPoints    Decimal?       @db.Decimal(8, 2)
+  isCorrect        Boolean?
+  submission       QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  quizQuestion     QuizQuestion   @relation(fields: [quizQuestionId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, quizQuestionId])
+}
+
+model Assessment {
+  id                String            @id @default(cuid())
+  title             String
+  titleAr           String?
+  description       String?
+  descriptionAr     String?
+  type              AssessmentType
+  status            AssessmentStatus  @default(DRAFT)
+  maxScore          Decimal           @db.Decimal(8, 2)
+  weightPercentage  Decimal?          @db.Decimal(5, 2)
+  opensAt           DateTime?
+  dueAt             DateTime?
+  closesAt          DateTime?
+  rubric            Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  groupId           String?
+  createdById       String
+  group             Group?            @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  createdBy         AdminUser         @relation("AssessmentCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  submissions       AssessmentSubmission[]
+
+  @@index([status, dueAt])
+}
+
+model AssessmentSubmission {
+  id                 String           @id @default(cuid())
+  assessmentId       String
+  studentId          String
+  status             SubmissionStatus @default(NOT_STARTED)
+  submittedAt        DateTime?
+  score              Decimal?         @db.Decimal(8, 2)
+  percentage         Decimal?         @db.Decimal(5, 2)
+  feedback           String?
+  attachmentUrl      String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  assessment         Assessment       @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  student            Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([assessmentId, studentId])
+  @@index([studentId, status])
+}
+
+model FileImportLog {
+  id              String      @id @default(cuid())
+  target          ImportTarget
+  fileName        String
+  storageUrl      String?
+  status          JobStatus   @default(PENDING)
+  totalRows       Int?
+  successfulRows  Int?
+  failedRows      Int?
+  errorReportUrl  String?
+  summary         Json?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime    @default(now())
+  createdById     String
+  createdBy       AdminUser   @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([target, status])
+}
+
+model ExportLog {
+  id              String       @id @default(cuid())
+  target          ExportTarget
+  fileName        String
+  format          String
+  filters         Json?
+  storageUrl      String?
+  rowCount        Int?
+  status          JobStatus    @default(PENDING)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  createdById     String
+  createdBy       AdminUser    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([target, status])
+}
