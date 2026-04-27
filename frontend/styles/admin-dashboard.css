@@ -2,15 +2,15 @@
 
 :root {
   --color-primary: #135bec;
-    --color-background: #101622;
+  --color-background: #101622;
   --color-surface: #1a2131;
   --color-sidebar: #0b0f1a;
   --color-border: #1e293b;
   --color-border-strong: #334155;
   --color-sidebar-link: #94a3b8;
   --color-sidebar-link-active: #135bec;
-  --color-sidebar-link-bg: rgba(19,91,236,0.1);
-  --color-sidebar-link-hover: rgba(19,91,236,0.1);
+  --color-sidebar-link-bg: rgba(19, 91, 236, 0.1);
+  --color-sidebar-link-hover: rgba(19, 91, 236, 0.1);
   --color-sidebar-avatar-border: #334155;
   --color-text-main: #fff;
   --color-text-secondary: #94a3b8;
@@ -18,15 +18,19 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-info: #818cf8;
-  --color-card-bg: rgba(30,41,59,0.5);
+  --color-card-bg: rgba(30, 41, 59, 0.5);
   --color-card-border: #334155;
   --color-card-radius: 12px;
-  --font-main: 'Inter', sans-serif;
+  --font-main: "Inter", sans-serif;
 }
 
 body {
   font-family: var(--font-main);
-  background: linear-gradient(0deg, var(--color-background), var(--color-background));
+  background: linear-gradient(
+    0deg,
+    var(--color-background),
+    var(--color-background)
+  );
   color: var(--color-text-main);
 }
 
@@ -35,7 +39,11 @@ body {
   flex-direction: row;
   width: 1280px;
   min-height: 1072px;
-  background: linear-gradient(0deg, var(--color-background), var(--color-background));
+  background: linear-gradient(
+    0deg,
+    var(--color-background),
+    var(--color-background)
+  );
 }
 
 .admin-sidebar {
@@ -96,7 +104,9 @@ body {
   background: none;
   font-weight: 500;
   font-size: 14px;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
   cursor: pointer;
 }
 .admin-sidebar-link.active {
