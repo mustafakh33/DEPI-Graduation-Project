@@ -29,7 +29,9 @@ const HeroSection: React.FC = () => {
         </div>
         <div className="relative lg:block hidden">
           <div className="glass-card rounded-2xl p-6 shadow-2xl relative z-10">
-            <img alt="Student Dashboard" className="rounded-lg w-full" data-alt="clean minimal student dashboard ui showing progress charts and course modules in a dark tech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2uToazQowSpchdMZZ2iXj7zIkxgfUJ3W118PSmPyZDATO3wA1M-OieA-2iOuhNd7pXYVuh0F9qhN8CsQmt2YC6UfOc7I0VTfPGwGxqcyOyPHRwRpPZtulg5TLuaj5tUI5LBOHbJ94Ood0Jn9HHqb8dh2rA0Va17oMJPn97Q1tS84uEMgvfM9rXYjizCT1Bp15RU7eDWVxoNtrULlEihN-PsjuMAi6cA-0aw_5hwtC0C2CC5bpTyf0UIfh1-qTVuyFbNjQUTFR6BQ" />
+            
+            
+            <img alt="Student Dashboard" className="rounded-lg w-full" data-alt="clean minimal student dashboard ui showing progress charts and course modules in a dark tech aesthetic" src="./landing_hero.png" />
             <div className="absolute -top-6 -right-6 glass-card p-4 rounded-xl shadow-xl flex items-center gap-3 animate-bounce shadow-primary-container/10">
               <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
                 <span className="material-symbols-outlined">grade</span>
