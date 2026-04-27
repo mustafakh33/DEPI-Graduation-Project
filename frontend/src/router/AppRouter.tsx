@@ -1,64 +1,68 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
-import "../styles/global.css"
+import "@/styles/global.css";
 // Public pages
-import LandingPage from "../pages/public/Landing";
-import Login from "../features/auth/pages/Login";
-import Register from "../features/auth/pages/Register";
-import ForgotPassword from "../features/auth/pages/ForgotPassword";
-import Unauthorized from "../pages/public/Unauthorized";
-import NotFound from "../pages/public/NotFound";
-import PlacementTest from "../features/auth/pages/PlacementTest";
+import LandingPage from "@/pages/public/Landing";
+import Login from "@/features/auth/pages/Login";
+import Register from "@/features/auth/pages/Register";
+import ForgotPassword from "@/features/auth/pages/ForgotPassword";
+import Unauthorized from "@/pages/public/Unauthorized";
+import NotFound from "@/pages/public/NotFound";
+import PlacementTest from "@/features/auth/pages/PlacementTest";
 
 // Student pages
-import StudentDashboard from "../features/student/pages/Dashboard";
-import Roadmap from "../features/student/pages/Roadmap";
-import StudyHub from "../features/student/pages/StudyHub";
-import StudyRoom from "../features/student/pages/StudyRoom";
-import Exams from "../features/student/pages/Exams";
-import StudentProfile from "../features/student/pages/StudentProfile";
-import Subject from "../features/student/pages/Subject";
-import StudentLayout from "../layouts/StudentLayout";
+import StudentDashboard from "@/features/student/pages/Dashboard";
+import Roadmap from "@/features/student/pages/Roadmap";
+import StudyHub from "@/features/student/pages/StudyHub";
+import StudyRoom from "@/features/student/pages/StudyRoom";
+import Exams from "@/features/student/pages/Exams";
+import StudentProfile from "@/features/student/pages/StudentProfile";
+import Subject from "@/features/student/pages/Subject";
+import StudentLayout from "@/layouts/StudentLayout";
 
 // Instructor pages
-import InstructorDashboard from "../features/instructor/pages/Dashboard";
-import MyCourses from "../features/instructor/pages/MyCourses";
-import Students from "../features/instructor/pages/Students";
-import Grades from "../features/instructor/pages/Grades";
-import Quizzes from "../features/instructor/pages/Quizzes";
-import LiveSession from "../features/instructor/pages/LiveSession";
-import InstructorLayout from "../layouts/InstructorLayout";
+import InstructorDashboard from "@/features/instructor/pages/Dashboard";
+import MyCourses from "@/features/instructor/pages/MyCourses";
+import Students from "@/features/instructor/pages/Students";
+import Grades from "@/features/instructor/pages/Grades";
+import Quizzes from "@/features/instructor/pages/Quizzes";
+import LiveSession from "@/features/instructor/pages/LiveSession";
+import InstructorLayout from "@/layouts/InstructorLayout";
 
 // Mentor pages
-import MentorDashboard from "../features/mentor/pages/Dashboard";
-import MyStudents from "../features/mentor/pages/MyStudents";
-import Alerts from "../features/mentor/pages/Alerts";
-import CheckIns from "../features/mentor/pages/CheckIns";
-import Progress from "../features/mentor/pages/Progress";
-import MentorLayout from "../layouts/MentorLayout";
+import MentorDashboard from "@/features/mentor/pages/Dashboard";
+import MyStudents from "@/features/mentor/pages/MyStudents";
+import Alerts from "@/features/mentor/pages/Alerts";
+import CheckIns from "@/features/mentor/pages/CheckIns";
+import Progress from "@/features/mentor/pages/Progress";
+import MentorLayout from "@/layouts/MentorLayout";
 
 // Admin pages
-import AdminDashboard from "../features/admin/pages/Dashboard";
-import Users from "../features/admin/pages/Users";
-import Batches from "../features/admin/pages/Batches";
-import Courses from "../features/admin/pages/Courses";
-import Reports from "../features/admin/pages/Reports";
-import Settings from "../features/admin/pages/Settings";
-import Sessions from "../features/admin/pages/Sessions";
-import Feedback from "../features/admin/pages/Feedback";
-import AdminStudents from "../features/admin/pages/Students";
-import AdminLayout from "../layouts/AdminLayout";
+import AdminDashboard from "@/features/admin/pages/Dashboard";
+import Users from "@/features/admin/pages/Users";
+import Batches from "@/features/admin/pages/Batches";
+import Courses from "@/features/admin/pages/Courses";
+import Reports from "@/features/admin/pages/Reports";
+import Settings from "@/features/admin/pages/Settings";
+import Sessions from "@/features/admin/pages/Sessions";
+import Feedback from "@/features/admin/pages/Feedback";
+import AdminStudents from "@/features/admin/pages/Students";
+import AdminLayout from "@/layouts/AdminLayout";
+import { adminDashboardPath } from "@/features/admin/config/navigation";
+import { instructorDashboardPath } from "@/features/instructor/config/navigation";
+import { mentorDashboardPath } from "@/features/mentor/config/navigation";
+import { studentDashboardPath } from "@/features/student/config/navigation";
 
 // Guards and hooks
-import AuthGuard from "../guards/AuthGuard";
-import RoleGuard from "../guards/RoleGuard";
-import { useAuth } from "../hooks/useAuth";
+import AuthGuard from "@/guards/AuthGuard";
+import RoleGuard from "@/guards/RoleGuard";
+import { useAuth } from "@/hooks/useAuth";
 
-// After login, redirect each role to its dashboard
+// After login, redirect each role to its dashboard (paths match feature nav config)
 const roleRedirects = {
-  student: "/student/dashboard",
-  instructor: "/instructor/dashboard",
-  mentor: "/mentor/dashboard",
-  admin: "/admin/dashboard",
+  student: studentDashboardPath,
+  instructor: instructorDashboardPath,
+  mentor: mentorDashboardPath,
+  admin: adminDashboardPath,
 };
 
 const AppRouter = () => {

@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router";
-import Sidebar from "../organisms/Sidebar";
-import type { NavLinkItem } from "../atoms/SidebarNavLink";
-import { useAuth } from "../../hooks/useAuth";
+import type { NavLinkItem } from "@/components/atoms/SidebarNavLink";
+import Sidebar from "@/components/organisms/Sidebar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useForceDashboardTheme } from "@/core/hooks/useForceDashboardTheme";
+import { useAuth } from "@/hooks/useAuth";
 
-export interface DashboardLayoutProps {
+export interface AppShellLayoutProps {
   links: NavLinkItem[];
   dashboardPath: string;
   logo?: React.ReactNode;
@@ -14,7 +17,7 @@ export interface DashboardLayoutProps {
   onLogout?: () => void;
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+const AppShellLayout: React.FC<AppShellLayoutProps> = ({
   links,
   dashboardPath,
   logo,
@@ -23,16 +26,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   onLogout,
 }) => {
   const { user } = useAuth();
-
-  /* Match admin HTML reference: Tailwind dark: tokens + correct slate on cards. */
-  useEffect(() => {
-    const root = document.documentElement;
-    const hadDark = root.classList.contains("dark");
-    if (!hadDark) root.classList.add("dark");
-    return () => {
-      if (!hadDark) root.classList.remove("dark");
-    };
-  }, []);
+  useForceDashboardTheme();
 
   return (
     <div className="flex min-h-screen bg-background-light font-display text-slate-900 dark:bg-background-dark dark:text-slate-100">
@@ -53,31 +47,25 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <span className="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-500">
                 search
               </span>
-              <input
+              <Input
                 type="search"
+                variant="shell"
                 placeholder="Search..."
-                className="w-full rounded-lg border-0 bg-slate-900 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 outline-none ring-0 focus:ring-2 focus:ring-[#135bec]/50"
+                className="w-full"
                 aria-label="Search"
               />
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-3 md:gap-4">
-            <button
-              type="button"
-              className="flex items-center gap-2 rounded-lg bg-[#135bec] px-3 py-2 text-sm font-bold text-white transition-colors hover:bg-[#135bec]/90 md:px-4"
-            >
+            <Button variant="primary" size="sm" className="font-bold">
               <span className="material-symbols-outlined text-[18px]">add</span>
               <span className="hidden sm:inline">New Action</span>
-            </button>
+            </Button>
             <div className="flex h-8 items-center gap-2 border-l border-slate-700 pl-3 md:gap-3 md:pl-4">
-              <button
-                type="button"
-                className="relative text-slate-300 transition-colors hover:text-white"
-                aria-label="Notifications"
-              >
+              <Button variant="headerIcon" aria-label="Notifications">
                 <span className="material-symbols-outlined">notifications</span>
                 <span className="absolute right-0 top-0 size-2 rounded-full bg-red-500 ring-2 ring-slate-950" />
-              </button>
+              </Button>
               <div className="ml-1 flex items-center gap-3">
                 <div className="hidden text-right sm:block">
                   <p className="text-sm font-bold leading-none text-white">{user?.name || "User"}</p>
@@ -98,4 +86,4 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   );
 };
 
-export default DashboardLayout;
+export default AppShellLayout;

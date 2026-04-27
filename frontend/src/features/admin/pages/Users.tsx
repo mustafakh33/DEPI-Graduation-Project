@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Modal } from "@/components/ui/dialog";
 
 const Users: React.FC = () => {
+  const [filterOpen, setFilterOpen] = useState(false);
+
   return (
     <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
       {/* Page Title Area */}
@@ -12,20 +17,20 @@ const Users: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          <Button variant="outline" className="px-4 py-2">
             <span className="material-symbols-outlined text-sm">download</span>
             Export Data
-          </button>
-          <button className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+          </Button>
+          <Button type="button" variant="outline" className="px-4 py-2" onClick={() => setFilterOpen(true)}>
             <span className="material-symbols-outlined text-sm">filter_list</span>
             Filter
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Table Container */}
       <div className="px-8 pb-8">
-        <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+        <Card className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -184,7 +189,7 @@ const Users: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Footer Stats */}
@@ -211,6 +216,22 @@ const Users: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        title="Filter users"
+        description="Narrow the list by role, batch, or status. Connect fields to your API when ready."
+        footer={
+          <Button type="button" variant="primary" onClick={() => setFilterOpen(false)}>
+            Done
+          </Button>
+        }
+      >
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Placeholder: filter controls will go here.
+        </p>
+      </Modal>
     </div>
   );
 };

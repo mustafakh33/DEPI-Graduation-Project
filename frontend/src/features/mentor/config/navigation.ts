@@ -1,0 +1,12 @@
+import type { NavLinkItem } from "@/components/atoms/SidebarNavLink";
+import { navIcon } from "@/components/dashboard/navIcon";
+
+export const mentorDashboardPath = "/mentor/dashboard";
+
+export const mentorNavItems: NavLinkItem[] = [
+  { to: "/mentor/dashboard", label: "Dashboard", icon: navIcon("dashboard") },
+  { to: "/mentor/my-students", label: "My Students", icon: navIcon("group") },
+  { to: "/mentor/alerts", label: "Alerts", icon: navIcon("notifications") },
+  { to: "/mentor/check-ins", label: "Check-Ins", icon: navIcon("assignment") },
+  { to: "/mentor/progress/1", label: "Progress", icon: navIcon("trending_up") },
+];
