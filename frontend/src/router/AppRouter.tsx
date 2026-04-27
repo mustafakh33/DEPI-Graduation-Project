@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
-
+import "../styles/global.css"
 // Public pages
 import LandingPage from "../pages/public/Landing";
 import Login from "../features/auth/pages/Login";
