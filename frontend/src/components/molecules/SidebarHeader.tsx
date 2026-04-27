@@ -3,15 +3,26 @@ import React from "react";
 interface SidebarHeaderProps {
   logo?: React.ReactNode;
   appName?: string;
+  portalSubtitle?: string;
 }
 
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   logo,
-  appName = "UniHub",
+  appName = "Uni Hub",
+  portalSubtitle,
 }) => (
-  <div className="sidebar-header">
-    {logo && <span className="sidebar-logo">{logo}</span>}
-    <span>{appName}</span>
+  <div className="flex items-center gap-3 p-6">
+    {logo ?? (
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+        <span className="material-symbols-outlined">school</span>
+      </div>
+    )}
+    <div className="min-w-0">
+      <h1 className="truncate text-lg font-bold leading-none text-slate-900 dark:text-white">{appName}</h1>
+      {portalSubtitle ? (
+        <p className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400">{portalSubtitle}</p>
+      ) : null}
+    </div>
   </div>
 );
 

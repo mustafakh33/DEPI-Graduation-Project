@@ -1,7 +1,218 @@
 import React from "react";
 
 const Users: React.FC = () => {
-  return <div>Admin Users Page</div>;
+  return (
+    <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      {/* Page Title Area */}
+      <div className="p-8 flex items-end justify-between">
+        <div>
+          <h2 className="text-3xl font-black tracking-tight mb-2">User Management</h2>
+          <p className="text-slate-500 dark:text-slate-400 max-w-xl">
+            Manage university instructors, mentors, and their assigned batches. Overview of active faculty and administrative access.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <span className="material-symbols-outlined text-sm">download</span>
+            Export Data
+          </button>
+          <button className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            <span className="material-symbols-outlined text-sm">filter_list</span>
+            Filter
+          </button>
+        </div>
+      </div>
+
+      {/* Table Container */}
+      <div className="px-8 pb-8">
+        <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-slate-800/50">
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Name</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Email</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Phone Number</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Role</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Assigned Batches</th>
+                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                {/* Row 1 */}
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">AS</div>
+                      <span className="font-medium text-slate-900 dark:text-slate-100">Dr. Alice Smith</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">alice.s@unihub.edu</td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0101</td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                      Instructor
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">CS101, CS202</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-slate-400 hover:text-primary transition-colors">
+                      <span className="material-symbols-outlined">edit</span>
+                    </button>
+                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                {/* Row 2 */}
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="size-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">MJ</div>
+                      <span className="font-medium text-slate-900 dark:text-slate-100">Mark Johnson</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">mark.j@unihub.edu</td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0102</td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      Mentor
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">UX Design A</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-slate-400 hover:text-primary transition-colors">
+                      <span className="material-symbols-outlined">edit</span>
+                    </button>
+                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                {/* Row 3 */}
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">RC</div>
+                      <span className="font-medium text-slate-900 dark:text-slate-100">Dr. Robert Chen</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">r.chen@unihub.edu</td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0103</td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                      Instructor
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Data Science 1</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-slate-400 hover:text-primary transition-colors">
+                      <span className="material-symbols-outlined">edit</span>
+                    </button>
+                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                {/* Row 4 */}
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="size-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">SW</div>
+                      <span className="font-medium text-slate-900 dark:text-slate-100">Sarah Williams</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">sarah.w@unihub.edu</td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0104</td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      Mentor
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">CS101, UX Design B</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-slate-400 hover:text-primary transition-colors">
+                      <span className="material-symbols-outlined">edit</span>
+                    </button>
+                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                {/* Row 5 */}
+                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">DT</div>
+                      <span className="font-medium text-slate-900 dark:text-slate-100">David Thompson</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">d.thompson@unihub.edu</td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0105</td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                      Instructor
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Algorithms 101</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="text-slate-400 hover:text-primary transition-colors">
+                      <span className="material-symbols-outlined">edit</span>
+                    </button>
+                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
+                      <span className="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination */}
+          <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <p className="text-sm text-slate-500 dark:text-slate-400">Showing 1-5 of 124 users</p>
+            <div className="flex items-center gap-1">
+              <button className="size-8 rounded flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <span className="material-symbols-outlined">chevron_left</span>
+              </button>
+              <button className="size-8 rounded flex items-center justify-center bg-primary text-white text-sm font-bold">1</button>
+              <button className="size-8 rounded flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm">2</button>
+              <button className="size-8 rounded flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm">3</button>
+              <span className="px-2 text-slate-400">...</span>
+              <button className="size-8 rounded flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm">25</button>
+              <button className="size-8 rounded flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <span className="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Stats */}
+      <div className="px-8 pb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 p-6 rounded-xl">
+          <h3 className="text-sm font-semibold text-primary mb-1 uppercase tracking-wider">Total Faculty</h3>
+          <div className="flex items-center justify-between">
+            <span className="text-3xl font-black">124</span>
+            <span className="material-symbols-outlined text-primary opacity-50 text-4xl">diversity_3</span>
+          </div>
+        </div>
+        <div className="bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-xl">
+          <h3 className="text-sm font-semibold text-emerald-500 mb-1 uppercase tracking-wider">Active Mentors</h3>
+          <div className="flex items-center justify-between">
+            <span className="text-3xl font-black">48</span>
+            <span className="material-symbols-outlined text-emerald-500 opacity-50 text-4xl">psychology</span>
+          </div>
+        </div>
+        <div className="bg-slate-500/5 dark:bg-slate-500/10 border border-slate-500/20 p-6 rounded-xl">
+          <h3 className="text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wider">Pending Approvals</h3>
+          <div className="flex items-center justify-between">
+            <span className="text-3xl font-black">09</span>
+            <span className="material-symbols-outlined text-slate-500 opacity-50 text-4xl">pending_actions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Users;

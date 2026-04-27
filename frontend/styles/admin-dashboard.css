@@ -1,0 +1,258 @@
+/* Uni Hub Admin Dashboard Overview - Style Guide */
+
+:root {
+  --color-primary: #135bec;
+    --color-background: #101622;
+  --color-surface: #1a2131;
+  --color-sidebar: #0b0f1a;
+  --color-border: #1e293b;
+  --color-border-strong: #334155;
+  --color-sidebar-link: #94a3b8;
+  --color-sidebar-link-active: #135bec;
+  --color-sidebar-link-bg: rgba(19,91,236,0.1);
+  --color-sidebar-link-hover: rgba(19,91,236,0.1);
+  --color-sidebar-avatar-border: #334155;
+  --color-text-main: #fff;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #818cf8;
+  --color-card-bg: rgba(30,41,59,0.5);
+  --color-card-border: #334155;
+  --color-card-radius: 12px;
+  --font-main: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  background: linear-gradient(0deg, var(--color-background), var(--color-background));
+  color: var(--color-text-main);
+}
+
+.admin-dashboard {
+  display: flex;
+  flex-direction: row;
+  width: 1280px;
+  min-height: 1072px;
+  background: linear-gradient(0deg, var(--color-background), var(--color-background));
+}
+
+.admin-sidebar {
+  width: 256px;
+  background: var(--color-sidebar);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.admin-sidebar-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 24px;
+  gap: 12px;
+}
+
+.admin-sidebar-logo {
+  width: 40px;
+  height: 40px;
+  background: var(--color-primary);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.admin-sidebar-title {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+
+.admin-sidebar-desc {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--color-sidebar-link);
+}
+
+.admin-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 4px;
+}
+
+.admin-sidebar-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 12px;
+  border-radius: 8px;
+  color: var(--color-sidebar-link);
+  background: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+.admin-sidebar-link.active {
+  background: var(--color-sidebar-link-bg);
+  color: var(--color-sidebar-link-active);
+}
+.admin-sidebar-link:hover {
+  background: var(--color-sidebar-link-hover);
+  color: var(--color-sidebar-link-active);
+}
+
+.admin-sidebar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-sidebar-avatar-border);
+  overflow: hidden;
+}
+
+.admin-sidebar-user {
+  font-weight: 600;
+  font-size: 12px;
+  color: #fff;
+}
+.admin-sidebar-role {
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--color-sidebar-link);
+}
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: none;
+  padding: 32px;
+  gap: 32px;
+}
+
+.admin-header {
+  font-weight: 900;
+  font-size: 30px;
+  color: #fff;
+  letter-spacing: -0.75px;
+}
+.admin-header-desc {
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color-text-secondary);
+}
+
+.admin-metrics {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+.admin-metric-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--color-card-radius);
+  padding: 24px;
+  min-width: 172px;
+  color: var(--color-text-main);
+}
+.admin-metric-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+.admin-metric-value {
+  font-weight: 700;
+  font-size: 30px;
+  color: #fff;
+}
+.admin-metric-change {
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--color-success);
+}
+.admin-metric-change.neutral {
+  color: var(--color-text-muted);
+}
+.admin-metric-change.primary {
+  color: var(--color-primary);
+}
+
+.admin-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--color-card-radius);
+  padding: 24px;
+  color: var(--color-text-main);
+}
+
+.admin-card-title {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+.admin-card-desc {
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.admin-progress-bar {
+  background: #334155;
+  border-radius: 9999px;
+  height: 10px;
+  width: 100%;
+  position: relative;
+  margin-top: 8px;
+}
+.admin-progress-bar-inner {
+  background: var(--color-primary);
+  border-radius: 9999px;
+  height: 10px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.admin-card-label {
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.admin-card-value {
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+
+.admin-card-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.admin-card-bar {
+  height: 6px;
+  border-radius: 9999px;
+}
+.admin-card-bar.primary {
+  background: var(--color-primary);
+}
+.admin-card-bar.success {
+  background: var(--color-success);
+}
+.admin-card-bar.warning {
+  background: var(--color-warning);
+}
+.admin-card-bar.info {
+  background: var(--color-info);
+}
+
+/* Add more classes as needed for other dashboard elements */

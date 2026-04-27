@@ -1,7 +1,8 @@
 import React from "react";
+import SharedRoleDashboard from "../../../components/dashboard/SharedRoleDashboard";
 
 const Dashboard: React.FC = () => {
-  return <div>Student Dashboard Page</div>;
+  return <SharedRoleDashboard />;
 };
 
 export default Dashboard;

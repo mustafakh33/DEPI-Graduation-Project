@@ -43,6 +43,9 @@ import Batches from "../features/admin/pages/Batches";
 import Courses from "../features/admin/pages/Courses";
 import Reports from "../features/admin/pages/Reports";
 import Settings from "../features/admin/pages/Settings";
+import Sessions from "../features/admin/pages/Sessions";
+import Feedback from "../features/admin/pages/Feedback";
+import AdminStudents from "../features/admin/pages/Students";
 import AdminLayout from "../layouts/AdminLayout";
 
 // Guards and hooks
@@ -133,9 +136,12 @@ const AppRouter = () => {
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/users" element={<Users />} />
+              <Route path="/admin/students" element={<AdminStudents />} />
+              <Route path="/admin/sessions" element={<Sessions />} />
               <Route path="/admin/batches" element={<Batches />} />
               <Route path="/admin/courses" element={<Courses />} />
               <Route path="/admin/reports" element={<Reports />} />
+              <Route path="/admin/feedback" element={<Feedback />} />
               <Route path="/admin/settings" element={<Settings />} />
             </Route>
           </Route>

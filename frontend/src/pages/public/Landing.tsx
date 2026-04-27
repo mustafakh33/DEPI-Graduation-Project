@@ -1,32 +1,34 @@
-import React from "react";
-import { Link } from "react-router";
-import "./Landing.css";
+import React, { useEffect } from "react";
+import TopNavBar from "../../components/organisms/Landing/TopNavBar";
+import HeroSection from "../../components/organisms/Landing/HeroSection";
+import StatsBar from "../../components/organisms/Landing/StatsBar";
+import ProblemSolution from "../../components/organisms/Landing/ProblemSolution";
+import HowItWorks from "../../components/organisms/Landing/HowItWorks";
+import CoreFeatures from "../../components/organisms/Landing/CoreFeatures";
+import LearningTracks from "../../components/organisms/Landing/LearningTracks";
+import Testimonials from "../../components/organisms/Landing/Testimonials";
+import Pricing from "../../components/organisms/Landing/Pricing";
+import FinalCTA from "../../components/organisms/Landing/FinalCTA";
+import LandingFooter from "../../components/organisms/Landing/LandingFooter";
 
 const Landing: React.FC = () => {
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+  }, []);
+
   return (
-    <div className="landing-root">
-      <nav className="landing-navbar">
-        <span className="logo">UniHub</span>
-        <div className="nav-links">
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
-        </div>
-      </nav>
-      <main className="landing-main">
-        <h1>Welcome to Smart UniHub</h1>
-        <p>
-          A structured digital education platform for Computer Science students
-          in the MENA region.
-        </p>
-        <div className="cta-buttons">
-          <Link to="/login" className="cta-btn">
-            Login
-          </Link>
-          <Link to="/register" className="cta-btn secondary">
-            Register
-          </Link>
-        </div>
-      </main>
+    <div className="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container w-full min-h-screen font-body-sm">
+      <TopNavBar />
+      <HeroSection />
+      <StatsBar />
+      <ProblemSolution />
+      <HowItWorks />
+      <CoreFeatures />
+      <LearningTracks />
+      <Testimonials />
+      <Pricing />
+      <FinalCTA />
+      <LandingFooter />
     </div>
   );
 };

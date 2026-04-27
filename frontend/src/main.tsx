@@ -7,9 +7,9 @@ import { Theme } from "@radix-ui/themes/dist/cjs/components/index.js";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      	<Theme>
-      <AppRouter />
-        </Theme>
+      <Theme>
+        <AppRouter />
+      </Theme>
     </AuthProvider>
   </StrictMode>,
 );
