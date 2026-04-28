@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 const ForgotPasswordIdentifyAccount: React.FC = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     const root = document.documentElement;
     const hadDark = root.classList.contains("dark");
@@ -66,7 +67,7 @@ const ForgotPasswordIdentifyAccount: React.FC = () => {
             <div className="space-y-stack-sm">
               <h1 className="text-h2 font-h2 text-on-surface">Forgot your password?</h1>
               <p className="text-body-md font-body-md text-on-surface-variant">
-                No worries. Enter your email and we’ll send you a reset link.
+                No worries. Enter your email and we’ll send you a verification code.
               </p>
             </div>
 
@@ -74,6 +75,7 @@ const ForgotPasswordIdentifyAccount: React.FC = () => {
               className="space-y-stack-md"
               onSubmit={(e) => {
                 e.preventDefault();
+                navigate("/forgot-password/verify-code");
               }}
             >
               <div className="space-y-stack-xs">
@@ -98,7 +100,7 @@ const ForgotPasswordIdentifyAccount: React.FC = () => {
               </div>
 
               <Button type="submit" variant="primary" className="h-14 w-full text-label-md font-label-md">
-                Send Reset Link
+                Send Verification Code
               </Button>
             </form>
 

@@ -5,6 +5,8 @@ import LandingPage from "@/pages/public/Landing";
 import Login from "@/features/auth/pages/Login";
 import Register from "@/features/auth/pages/Register";
 import ForgotPasswordIdentifyAccount from "@/features/auth/pages/ForgotPasswordIdentifyAccount";
+import ForgotPasswordLinkSent from "@/features/auth/pages/ForgotPasswordLinkSent";
+import NewPassword from "@/pages/public/NewPassword";
 import Unauthorized from "@/pages/public/Unauthorized";
 import NotFound from "@/pages/public/NotFound";
 import PlacementTest from "@/features/auth/pages/PlacementTest";
@@ -76,7 +78,19 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/placement-test" element={<PlacementTest />} />
-        <Route path="/forgot-password" element={<ForgotPasswordIdentifyAccount />} />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordIdentifyAccount />}
+        />
+        <Route
+          path="/forgot-password/verify-code"
+          element={<ForgotPasswordLinkSent />}
+        />
+        <Route
+          path="/forgot-password/link-sent"
+          element={<ForgotPasswordLinkSent />}
+        />
+        <Route path="/forgot-password/new-password" element={<NewPassword />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Protected routes (authentication required) */}
