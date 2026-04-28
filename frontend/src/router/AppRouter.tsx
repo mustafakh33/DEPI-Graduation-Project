@@ -9,7 +9,14 @@ import ForgotPasswordLinkSent from "@/features/auth/pages/ForgotPasswordLinkSent
 import NewPassword from "@/pages/public/NewPassword";
 import Unauthorized from "@/pages/public/Unauthorized";
 import NotFound from "@/pages/public/NotFound";
-import PlacementTest from "@/features/auth/pages/PlacementTest";
+import TrackSelection from "@/pages/TrackSelection";
+import ScheduleSetup from "@/pages/ScheduleSetup";
+import TestIntro from "@/pages/TestIntro";
+import ActiveTest from "@/pages/ActiveTest";
+import TestResult from "@/pages/TestResult";
+import FinalWelcome from "@/pages/FinalWelcome";
+import OnboardingDashboard from "@/pages/OnboardingDashboard";
+import { OnboardingRouteGuard } from "@/components/onboarding/OnboardingRouteGuard";
 
 // Student pages
 import StudentDashboard from "@/features/student/pages/Dashboard";
@@ -76,8 +83,35 @@ const AppRouter = () => {
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/placement-test" element={<PlacementTest />} />
+        <Route path="/signup" element={<Register />} />
+        <Route path="/register" element={<Navigate to="/signup" replace />} />
+
+        <Route element={<OnboardingRouteGuard step="track" />}>
+          <Route path="/track-selection" element={<TrackSelection />} />
+        </Route>
+        <Route element={<OnboardingRouteGuard step="schedule" />}>
+          <Route path="/schedule" element={<ScheduleSetup />} />
+          <Route path="/schedule-setup" element={<Navigate to="/schedule" replace />} />
+        </Route>
+        <Route element={<OnboardingRouteGuard step="intro" />}>
+          <Route path="/placement-intro" element={<TestIntro />} />
+          <Route path="/test-intro" element={<Navigate to="/placement-intro" replace />} />
+        </Route>
+        <Route element={<OnboardingRouteGuard step="test" />}>
+          <Route path="/placement-test" element={<ActiveTest />} />
+          <Route path="/active-test" element={<Navigate to="/placement-test" replace />} />
+        </Route>
+        <Route element={<OnboardingRouteGuard step="result" />}>
+          <Route path="/result" element={<TestResult />} />
+          <Route path="/test-result" element={<Navigate to="/result" replace />} />
+        </Route>
+        <Route element={<OnboardingRouteGuard step="complete" />}>
+          <Route path="/onboarding-complete" element={<FinalWelcome />} />
+          <Route path="/final-welcome" element={<Navigate to="/onboarding-complete" replace />} />
+        </Route>
+        <Route element={<OnboardingRouteGuard step="dashboard" />}>
+          <Route path="/dashboard" element={<OnboardingDashboard />} />
+        </Route>
         <Route
           path="/forgot-password"
           element={<ForgotPasswordIdentifyAccount />}

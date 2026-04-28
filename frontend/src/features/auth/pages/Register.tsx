@@ -1,7 +1,23 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+
+import { useOnboarding } from "@/store/onboarding/OnboardingContext";
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
+  const { completeSignup } = useOnboarding();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    completeSignup({
+      email: String(formData.get("email") || "student@unihub.edu"),
+      name: String(formData.get("name") || "Alex"),
+    });
+    navigate("/track-selection");
+  };
+
   return (
     <div className="antialiased font-body-md overflow-x-hidden min-h-screen bg-[#11131b] text-on-background selection:bg-primary-container selection:text-on-primary-container">
       <main className="min-h-screen pt-8 flex items-center justify-center relative">
@@ -15,7 +31,7 @@ const Register: React.FC = () => {
           {/* Left Section: Value Proposition */}
           <div className="lg:col-span-6 flex flex-col justify-center space-y-stack-lg">
             <div className="space-y-stack-md">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/20 text-secondary text-label-sm border border-secondary-container/30">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/20 text-on-background text-label-sm border border-secondary-container/30">
                 <span className="material-symbols-outlined text-[14px] mr-1">
                   bolt
                 </span>
@@ -109,7 +125,7 @@ const Register: React.FC = () => {
                 </p>
               </div>
 
-              <form className="space-y-stack-md">
+              <form className="space-y-stack-md" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
                   <div className="space-y-stack-xs">
                     <label
@@ -120,6 +136,7 @@ const Register: React.FC = () => {
                     </label>
                     <input
                       id="name"
+                      name="name"
                       className="w-full bg-surface-container-highest border border-outline-variant text-on-surface rounded-lg py-3 px-4 focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none"
                       placeholder="Alan Turing"
                       type="text"
@@ -134,6 +151,7 @@ const Register: React.FC = () => {
                     </label>
                     <input
                       id="email"
+                      name="email"
                       className="w-full bg-surface-container-highest border border-outline-variant text-on-surface rounded-lg py-3 px-4 focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none"
                       placeholder="alan@unihub.edu"
                       type="email"
@@ -149,7 +167,8 @@ const Register: React.FC = () => {
                     Password
                   </label>
                   <input
-                    id="password"
+                      id="password"
+                      name="password"
                     className="w-full bg-surface-container-highest border border-outline-variant text-on-surface rounded-lg py-3 px-4 focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none"
                     placeholder="••••••••"
                     type="password"
@@ -169,6 +188,7 @@ const Register: React.FC = () => {
                   <div className="relative">
                     <select
                       id="track"
+                      name="track"
                       className="w-full bg-surface-container-highest border border-outline-variant text-on-surface rounded-lg py-3 px-4 appearance-none focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none cursor-pointer"
                       defaultValue=""
                     >

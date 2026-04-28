@@ -5,14 +5,17 @@ import AppRouter from "@/router/AppRouter.tsx";
 import { Theme } from "@radix-ui/themes/dist/cjs/components/index.js";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import { OnboardingProvider } from "@/store/onboarding/OnboardingContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <AuthProvider>
-        <Theme>
-          <AppRouter />
-        </Theme>
+        <OnboardingProvider>
+          <Theme>
+            <AppRouter />
+          </Theme>
+        </OnboardingProvider>
       </AuthProvider>
     </Provider>
   </StrictMode>,
