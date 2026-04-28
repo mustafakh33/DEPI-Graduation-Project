@@ -1,69 +1,80 @@
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Students: React.FC = () => {
   const [filter, setFilter] = useState("All Students");
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar p-8">
-      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 md:p-8">
+      <div className="mb-6 flex flex-col justify-between gap-4 md:mb-8 md:flex-row md:items-end">
         <div>
-          <h2 className="text-3xl font-extrabold tracking-tight">Student Performance Directory</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Student Performance Directory</h2>
           <p className="text-slate-500 dark:text-slate-400 mt-2">Comprehensive overview of academic rankings and engagement metrics across all batches.</p>
         </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
+          <Button variant="outline" className="justify-center gap-2">
             <span className="material-symbols-outlined text-lg">download</span>
             Export CSV
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+          </Button>
+          <Button variant="primary" className="justify-center gap-2 shadow-lg shadow-primary/20">
             <span className="material-symbols-outlined text-lg">add</span>
             Add Student
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white dark:bg-card p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
+        <Card className="rounded-xl border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-card sm:p-6">
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Total Students</p>
-          <h3 className="text-2xl font-bold mt-1">1,284</h3>
+          <h3 className="mt-1 text-xl font-bold sm:text-2xl">1,284</h3>
           <div className="flex items-center gap-1 text-emerald-500 text-xs mt-2">
             <span className="material-symbols-outlined text-sm">trending_up</span>
             <span>12% from last month</span>
           </div>
-        </div>
-        <div className="bg-white dark:bg-card p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+        </Card>
+        <Card className="rounded-xl border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-card sm:p-6">
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Avg. Attendance</p>
-          <h3 className="text-2xl font-bold mt-1">88.4%</h3>
-          <div className="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-3">
-            <div className="bg-primary h-full rounded-full" style={{ width: "88.4%" }}></div>
-          </div>
-        </div>
-        <div className="bg-white dark:bg-card p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 className="mt-1 text-xl font-bold sm:text-2xl">88.4%</h3>
+          <Progress
+            value={88.4}
+            className="mt-3 h-1.5 bg-slate-100 dark:bg-slate-800 **:data-[slot=progress-indicator]:bg-primary"
+          />
+        </Card>
+        <Card className="rounded-xl border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-card sm:p-6">
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Pass Rate</p>
-          <h3 className="text-2xl font-bold mt-1">92.1%</h3>
+          <h3 className="mt-1 text-xl font-bold sm:text-2xl">92.1%</h3>
           <div className="flex items-center gap-1 text-emerald-500 text-xs mt-2">
             <span className="material-symbols-outlined text-sm">check_circle</span>
             <span>Healthy target achieved</span>
           </div>
-        </div>
-        <div className="bg-white dark:bg-card p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+        </Card>
+        <Card className="rounded-xl border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-card sm:p-6">
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Total Coins</p>
-          <h3 className="text-2xl font-bold mt-1">45.2k</h3>
+          <h3 className="mt-1 text-xl font-bold sm:text-2xl">45.2k</h3>
           <div className="flex items-center gap-1 text-amber-500 text-xs mt-2">
             <span className="material-symbols-outlined text-sm">stars</span>
             <span>Engagement high</span>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Filters */}
-      <div className="flex gap-3 mb-6 overflow-x-auto pb-2 custom-scrollbar">
+      <div className="mb-6 flex flex-wrap items-center gap-2 overflow-x-auto pb-2 sm:gap-3 custom-scrollbar">
         {["All Students", "Top Performers", "At Risk", "Graduating Class"].map((f) => (
           <button 
             key={f}
             onClick={() => setFilter(f)}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors sm:px-4 sm:text-sm ${
               filter === f 
                 ? "bg-primary text-white" 
                 : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
@@ -73,20 +84,25 @@ const Students: React.FC = () => {
           </button>
         ))}
         
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-0 flex w-full items-center justify-end gap-2 pt-1 sm:ml-auto sm:w-auto sm:pt-0">
           <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Sort by:</span>
-          <select className="bg-transparent border-none text-sm font-semibold text-primary focus:ring-0 cursor-pointer outline-none">
-            <option>Rank (Highest First)</option>
-            <option>Name (A-Z)</option>
-            <option>Recent Activity</option>
-          </select>
+          <Select defaultValue="rank">
+            <SelectTrigger size="sm" className="border-0 bg-transparent px-0 font-semibold text-primary shadow-none hover:bg-transparent focus-visible:ring-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectItem value="rank">Rank (Highest First)</SelectItem>
+              <SelectItem value="name">Name (A-Z)</SelectItem>
+              <SelectItem value="recent">Recent Activity</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
       {/* Students Table */}
-      <div className="bg-white dark:bg-card rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+      <Card className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-card">
         <div className="overflow-x-auto custom-scrollbar">
-          <table className="w-full text-left border-collapse min-w-[1000px]">
+          <table className="w-full min-w-[900px] border-collapse text-left xl:min-w-[1000px]">
             <thead>
               <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
                 <th className="px-6 py-4">Rank</th>
@@ -159,7 +175,7 @@ const Students: React.FC = () => {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 rounded transition-colors opacity-0 group-hover:opacity-100">View Details</button>
+                    <button className="rounded px-3 py-1.5 text-xs font-bold text-primary opacity-100 transition-colors hover:bg-primary/10 sm:opacity-0 sm:group-hover:opacity-100">View Details</button>
                     <button className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
                       <span className="material-symbols-outlined">more_vert</span>
                     </button>
@@ -222,7 +238,7 @@ const Students: React.FC = () => {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 rounded transition-colors opacity-0 group-hover:opacity-100">View Details</button>
+                    <button className="rounded px-3 py-1.5 text-xs font-bold text-primary opacity-100 transition-colors hover:bg-primary/10 sm:opacity-0 sm:group-hover:opacity-100">View Details</button>
                     <button className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
                       <span className="material-symbols-outlined">more_vert</span>
                     </button>
@@ -285,7 +301,7 @@ const Students: React.FC = () => {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <button className="px-3 py-1.5 text-xs font-bold text-primary hover:bg-primary/10 rounded transition-colors opacity-0 group-hover:opacity-100">View Details</button>
+                    <button className="rounded px-3 py-1.5 text-xs font-bold text-primary opacity-100 transition-colors hover:bg-primary/10 sm:opacity-0 sm:group-hover:opacity-100">View Details</button>
                     <button className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
                       <span className="material-symbols-outlined">more_vert</span>
                     </button>
@@ -296,21 +312,32 @@ const Students: React.FC = () => {
           </table>
         </div>
         
-        <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
+        <div className="flex flex-col gap-3 border-t border-slate-100 bg-slate-50/50 px-4 py-4 dark:border-slate-800 dark:bg-slate-800/30 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Showing <span className="font-bold text-slate-900 dark:text-slate-100">1 to 3</span> of <span className="font-bold text-slate-900 dark:text-slate-100">1,284</span> results
           </p>
           <div className="flex gap-2">
-            <button className="p-1 border border-slate-200 dark:border-slate-700 rounded hover:bg-white dark:hover:bg-slate-800 disabled:opacity-50 transition-colors" disabled>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 border-slate-200 dark:border-slate-700"
+              disabled
+              aria-label="Previous page"
+            >
               <span className="material-symbols-outlined text-lg">chevron_left</span>
-            </button>
+            </Button>
             <div className="flex items-center px-2 text-xs font-bold">Page 1 of 257</div>
-            <button className="p-1 border border-slate-200 dark:border-slate-700 rounded hover:bg-white dark:hover:bg-slate-800 transition-colors">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 border-slate-200 dark:border-slate-700"
+              aria-label="Next page"
+            >
               <span className="material-symbols-outlined text-lg">chevron_right</span>
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

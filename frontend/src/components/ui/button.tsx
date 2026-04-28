@@ -19,6 +19,11 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        /** Dashboard shell — saturated primary CTA (matches legacy `variant="primary"`). */
+        primary: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
+        /** Header icon — dark bar, minimal chrome */
+        headerIcon:
+          "relative size-9 shrink-0 rounded-md border-0 bg-transparent text-white hover:bg-slate-800/80 focus-visible:ring-slate-600",
         heroPrimary:
           "bg-primary-container text-on-primary-container shadow-lg shadow-primary-container/20 hover:scale-105 active:scale-95",
         heroOutline:
@@ -43,16 +48,18 @@ const buttonVariants = cva(
   }
 )
 
+export type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }
+
 function Button({
   className,
   variant = "default",
   size = "default",
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
 
   return (

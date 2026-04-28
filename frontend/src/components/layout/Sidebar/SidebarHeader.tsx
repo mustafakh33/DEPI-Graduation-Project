@@ -1,4 +1,5 @@
 import React from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface SidebarHeaderProps {
   logo?: React.ReactNode;
@@ -13,9 +14,11 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
 }) => (
   <div className="flex items-center gap-3 p-6">
     {logo ?? (
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-        <span className="material-symbols-outlined">school</span>
-      </div>
+      <Avatar className="size-10 shrink-0 bg-primary">
+        <AvatarFallback className="rounded-full bg-primary text-white">
+          <span className="material-symbols-outlined">school</span>
+        </AvatarFallback>
+      </Avatar>
     )}
     <div className="min-w-0">
       <h1 className="truncate text-lg font-bold leading-none text-slate-900 dark:text-white">{appName}</h1>

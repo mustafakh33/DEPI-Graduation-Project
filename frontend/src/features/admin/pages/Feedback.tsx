@@ -1,82 +1,85 @@
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Feedback: React.FC = () => {
   const [activeTab, setActiveTab] = useState("all");
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 md:p-8">
       {/* Header Stats Section */}
       <div className="mb-8">
-        <div className="flex justify-between items-end mb-6">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-black text-slate-100 mb-2">Compliments & Complaints</h1>
+            <h1 className="mb-2 text-2xl font-black text-slate-100 sm:text-3xl">Compliments & Complaints</h1>
             <p className="text-slate-400 text-sm">Monitor campus sentiment and resolve student concerns in real-time.</p>
           </div>
-          <div className="flex gap-2 p-1 bg-slate-800 rounded-lg">
-            <button className="px-4 py-1.5 text-xs font-bold rounded bg-primary text-white">All Time</button>
-            <button className="px-4 py-1.5 text-xs font-bold rounded text-slate-400 hover:text-slate-100">Last 30 Days</button>
+          <div className="flex w-full gap-2 rounded-lg bg-slate-800 p-1 sm:w-auto">
+            <Button variant="primary" size="sm" className="flex-1 sm:flex-none">All Time</Button>
+            <Button variant="ghost" size="sm" className="flex-1 text-slate-400 hover:text-slate-100 sm:flex-none">
+              Last 30 Days
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-slate-800/40 border border-slate-800 p-6 rounded-xl">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
+          <Card className="rounded-xl border-slate-800 bg-slate-800/40 p-4 text-slate-100 sm:p-6">
             <p className="text-slate-400 text-sm font-medium mb-1">Total Reports</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-slate-100">1,240</span>
+              <span className="text-2xl font-bold text-slate-100 sm:text-3xl">1,240</span>
               <span className="text-xs font-bold text-emerald-500 flex items-center">
                 <span className="material-symbols-outlined text-[14px]">trending_up</span> 12%
               </span>
             </div>
-          </div>
-          <div className="bg-slate-800/40 border border-slate-800 p-6 rounded-xl">
+          </Card>
+          <Card className="rounded-xl border-slate-800 bg-slate-800/40 p-4 text-slate-100 sm:p-6">
             <p className="text-slate-400 text-sm font-medium mb-1">Open Issues</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-slate-100">84</span>
+              <span className="text-2xl font-bold text-slate-100 sm:text-3xl">84</span>
               <span className="text-xs font-bold text-rose-500 flex items-center">
                 <span className="material-symbols-outlined text-[14px]">trending_down</span> 5%
               </span>
             </div>
-          </div>
-          <div className="bg-slate-800/40 border border-slate-800 p-6 rounded-xl">
+          </Card>
+          <Card className="rounded-xl border-slate-800 bg-slate-800/40 p-4 text-slate-100 sm:p-6">
             <p className="text-slate-400 text-sm font-medium mb-1">Resolution Rate</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-slate-100">93.2%</span>
+              <span className="text-2xl font-bold text-slate-100 sm:text-3xl">93.2%</span>
               <span className="text-xs font-bold text-emerald-500 flex items-center">
                 <span className="material-symbols-outlined text-[14px]">trending_up</span> 18%
               </span>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 
-      {/* Tabs Navigation */}
-      <div className="border-b border-slate-800 mb-6 flex gap-8">
-        <button 
-          onClick={() => setActiveTab("all")}
-          className={`pb-4 text-sm font-bold relative ${activeTab === 'all' ? 'text-primary' : 'text-slate-400 hover:text-slate-200'}`}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-0">
+        <TabsList
+          variant="line"
+          className="mb-6 w-full justify-start gap-6 overflow-x-auto border-b border-slate-800 bg-transparent p-0 pb-1 text-slate-400 custom-scrollbar sm:gap-8"
         >
-          All Feedback
-          {activeTab === 'all' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>}
-        </button>
-        <button 
-          onClick={() => setActiveTab("complaints")}
-          className={`pb-4 text-sm font-bold relative ${activeTab === 'complaints' ? 'text-primary' : 'text-slate-400 hover:text-slate-200'}`}
-        >
-          Complaints
-          {activeTab === 'complaints' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>}
-        </button>
-        <button 
-          onClick={() => setActiveTab("compliments")}
-          className={`pb-4 text-sm font-bold relative ${activeTab === 'compliments' ? 'text-primary' : 'text-slate-400 hover:text-slate-200'}`}
-        >
-          Compliments
-          {activeTab === 'compliments' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>}
-        </button>
-      </div>
+          <TabsTrigger value="all" className="px-0 pb-4 text-sm font-bold text-slate-400 data-[state=active]:text-primary">
+            All Feedback
+          </TabsTrigger>
+          <TabsTrigger
+            value="complaints"
+            className="px-0 pb-4 text-sm font-bold text-slate-400 data-[state=active]:text-primary"
+          >
+            Complaints
+          </TabsTrigger>
+          <TabsTrigger
+            value="compliments"
+            className="px-0 pb-4 text-sm font-bold text-slate-400 data-[state=active]:text-primary"
+          >
+            Compliments
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Feedback Table */}
-      <div className="bg-slate-800/20 border border-slate-800 rounded-xl overflow-hidden">
-        <table className="w-full text-left border-collapse">
+        <TabsContent value={activeTab} className="m-0">
+          <Card className="overflow-hidden rounded-xl border-slate-800 bg-slate-800/20 p-0">
+            <div className="overflow-x-auto custom-scrollbar">
+              <table className="w-full min-w-[860px] border-collapse text-left xl:min-w-[980px]">
           <thead>
             <tr className="bg-slate-800/50">
               <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Complainant</th>
@@ -180,17 +183,20 @@ const Feedback: React.FC = () => {
               </td>
             </tr>
           </tbody>
-        </table>
-        <div className="px-6 py-4 border-t border-slate-800 flex items-center justify-between">
+              </table>
+            </div>
+            <div className="flex flex-col gap-3 border-t border-slate-800 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p className="text-xs text-slate-500">Showing 1 to 4 of 1,240 entries</p>
-          <div className="flex gap-2">
-            <button className="px-3 py-1 bg-slate-800 text-slate-400 rounded-lg text-xs font-bold hover:text-white transition-colors">Previous</button>
-            <button className="px-3 py-1 bg-primary text-white rounded-lg text-xs font-bold">1</button>
-            <button className="px-3 py-1 bg-slate-800 text-slate-400 rounded-lg text-xs font-bold hover:text-white transition-colors">2</button>
-            <button className="px-3 py-1 bg-slate-800 text-slate-400 rounded-lg text-xs font-bold hover:text-white transition-colors">Next</button>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" size="sm" className="bg-slate-800 text-slate-400 hover:text-white">Previous</Button>
+            <Button variant="primary" size="sm">1</Button>
+            <Button variant="secondary" size="sm" className="bg-slate-800 text-slate-400 hover:text-white">2</Button>
+            <Button variant="secondary" size="sm" className="bg-slate-800 text-slate-400 hover:text-white">Next</Button>
           </div>
         </div>
-      </div>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

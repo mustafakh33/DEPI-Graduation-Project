@@ -4,12 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormValues } from "@/utils/validations/auth.validation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useAppDispatch } from "@/store/hooks";
+// import { useAppDispatch } from "@/store/hooks";
 // import { loginThunk } from "../store/authSlice";
 
 export const LoginForm: React.FC = () => {
-  const dispatch = useAppDispatch();
-  
   const {
     register,
     handleSubmit,
