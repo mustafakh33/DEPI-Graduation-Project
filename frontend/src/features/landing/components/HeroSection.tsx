@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { Button } from '@/components/ui/button';
 
 const HeroSection: React.FC = () => {
   return (
@@ -20,11 +21,13 @@ const HeroSection: React.FC = () => {
             UniHub transforms self-learning into a rigorous, cohort-based experience. Join a semester, follow a track, and graduate with a portfolio that matters.
           </p>
           <div className="flex flex-wrap gap-4 pt-4">
-            <Link to="/register" className="bg-primary-container text-on-primary-container px-8 py-4 rounded-xl font-label-md text-label-md shadow-lg shadow-primary-container/20 hover:scale-105 active:scale-95 transition-all inline-block">Start Learning Free</Link>
-            <button className="border border-outline-variant text-white px-8 py-4 rounded-xl font-label-md text-label-md hover:bg-surface-container transition-all flex items-center gap-2">
+            <Button variant="heroPrimary" size="hero" asChild>
+              <Link to="/register">Start Learning Free</Link>
+            </Button>
+            <Button variant="heroOutline" size="hero">
               See How It Works
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
+            </Button>
           </div>
         </div>
         <div className="relative lg:block hidden">
