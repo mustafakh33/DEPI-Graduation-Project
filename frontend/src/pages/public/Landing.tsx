@@ -17,7 +17,7 @@ const Landing: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container w-full min-h-screen font-body-sm">
+    <div className="bg-[#09090b] text-gray-200 selection:bg-blue-500/30 selection:text-white w-full min-h-screen font-sans antialiased overflow-x-hidden">
       <TopNavBar />
       <HeroSection />
       <StatsBar />

@@ -1,68 +1,111 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+
+const tracks = [
+  {
+    title: "Web Development",
+    level: "Professional",
+    levelColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    desc: "Full-stack React & Node.js mastery with system design.",
+    modules: "12 Modules",
+    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "AI & Data Science",
+    level: "Expert",
+    levelColor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+    desc: "Python, Machine Learning models, and LLM implementation.",
+    modules: "15 Modules",
+    img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "Mobile Development",
+    level: "Foundation",
+    levelColor: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+    desc: "Cross-platform development using Flutter and React Native.",
+    modules: "10 Modules",
+    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "Cybersecurity",
+    level: "Hardcore",
+    levelColor: "bg-red-500/20 text-red-400 border-red-500/30",
+    desc: "Ethical hacking, network security, and forensic analysis.",
+    modules: "14 Modules",
+    img: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800"
+  }
+];
 
 const LearningTracks: React.FC = () => {
   return (
-    <section className="py-24 bg-surface-container-lowest" id="tracks">
-      <div className="max-w-container-max mx-auto px-6 md:px-12">
+    <section className="py-24 bg-[#09090b] relative" id="tracks">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/5 to-transparent"></div>
+      
+      <div className="max-w-container-max mx-auto px-6 md:px-12 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="space-y-4">
-            <h2 className="font-h2 text-h2 text-white">Choose Your Path</h2>
-            <p className="text-on-surface-variant font-body-lg text-body-lg max-w-xl">Each track is a 4-month intensive curriculum designed to take you from novice to job-ready.</p>
-          </div>
-          <div className="flex gap-2">
-            <button className="p-2 border border-outline-variant rounded-full text-white hover:bg-surface-container"><span className="material-symbols-outlined">chevron_left</span></button>
-            <button className="p-2 border border-outline-variant rounded-full text-white hover:bg-surface-container"><span className="material-symbols-outlined">chevron_right</span></button>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="space-y-4"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Choose Your Path</h2>
+            <p className="text-gray-400 text-lg max-w-xl">Each track is a 4-month intensive curriculum designed to take you from novice to job-ready.</p>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex gap-3"
+          >
+            <button className="p-3 border border-white/10 rounded-full text-white hover:bg-white/5 transition-all hover:scale-105 active:scale-95">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button className="p-3 border border-white/10 rounded-full text-white hover:bg-white/5 transition-all hover:scale-105 active:scale-95">
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </motion.div>
         </div>
+
         <div className="grid md:grid-cols-4 gap-6">
-          <div className="bg-surface-container p-6 rounded-2xl border border-outline-variant/20 group hover:bg-surface-container-high transition-all">
-            <div className="h-40 rounded-xl mb-6 overflow-hidden">
-              <img alt="Web Dev" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="abstract lines and code representation symbolizing modern web development and high performance architecture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFiECNHU1HW1J-oblhmz7h3GqDhQ7-HmCzyR9O7tT9lx-612WdGu5xHnDuHRgH038Up-gSXSEE5yDrDsQBnQWyCJQw_QLkkw8gPksqUHtccVLIkMRNhPJyqbEV7_3jTGttcOwbRmdeTeensOnorWzbWESaPLobos6SpXnov6JydMLYBKjBqz4X5dd84bjdEhLn3_GUe-M50Y5RuchZ7fHFvQ7huRUWUQvM42N1xXmkY4SiHyRhXDOOsnI7EatDUMmj8r4IEAeHDPI" />
-            </div>
-            <span className="bg-primary-container/20 text-primary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Professional</span>
-            <h4 className="text-white font-h3 text-h3 mt-3">Web Development</h4>
-            <p className="text-on-surface-variant font-body-sm text-body-sm mt-2 mb-6">Full-stack React &amp; Node.js mastery with system design.</p>
-            <div className="flex items-center justify-between border-t border-outline-variant/30 pt-4">
-              <span className="text-on-surface-variant text-label-sm font-label-sm">12 Modules</span>
-              <a className="text-primary-container font-label-md text-label-md hover:underline" href="#">View Track</a>
-            </div>
-          </div>
-          <div className="bg-surface-container p-6 rounded-2xl border border-outline-variant/20 group hover:bg-surface-container-high transition-all">
-            <div className="h-40 rounded-xl mb-6 overflow-hidden">
-              <img alt="AI" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="neural network visualization with glowing nodes and connecting lines on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwFIa1KzpTg4QZ7C8li-lA7OJuDWGfq2gDoDz3vwyQMon4O9iQjL9BH1_vO3t6JrU3XjVAuNNk2Ozc9yBoJdaZ7SJ_2bzLY5J1dIG1cbhVU163DTg2WKCoQnLkQraTsI3ATh_Z5PWB0BvnIwSjL3Y0YwHGa2WFErIqsMzOnKQBVPhfiq9WiMgcGc2DOTz5TEhfqcQo3WOrwbLc9JexNNZ9uoMGi4jhZwiFO-Guml3LYSKhqFmaUopZTDJYUeBHto8vjHgWH3C72ms" />
-            </div>
-            <span className="bg-secondary-container/20 text-secondary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Expert</span>
-            <h4 className="text-white font-h3 text-h3 mt-3">AI &amp; Data Science</h4>
-            <p className="text-on-surface-variant font-body-sm text-body-sm mt-2 mb-6">Python, Machine Learning models, and LLM implementation.</p>
-            <div className="flex items-center justify-between border-t border-outline-variant/30 pt-4">
-              <span className="text-on-surface-variant text-label-sm font-label-sm">15 Modules</span>
-              <a className="text-primary-container font-label-md text-label-md hover:underline" href="#">View Track</a>
-            </div>
-          </div>
-          <div className="bg-surface-container p-6 rounded-2xl border border-outline-variant/20 group hover:bg-surface-container-high transition-all">
-            <div className="h-40 rounded-xl mb-6 overflow-hidden">
-              <img alt="Mobile" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="minimal smartphone interface showing clean app icons and vibrant UI elements" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOMU9QRpWcfqCn_WR61ojYdONT1C2qi_ThqpduxOTJbD67VCYjX1zns6a8KUBxnqiPxav1nUrvMnbcGJqOtl1d4qOLdngmU-7TeOaBgnR0Cklb7gYNpbPrbvxdoUS7wrJ5RaMbUHfN58vpRdWpJlEEZH7SebChmJa-PK1WJ3oA2dM4EFA3IT6qq9RdWTmXNCCJNgc7z4Y7nZ_MRZWzldX9OJxVO7UgSuZdM--Y1TDNb-Bf8rN30RTVqFLPvrOglb_q5ROds1Ydwg4" />
-            </div>
-            <span className="bg-tertiary-container/20 text-tertiary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Foundation</span>
-            <h4 className="text-white font-h3 text-h3 mt-3">Mobile Development</h4>
-            <p className="text-on-surface-variant font-body-sm text-body-sm mt-2 mb-6">Cross-platform development using Flutter and React Native.</p>
-            <div className="flex items-center justify-between border-t border-outline-variant/30 pt-4">
-              <span className="text-on-surface-variant text-label-sm font-label-sm">10 Modules</span>
-              <a className="text-primary-container font-label-md text-label-md hover:underline" href="#">View Track</a>
-            </div>
-          </div>
-          <div className="bg-surface-container p-6 rounded-2xl border border-outline-variant/20 group hover:bg-surface-container-high transition-all">
-            <div className="h-40 rounded-xl mb-6 overflow-hidden">
-              <img alt="Cybersecurity" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="digital lock and secure data stream visualization with green matrix style accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhksdz2RzqLw5_HrWChm-NJQ9Ts6SetCqT4L1rxB2kuNolJYK3bzFc1aDJr5TgTfnJG8kUPkYY-k4w1RaKaYwhjOzO6gHlHSzL9tuB8PPeU3dDUT_Oe5hU07nQ6nUJjZnvoX4SR7a0A09J_7kUI6k2ZXgHqYAKRVTs97dPnpG6M0izFbWAK1yWOOV5lQjjuBddAA7yluQdv3TizsGyYUsQhvzxYw9SwSHYEz9bT0De1teoz4ut5j-AkBmc75ymGExL2P-7pIE1VUc" />
-            </div>
-            <span className="bg-error-container/20 text-error text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Hardcore</span>
-            <h4 className="text-white font-h3 text-h3 mt-3">Cybersecurity</h4>
-            <p className="text-on-surface-variant font-body-sm text-body-sm mt-2 mb-6">Ethical hacking, network security, and forensic analysis.</p>
-            <div className="flex items-center justify-between border-t border-outline-variant/30 pt-4">
-              <span className="text-on-surface-variant text-label-sm font-label-sm">14 Modules</span>
-              <a className="text-primary-container font-label-md text-label-md hover:underline" href="#">View Track</a>
-            </div>
-          </div>
+          {tracks.map((track, idx) => (
+            <motion.div 
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="bg-[#18181b] p-2 rounded-3xl border border-white/5 group hover:border-blue-500/30 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] flex flex-col h-full"
+            >
+              <div className="h-48 rounded-2xl mb-4 overflow-hidden relative">
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                <img 
+                  alt={track.title} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                  src={track.img} 
+                />
+              </div>
+              
+              <div className="px-4 pb-4 flex flex-col flex-grow">
+                <span className={`inline-block w-fit text-[10px] font-bold px-3 py-1 rounded-full uppercase border mb-4 ${track.levelColor}`}>
+                  {track.level}
+                </span>
+                
+                <h4 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">{track.title}</h4>
+                <p className="text-gray-400 text-sm mb-6 flex-grow">{track.desc}</p>
+                
+                <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
+                  <span className="text-gray-500 text-sm font-medium">{track.modules}</span>
+                  <a className="text-blue-400 text-sm font-semibold hover:text-blue-300 flex items-center gap-1 group/link" href="#">
+                    View Track
+                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
