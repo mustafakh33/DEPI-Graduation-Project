@@ -32,10 +32,10 @@ const HeroSection: React.FC = () => {
             The Online University
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-              That Keeps You Accountable
+              Structured Path
             </span>
             <br />
-            And Gets You Hired
+            From Zero to Hero
           </h1>
           
           <p className="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed">
