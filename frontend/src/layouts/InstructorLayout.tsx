@@ -3,7 +3,7 @@ import {
   instructorDashboardPath,
   instructorNavItems,
 } from "@/features/instructor/config/navigation";
-import { useLogout } from "@/core/hooks/useLogout";
+import { useLogout } from "@/hooks/useLogout";
 import AppShellLayout from "@/layouts/AppShellLayout";
 
 const InstructorLayout: React.FC = () => {

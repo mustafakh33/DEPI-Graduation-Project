@@ -1,8 +1,8 @@
 import React from "react";
-import SidebarHeader from "../molecules/SidebarHeader";
-import SidebarNavLink from "../atoms/SidebarNavLink";
-import type { NavLinkItem } from "../atoms/SidebarNavLink";
-import LogoutButton from "../atoms/LogoutButton";
+import SidebarHeader from "./SidebarHeader";
+import SidebarNavLink from "./SidebarNavLink";
+import type { NavLinkItem } from "./SidebarNavLink";
+import LogoutButton from "./LogoutButton";
 
 interface SidebarProps {
   links: NavLinkItem[];

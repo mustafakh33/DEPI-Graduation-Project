@@ -1,5 +1,5 @@
 import React from "react";
-import PortalDashboardOverview from "@/components/dashboard/PortalDashboardOverview";
+import PortalDashboardOverview from "@/features/dashboard/components/PortalDashboardOverview";
 import { useAuth } from "@/hooks/useAuth";
 
 /**

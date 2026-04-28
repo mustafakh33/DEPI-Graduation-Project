@@ -1,5 +1,5 @@
-import type { NavLinkItem } from "@/components/atoms/SidebarNavLink";
-import { navIcon } from "@/components/dashboard/navIcon";
+import type { NavLinkItem } from "@/components/layout/Sidebar/SidebarNavLink";
+import { navIcon } from "@/features/dashboard/components/navIcon";
 
 export const studentDashboardPath = "/student/dashboard";
 

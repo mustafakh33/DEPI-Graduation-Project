@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
-import TopNavBar from "@/components/organisms/Landing/TopNavBar";
-import HeroSection from "@/components/organisms/Landing/HeroSection";
-import StatsBar from "@/components/organisms/Landing/StatsBar";
-import ProblemSolution from "@/components/organisms/Landing/ProblemSolution";
-import HowItWorks from "@/components/organisms/Landing/HowItWorks";
-import CoreFeatures from "@/components/organisms/Landing/CoreFeatures";
-import LearningTracks from "@/components/organisms/Landing/LearningTracks";
-import Testimonials from "@/components/organisms/Landing/Testimonials";
-import Pricing from "@/components/organisms/Landing/Pricing";
-import FinalCTA from "@/components/organisms/Landing/FinalCTA";
-import LandingFooter from "@/components/organisms/Landing/LandingFooter";
+import TopNavBar from "@/features/landing/components/TopNavBar";
+import HeroSection from "@/features/landing/components/HeroSection";
+import StatsBar from "@/features/landing/components/StatsBar";
+import ProblemSolution from "@/features/landing/components/ProblemSolution";
+import HowItWorks from "@/features/landing/components/HowItWorks";
+import CoreFeatures from "@/features/landing/components/CoreFeatures";
+import LearningTracks from "@/features/landing/components/LearningTracks";
+import Testimonials from "@/features/landing/components/Testimonials";
+import Pricing from "@/features/landing/components/Pricing";
+import FinalCTA from "@/features/landing/components/FinalCTA";
+import LandingFooter from "@/features/landing/components/LandingFooter";
 
 const Landing: React.FC = () => {
   useEffect(() => {

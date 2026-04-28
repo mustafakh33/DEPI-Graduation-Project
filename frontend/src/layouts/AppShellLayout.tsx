@@ -1,10 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router";
-import type { NavLinkItem } from "@/components/atoms/SidebarNavLink";
-import Sidebar from "@/components/organisms/Sidebar";
+import type { NavLinkItem } from "@/components/layout/Sidebar/SidebarNavLink";
+import Sidebar from "@/components/layout/Sidebar/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useForceDashboardTheme } from "@/core/hooks/useForceDashboardTheme";
+import { useForceDashboardTheme } from "@/hooks/useForceDashboardTheme";
 import { useAuth } from "@/hooks/useAuth";
 
 export interface AppShellLayoutProps {
