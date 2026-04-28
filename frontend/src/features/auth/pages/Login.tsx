@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck } from "lucide-react";
+import AuthLayout from "../../../layouts/AuthLayout";
+import { Button } from "@/components/ui/button";
 
 import type { Role } from "../../../types/global.types";
 import { useAuth } from "../../../hooks/useAuth";
@@ -17,6 +20,7 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [role, setRole] = useState<Role>("student");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,173 +29,111 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
-      <section className="hidden md:flex md:w-1/2 relative overflow-hidden flex-col justify-end p-margin items-start">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 login-image-overlay z-10"></div>
-          <img
-            alt="Campus Architecture"
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY8tuR_tHQDyM89kD-hYna1qVi3OEm1-fcFxv2nwZfQjzvQZylYfMwBdeqcEu2WbG_t-CL1mGdEmv4_jmrM6vhM4l7L1y0QfZmHcMH1Y75sil6pulYxjGhHUgU7sf2J0nL6T1Z0DENJ2O2yVfMwi424zv7eOa5ZrrrcmkjzDS2RUwEEIkwTit2ofNYuECOvUfqhdXt_HEaz_5Y--AINVws0hb7uUJ4p5pVW0ladmTNGHHL3LVPLhy_40aK0lZJK68ZnNqFJpRvSts"
-          />
-        </div>
-        <div className="relative z-20 max-w-lg">
-          <div className="mb-stack-lg">
-            <h1 className="font-h1 text-h1 text-on-background tracking-tight mb-stack-xs uppercase">
-              WELCOME BACK,
-            </h1>
-            <span className="font-h1 text-h1 text-primary-container font-extrabold uppercase block mb-stack-md">
-              STUDENT
-            </span>
-            <p className="font-body-lg text-body-lg text-on-surface-variant">
-              Your academic progress is waiting for you.
-            </p>
-          </div>
-          <div className="glass-panel rounded-xl p-stack-md w-full mb-stack-lg">
-            <div className="flex justify-between items-center mb-stack-sm">
-              <span className="font-label-md text-label-md text-primary">
-                FALL 2024 semester
-              </span>
-              <span className="font-label-md text-label-md text-on-surface">
-                37% through your journey
-              </span>
+    <AuthLayout 
+      title="Welcome back" 
+      subtitle="Log in to access your digital campus dashboard"
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-400 ml-1">Email Address</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
             </div>
-            <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-              <div className="bg-primary-container h-full w-[37%] rounded-full shadow-[0_0_8px_rgba(37,99,235,0.6)]"></div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 opacity-60">
-            <div className="flex items-center gap-2 font-label-sm text-label-sm text-outline">
-              <span
-                className="material-symbols-outlined text-[14px]"
-                style={{
-                  fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24",
-                }}
-              >
-                terminal
-              </span>
-              SYSTEM VERSION 4.0.2 // TERMINAL ACCESS RESTRICTED
-            </div>
-            <div className="flex items-center gap-2 font-label-sm text-label-sm text-primary">
-              <span
-                className="material-symbols-outlined text-[14px]"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                sync
-              </span>
-              ACADEMIC PROGRESS SYNCED
-            </div>
+            <input
+              type="email"
+              placeholder="student@unihub.edu"
+              required
+              className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner"
+            />
           </div>
         </div>
-      </section>
 
-      <section className="flex-grow md:w-1/2 bg-surface-container-lowest flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          <div className="mb-stack-lg text-center md:text-left">
-            <h2 className="font-h2 text-h2 text-on-surface mb-stack-xs uppercase">
-              LOG IN TO YOUR ACCOUNT
-            </h2>
-            <p className="font-body-md text-body-md text-on-surface-variant">
-              Access your digital campus dashboard
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-stack-md">
-            <div className="space-y-stack-xs">
-              <label className="font-label-sm text-label-sm text-on-surface-variant ml-1 uppercase">
-                UNIVERSITY EMAIL
-              </label>
-              <div className="relative">
-                <input
-                  className="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all placeholder:text-outline/50"
-                  placeholder="student@unihub.edu"
-                  type="email"
-                />
-              </div>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-400 ml-1">Password</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
             </div>
-
-            <div className="space-y-stack-xs">
-              <label className="font-label-sm text-label-sm text-on-surface-variant ml-1 uppercase">
-                SECURE PASSWORD
-              </label>
-              <div className="relative">
-                <input
-                  className="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all placeholder:text-outline/50"
-                  placeholder="••••••••"
-                  type="password"
-                />
-              </div>
-            </div>
-
-            {/* Development Mock Role Selector */}
-            <div className="space-y-stack-xs pt-2">
-              <label className="font-label-sm text-label-sm text-on-surface-variant ml-1 uppercase">
-                DEVELOPMENT: SELECT ROLE TO LOGIN AS
-              </label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as Role)}
-                className="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all"
-              >
-                {roles.map((r) => (
-                  <option key={r} value={r}>
-                    {r.charAt(0).toUpperCase() + r.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex justify-between items-center py-2">
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <input
-                  className="w-4 h-4 rounded border-outline-variant bg-surface-container text-primary-container focus:ring-offset-background"
-                  type="checkbox"
-                />
-                <span className="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-surface transition-colors">
-                  Remember me
-                </span>
-              </label>
-              <Link
-                to="/forgot-password"
-                className="font-label-sm text-label-sm text-primary-container hover:underline uppercase tracking-tight"
-              >
-                FORGOT PASSWORD?
-              </Link>
-            </div>
-
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="••••••••"
+              required
+              className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-10 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner"
+            />
             <button
-              type="submit"
-              className="w-full bg-primary-container text-white py-4 rounded-lg font-label-md text-label-md uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-inverse-primary shadow-lg active:scale-[0.98] transition-all"
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 hover:text-gray-300 transition-colors"
             >
-              LOG IN <span className="material-symbols-outlined">arrow_forward</span>
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
-          </form>
-
-          <div className="mt-stack-lg text-center space-y-4">
-            <p className="font-body-sm text-body-sm text-on-surface-variant">
-              New to the campus?{" "}
-              <Link
-                to="/register"
-                className="text-primary font-bold hover:underline"
-              >
-                ENROL NOW
-              </Link>
-            </p>
-            <div className="flex flex-col gap-2 opacity-50">
-              <p className="font-label-sm text-label-sm italic tracking-tight">
-                Takes less than a minute
-              </p>
-              <p className="font-label-sm text-label-sm flex items-center justify-center gap-1">
-                <span className="material-symbols-outlined text-[14px]">
-                  verified_user
-                </span>
-                Secure platform. Your data is protected.
-              </p>
-            </div>
           </div>
         </div>
-      </section>
-    </div>
+
+        {/* Development Mock Role Selector */}
+        <div className="space-y-1.5 pt-2">
+          <label className="text-xs font-medium text-blue-400/80 uppercase tracking-wider ml-1">
+            Dev Only: Role
+          </label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value as Role)}
+            className="w-full bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 py-3 text-blue-100 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer"
+          >
+            {roles.map((r) => (
+              <option key={r} value={r} className="bg-[#18181b] text-white">
+                {r.charAt(0).toUpperCase() + r.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center justify-between pt-1">
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <div className="relative flex items-center justify-center">
+              <input
+                type="checkbox"
+                className="peer sr-only"
+              />
+              <div className="w-4 h-4 rounded bg-black/40 border border-white/20 peer-checked:bg-blue-600 peer-checked:border-blue-500 transition-all flex items-center justify-center">
+                <svg className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">Remember me</span>
+          </label>
+          <Link
+            to="/forgot-password"
+            className="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+          >
+            Forgot password?
+          </Link>
+        </div>
+
+        <Button 
+          type="submit"
+          className="w-full bg-white text-black hover:bg-gray-200 py-6 rounded-xl font-semibold text-base group transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] mt-2"
+        >
+          Sign In
+          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+        </Button>
+      </form>
+
+      <div className="mt-8 text-center space-y-4">
+        <p className="text-gray-400 text-sm">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-white font-medium hover:text-blue-400 transition-colors">
+            Create an account
+          </Link>
+        </p>
+        <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
+          <ShieldCheck className="w-4 h-4" />
+          <span>Secure, encrypted login</span>
+        </div>
+      </div>
+    </AuthLayout>
   );
 };
 

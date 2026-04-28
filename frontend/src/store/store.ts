@@ -6,6 +6,7 @@ import { configureStore } from "@reduxjs/toolkit";
 export const store = configureStore({
   reducer: {
     // auth: authReducer,
+    _placeholder: (state = null) => state,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

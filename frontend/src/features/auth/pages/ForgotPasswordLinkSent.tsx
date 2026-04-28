@@ -1,108 +1,98 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
+import { CheckCircle2, RefreshCw, LifeBuoy, Info, ArrowLeft, ArrowRight } from "lucide-react";
+import AuthLayout from "../../../layouts/AuthLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const ForgotPasswordLinkSent: React.FC = () => {
   const navigate = useNavigate();
+  const [timeLeft, setTimeLeft] = useState(59);
+
   useEffect(() => {
-    const root = document.documentElement;
-    const hadDark = root.classList.contains("dark");
-    if (!hadDark) root.classList.add("dark");
-    return () => {
-      if (!hadDark) root.classList.remove("dark");
-    };
-  }, []);
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [timeLeft]);
 
   return (
-    <div className="min-h-screen bg-[#11131b] text-on-background">
-      <main className="flex min-h-screen items-center justify-center px-6 py-12">
-        <div className="flex w-full max-w-container-max justify-center">
-          <Card className="relative w-full max-w-md overflow-hidden border border-[#374151] bg-[#1f2937] shadow-md">
-            <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-primary-container/10 blur-3xl" />
-            <CardContent className="flex flex-col items-center p-stack-lg text-center">
-              <div className="mb-stack-md flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/20">
-                <span className="material-symbols-outlined text-4xl text-emerald-500">check_circle</span>
-              </div>
-
-              <h1 className="mb-stack-sm text-h3 font-h3 text-on-background">Reset link sent!</h1>
-              <p className="mb-stack-lg text-body-md font-body-md text-on-surface-variant">
-                We sent a 6-digit code to your email. Enter it below to continue.
-              </p>
-
-              <form
-                className="mb-stack-md w-full space-y-stack-md"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  navigate("/forgot-password/new-password");
-                }}
-              >
-                <div className="space-y-stack-xs text-left">
-                  <label className="ml-1 text-label-sm font-label-sm text-on-surface-variant" htmlFor="verify-code">
-                    Verification Code
-                  </label>
-                  <Input
-                    id="verify-code"
-                    name="verify-code"
-                    inputMode="numeric"
-                    maxLength={6}
-                    placeholder="Enter 6-digit code"
-                    className="h-12 border-[#374151] bg-[#11131b] text-center tracking-[0.3em] text-on-surface placeholder:text-slate-500"
-                  />
-                </div>
-
-                <Button type="submit" variant="primary" className="h-12 w-full">
-                  Verify Code
-                </Button>
-              </form>
-
-              <Button
-                type="button"
-                disabled
-                variant="outline"
-                className="mb-stack-sm h-12 w-full cursor-not-allowed border-[#374151] bg-[#1f2937] text-[#9ca3af]"
-              >
-                <span className="material-symbols-outlined text-sm">refresh</span>
-                Resend code (00:59)
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                className="mb-stack-lg h-12 w-full border-[#374151] bg-transparent text-on-surface transition-all hover:bg-surface-variant active:scale-95"
-              >
-                <span className="material-symbols-outlined text-sm">support_agent</span>
-                Contact support
-              </Button>
-
-              <div className="flex items-center gap-2 rounded-full border border-tertiary-container/20 bg-tertiary-container/10 px-4 py-2 text-on-tertiary-fixed-variant">
-                <span className="material-symbols-outlined text-[16px]">info</span>
-                <span className="text-label-sm font-label-sm">The code will expire in 30 minutes</span>
-              </div>
-
-              <Link
-                to="/login"
-                className="mt-stack-md inline-flex items-center gap-2 text-label-sm font-label-sm text-primary-container hover:underline"
-              >
-                <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-                Back to Login
-              </Link>
-            </CardContent>
-          </Card>
+    <AuthLayout 
+      title="Reset link sent!" 
+      subtitle="We sent a 6-digit code to your email. Enter it below to continue."
+    >
+      <div className="flex justify-center mb-6">
+        <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+          <CheckCircle2 className="w-8 h-8 text-emerald-500" />
         </div>
-      </main>
+      </div>
 
-      <section className="pointer-events-none fixed right-0 top-0 z-0 hidden h-full w-1/4 p-6 lg:block">
-        <div className="h-full w-full overflow-hidden rounded-xl border border-[#374151] shadow-lg">
-          <img
-            alt="Corporate Modern Workspace"
-            className="h-full w-full object-cover opacity-40 mix-blend-luminosity"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPir_DgzvmLpHjgIYqLX1XD4ASiymj4071PNUxDRH5YGcqpjtngZ4uR1rPSeRN46jhKF7ONq-w39UK7wzTK6BhXkq_t1QSq7VN__Uy1rk9uF2FsYdOhz4gv3veVi8RckNalwerhFqwwSEW7X1Hb_r6dbB4evI4qQNZZUSoCXzmlKfVWpsAS7ydFZo8lyFKl914Ho1w6_iLRceuMuqF-JKgb2JvN8ISjIm3TUp0ci5zuqKtBc8lvHC1zf2WWyDpw2xglOFLt92eHEk"
+      <form
+        className="space-y-6"
+        onSubmit={(e) => {
+          e.preventDefault();
+          navigate("/forgot-password/new-password");
+        }}
+      >
+        <div className="space-y-1.5">
+          <label htmlFor="verify-code" className="text-sm font-medium text-gray-400 ml-1">
+            Verification Code
+          </label>
+          <input
+            id="verify-code"
+            name="verify-code"
+            inputMode="numeric"
+            maxLength={6}
+            placeholder="000000"
+            required
+            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-center tracking-[0.5em] text-2xl text-white placeholder:text-gray-700 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner font-mono"
           />
         </div>
-      </section>
-    </div>
+
+        <Button 
+          type="submit"
+          className="w-full bg-white text-black hover:bg-gray-200 py-6 rounded-xl font-semibold text-base group transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+        >
+          Verify Code
+          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+        </Button>
+      </form>
+
+      <div className="mt-6 space-y-3">
+        <Button
+          type="button"
+          disabled={timeLeft > 0}
+          variant="outline"
+          className="w-full h-12 bg-transparent border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"
+        >
+          <RefreshCw className={`w-4 h-4 mr-2 ${timeLeft === 0 ? '' : 'opacity-50'}`} />
+          {timeLeft > 0 ? `Resend code (00:${timeLeft.toString().padStart(2, '0')})` : 'Resend code'}
+        </Button>
+
+        <Button
+          type="button"
+          variant="ghost"
+          className="w-full h-12 text-gray-400 hover:text-white hover:bg-white/5 transition-all rounded-xl"
+        >
+          <LifeBuoy className="w-4 h-4 mr-2" />
+          Contact support
+        </Button>
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400/80 text-sm">
+        <Info className="w-4 h-4" />
+        <span>The code will expire in 30 minutes</span>
+      </div>
+
+      <div className="mt-8 text-center">
+        <Link
+          to="/login"
+          className="inline-flex items-center text-sm text-gray-400 hover:text-blue-400 transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          Back to Login
+        </Link>
+      </div>
+    </AuthLayout>
   );
 };
 

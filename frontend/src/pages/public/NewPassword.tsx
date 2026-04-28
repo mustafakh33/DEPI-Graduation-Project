@@ -1,13 +1,18 @@
 import React, { useState } from "react";
+import { Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from "lucide-react";
+import AuthLayout from "../../layouts/AuthLayout";
+import { Button } from "@/components/ui/button";
 
 const NewPasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("Medium");
 
   // Dummy password strength logic
   const getStrength = (password: string) => {
+    if (password.length === 0) return "";
     if (password.length >= 12) return "Strong";
     if (password.length >= 8) return "Medium";
     return "Weak";
@@ -25,131 +30,108 @@ const NewPasswordPage = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col font-body-md antialiased"
-      style={{ background: "#11131b" }}
+    <AuthLayout 
+      title="Create new password" 
+      subtitle="Please enter your new authentication credentials below."
     >
-      {/* TopAppBar */}
-
-      <main className="flex-grow flex items-center justify-center px-6 pt-24 pb-16 relative overflow-hidden">
-        {/* Background Decoration */}
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-container opacity-10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-secondary-container opacity-10 blur-[120px] rounded-full"></div>
-        <div className="w-full max-w-md z-10">
-          {/* Form Card */}
-          <div className="bg-surface-container-low border border-outline-variant shadow-lg rounded-xl p-stack-lg">
-            <div className="text-center mb-stack-lg">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-container/10 text-primary-container mb-stack-md">
-                <span className="material-symbols-outlined text-[28px]">
-                  lock_reset
-                </span>
-              </div>
-              <h1 className="font-h3 text-h3 text-on-surface mb-stack-sm">
-                Create a new password
-              </h1>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">
-                Please enter your new authentication credentials below.
-              </p>
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        {/* New Password Field */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-gray-400 ml-1">New Password</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
             </div>
-            <form className="space-y-stack-md" onSubmit={handleSubmit}>
-              {/* New Password Field */}
-              <div className="space-y-stack-xs">
-                <label className="font-label-sm text-label-sm text-on-surface-variant block ml-1">
-                  New Password
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px]">
-                    lock
-                  </span>
-                  <input
-                    className="w-full bg-surface-container border border-outline-variant rounded-lg py-3 pl-10 pr-10 text-on-surface focus:ring-1 focus:ring-primary-container focus:border-primary-container transition-all outline-none"
-                    placeholder="••••••••"
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={handleNewPasswordChange}
-                  />
-                  <button
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors"
-                    type="button"
-                    onClick={() => setShowNewPassword((v) => !v)}
-                  >
-                    <span className="material-symbols-outlined text-[20px]">
-                      {showNewPassword ? "visibility_off" : "visibility"}
-                    </span>
-                  </button>
-                </div>
-                <p className="text-[11px] font-medium text-on-surface-variant/70 ml-1">
-                  At least 8 characters
-                </p>
-              </div>
-              {/* Password Strength Indicator */}
-              <div className="space-y-stack-xs pt-1">
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wider">
-                    Security Strength
-                  </span>
-                  <span className="text-[11px] font-bold text-secondary">
-                    {passwordStrength}
-                  </span>
-                </div>
-                <div className="flex gap-1.5 h-1.5">
-                  <div
-                    className={`flex-1 ${passwordStrength !== "Weak" ? "bg-secondary" : "bg-outline-variant"} rounded-full`}
-                  ></div>
-                  <div
-                    className={`flex-1 ${passwordStrength === "Strong" || passwordStrength === "Medium" ? "bg-secondary" : "bg-outline-variant"} rounded-full`}
-                  ></div>
-                  <div
-                    className={`flex-1 ${passwordStrength === "Strong" ? "bg-secondary" : "bg-outline-variant"} rounded-full`}
-                  ></div>
-                  <div className="flex-1 bg-outline-variant rounded-full"></div>
-                </div>
-              </div>
-              {/* Confirm Password Field */}
-              <div className="space-y-stack-xs pt-2">
-                <label className="font-label-sm text-label-sm text-on-surface-variant block ml-1">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px]">
-                    verified_user
-                  </span>
-                  <input
-                    className="w-full bg-surface-container border border-outline-variant rounded-lg py-3 pl-10 pr-10 text-on-surface focus:ring-1 focus:ring-primary-container focus:border-primary-container transition-all outline-none"
-                    placeholder="••••••••"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-              {/* Action Buttons */}
-              <div className="pt-stack-md space-y-3">
-                <button
-                  className="w-full bg-[#2563eb] text-[#f9fafb] font-label-md py-3.5 rounded-lg shadow-sm hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                  type="submit"
-                >
-                  Update Password
-                  <span className="material-symbols-outlined text-[18px]">
-                    arrow_forward
-                  </span>
-                </button>
-                <button
-                  className="w-full border border-outline-variant text-on-surface font-label-md py-3 rounded-lg hover:bg-surface-variant/30 active:scale-[0.98] transition-all"
-                  type="button"
-                  onClick={() => {
-                    setNewPassword("");
-                    setConfirmPassword("");
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+            <input
+              type={showNewPassword ? "text" : "password"}
+              required
+              className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-10 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner"
+              placeholder="••••••••"
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+            />
+            <button
+              type="button"
+              onClick={() => setShowNewPassword(!showNewPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 ml-1 mt-1">At least 8 characters</p>
+        </div>
+
+        {/* Password Strength Indicator */}
+        {passwordStrength && (
+          <div className="space-y-1.5 pt-1">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                Security Strength
+              </span>
+              <span className={`text-[10px] font-bold ${
+                passwordStrength === "Strong" ? "text-emerald-400" :
+                passwordStrength === "Medium" ? "text-blue-400" : "text-rose-400"
+              }`}>
+                {passwordStrength}
+              </span>
+            </div>
+            <div className="flex gap-1.5 h-1.5">
+              <div className={`flex-1 rounded-full ${passwordStrength !== "Weak" ? "bg-blue-500" : "bg-gray-700"}`}></div>
+              <div className={`flex-1 rounded-full ${passwordStrength === "Strong" || passwordStrength === "Medium" ? "bg-blue-500" : "bg-gray-700"}`}></div>
+              <div className={`flex-1 rounded-full ${passwordStrength === "Strong" ? "bg-emerald-500" : "bg-gray-700"}`}></div>
+              <div className="flex-1 bg-gray-700 rounded-full"></div>
+            </div>
+          </div>
+        )}
+
+        {/* Confirm Password Field */}
+        <div className="space-y-1.5 pt-2">
+          <label className="text-sm font-medium text-gray-400 ml-1">Confirm Password</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <ShieldCheck className="h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
+            </div>
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              required
+              className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-10 py-3 text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all shadow-inner"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
           </div>
         </div>
-      </main>
-    </div>
+
+        {/* Action Buttons */}
+        <div className="pt-4 space-y-3">
+          <Button 
+            type="submit"
+            className="w-full bg-white text-black hover:bg-gray-200 py-6 rounded-xl font-semibold text-base group transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+          >
+            Update Password
+            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full h-12 bg-transparent border-white/10 text-gray-300 hover:text-white hover:bg-white/5 transition-all rounded-xl"
+            onClick={() => {
+              setNewPassword("");
+              setConfirmPassword("");
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </AuthLayout>
   );
 };
 
