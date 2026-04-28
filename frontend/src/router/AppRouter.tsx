@@ -4,7 +4,7 @@ import "@/styles/global.css";
 import LandingPage from "@/pages/public/Landing";
 import Login from "@/features/auth/pages/Login";
 import Register from "@/features/auth/pages/Register";
-import ForgotPassword from "@/features/auth/pages/ForgotPassword";
+import ForgotPasswordIdentifyAccount from "@/features/auth/pages/ForgotPasswordIdentifyAccount";
 import Unauthorized from "@/pages/public/Unauthorized";
 import NotFound from "@/pages/public/NotFound";
 import PlacementTest from "@/features/auth/pages/PlacementTest";
@@ -76,7 +76,7 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/placement-test" element={<PlacementTest />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password" element={<ForgotPasswordIdentifyAccount />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Protected routes (authentication required) */}
