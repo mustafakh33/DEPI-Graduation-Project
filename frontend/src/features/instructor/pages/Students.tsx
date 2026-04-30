@@ -1,6 +1,11 @@
 import React from "react";
-import { DashboardPageShell } from "@/features/dashboard/components/DashboardPageShell";
+import { DashboardPageShell } from "@/components/shared/DashboardPageShell";
 
-const Students: React.FC = () => <DashboardPageShell title="Students" description="Roster and performance for your courses." />;
+const Students: React.FC = () => (
+  <DashboardPageShell
+    title="Students"
+    description="Roster and performance for your courses."
+  />
+);
 
 export default Students;

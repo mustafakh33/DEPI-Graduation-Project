@@ -1,5 +1,5 @@
 import type { NavLinkItem } from "@/components/layout/Sidebar/SidebarNavLink";
-import { navIcon } from "@/features/dashboard/components/navIcon";
+import { navIcon } from "@/utils/navIcon";
 
 export const mentorDashboardPath = "/mentor/dashboard";
 

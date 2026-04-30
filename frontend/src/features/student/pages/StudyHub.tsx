@@ -1,6 +1,11 @@
 import React from "react";
-import { DashboardPageShell } from "@/features/dashboard/components/DashboardPageShell";
+import { DashboardPageShell } from "@/components/shared/DashboardPageShell";
 
-const StudyHub: React.FC = () => <DashboardPageShell title="Study Hub" description="Your learning materials and resources." />;
+const StudyHub: React.FC = () => (
+  <DashboardPageShell
+    title="Study Hub"
+    description="Your learning materials and resources."
+  />
+);
 
 export default StudyHub;

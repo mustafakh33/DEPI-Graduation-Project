@@ -5,7 +5,7 @@ import AppRouter from "@/router/AppRouter.tsx";
 import { Theme } from "@radix-ui/themes/dist/cjs/components/index.js";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
-import { OnboardingProvider } from "@/store/onboarding/OnboardingContext";
+import { OnboardingProvider } from "@/features/onboarding/context/OnboardingContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

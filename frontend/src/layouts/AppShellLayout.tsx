@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
-import type { NavLinkItem } from "@/components/layout/Sidebar/SidebarNavLink";
-import Sidebar from "@/components/layout/Sidebar/Sidebar";
+import type { NavLinkItem } from "@/components/shared/Sidebar/SidebarNavLink";
+import Sidebar from "@/components/shared/Sidebar/Sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
