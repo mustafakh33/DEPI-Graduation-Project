@@ -16,9 +16,12 @@ export interface AppShellLayoutProps {
   dashboardPath: string;
   logo?: React.ReactNode;
   appName?: string;
-  /** Shown under app name, e.g. "Student Dashboard" (same pattern as admin reference). */
   portalSubtitle?: string;
   onLogout?: () => void;
+  headerContent?: React.ReactNode;
+  sidebarUserName?: string;
+  sidebarUserAvatarUrl?: string;
+  showSidebarUserRole?: boolean;
 }
 
 const AppShellLayout: React.FC<AppShellLayoutProps> = ({
@@ -28,6 +31,10 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
   appName = "Uni Hub",
   portalSubtitle = "Portal",
   onLogout,
+  headerContent,
+   sidebarUserName,
+   sidebarUserAvatarUrl,
+  showSidebarUserRole,
 }) => {
   const { user } = useAuth();
   useForceDashboardTheme();
@@ -44,8 +51,10 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
     logo,
     appName,
     portalSubtitle,
-    userName: user?.name,
+    userName: sidebarUserName ?? user?.name,
     userRole: user?.role,
+     userAvatarUrl: sidebarUserAvatarUrl,
+  showUserRole: showSidebarUserRole,
     onLogout: handleLogout,
   };
 
@@ -68,6 +77,9 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
       </Sheet>
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        {headerContent ? (
+  headerContent
+) : (
         <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between gap-2 border-b border-slate-800 bg-slate-950 px-3 sm:gap-4 sm:px-4 md:px-8">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
             <Button
@@ -119,6 +131,8 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
             </div>
           </div>
         </header>
+        
+)}
         <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-background-light dark:bg-background-dark">
           <ScrollArea className="min-h-0 flex-1">
             <div className="p-4 pr-6 sm:p-6 md:p-8 md:pr-10">

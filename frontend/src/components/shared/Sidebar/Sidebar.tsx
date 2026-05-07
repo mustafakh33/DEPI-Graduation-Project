@@ -16,6 +16,8 @@ interface SidebarProps {
   portalSubtitle?: string;
   userName?: string;
   userRole?: string;
+  userAvatarUrl?: string;
+  showUserRole?: boolean;
   onLogout?: () => void;
   /** Extra classes — e.g. mobile drawer (`h-full`) vs desktop (`md:flex w-64`) */
   className?: string;
@@ -30,6 +32,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   portalSubtitle,
   userName,
   userRole,
+  userAvatarUrl,
+  showUserRole = true,
   onLogout,
   className,
   onNavigate,
@@ -42,6 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     )}
   >
     <SidebarHeader logo={logo} appName={appName} portalSubtitle={portalSubtitle} />
+
     <ScrollArea className="min-h-0 flex-1">
       <nav className="flex flex-col space-y-1 px-4 py-4">
         {links.map((link) => (
@@ -54,24 +59,41 @@ const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </nav>
     </ScrollArea>
+
     {(userName || onLogout) && (
       <div className="p-4">
         <Separator className="mb-4 bg-slate-200 dark:bg-slate-800" />
+
         {userName ? (
           <div className="mb-3 flex items-center gap-3 p-2">
-            <Avatar className="size-8 border border-slate-300 bg-slate-200 dark:border-slate-700 dark:bg-slate-700">
-              <AvatarFallback className="bg-slate-200 text-xs font-bold uppercase text-slate-600 dark:bg-slate-700 dark:text-slate-200">
-                {userName.slice(0, 1)}
-              </AvatarFallback>
+            <Avatar className="size-8 overflow-hidden border border-slate-300 bg-slate-200 dark:border-slate-700 dark:bg-slate-700">
+              {userAvatarUrl ? (
+                <img
+                  src={userAvatarUrl}
+                  alt={`${userName} avatar`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <AvatarFallback className="bg-slate-200 text-xs font-bold uppercase text-slate-600 dark:bg-slate-700 dark:text-slate-200">
+                  {userName.slice(0, 1)}
+                </AvatarFallback>
+              )}
             </Avatar>
+
             <div className="min-w-0 flex-1 overflow-hidden">
-              <p className="truncate text-xs font-semibold text-slate-900 dark:text-white">{userName}</p>
-              {userRole ? (
-                <p className="truncate text-[10px] capitalize text-slate-500 dark:text-slate-400">{userRole}</p>
+              <p className="truncate text-xs font-semibold text-slate-900 dark:text-white">
+                {userName}
+              </p>
+
+              {showUserRole && userRole ? (
+                <p className="truncate text-[10px] capitalize text-slate-500 dark:text-slate-400">
+                  {userRole}
+                </p>
               ) : null}
             </div>
           </div>
         ) : null}
+
         {onLogout ? <LogoutButton onLogout={onLogout} /> : null}
       </div>
     )}

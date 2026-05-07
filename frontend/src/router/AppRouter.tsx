@@ -23,6 +23,7 @@ import OnboardingDashboard from "@/features/onboarding/pages/OnboardingDashboard
 import { OnboardingRouteGuard } from "@/guards/OnboardingRouteGuard";
 
 // Student pages
+// Student pages
 import StudentDashboard from "@/features/student/pages/Dashboard";
 import Roadmap from "@/features/student/pages/Roadmap";
 import StudyHub from "@/features/student/pages/StudyHub";
@@ -31,6 +32,15 @@ import Exams from "@/features/student/pages/Exams";
 import StudentProfile from "@/features/student/pages/StudentProfile";
 import Subject from "@/features/student/pages/Subject";
 import StudentLayout from "@/layouts/StudentLayout";
+import Analytics from "@/features/student/pages/Analytics";
+import Assignments from "@/features/student/pages/Assignments";
+import StudentQuizzes from "@/features/student/pages/Quizzes";
+import Ranking from "@/features/student/pages/Ranking";
+import Results from "@/features/student/pages/Results";
+
+
+
+
 
 // Instructor pages
 import InstructorDashboard from "@/features/instructor/pages/Dashboard";
@@ -143,6 +153,12 @@ const AppRouter = () => {
               <Route path="/student/exams" element={<Exams />} />
               <Route path="/student/profile" element={<StudentProfile />} />
               <Route path="/student/subject/:id" element={<Subject />} />
+              <Route path="/student/analytics" element={<Analytics />} />
+              <Route path="/student/assignments" element={<Assignments />} />
+              <Route path="/student/quizzes" element={<StudentQuizzes />} />
+              <Route path="/student/ranking" element={<Ranking />} />
+              <Route path="/student/results" element={<Results />} />
+                            
             </Route>
           </Route>
 

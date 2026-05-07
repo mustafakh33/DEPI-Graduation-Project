@@ -1,4 +1,4 @@
-import type { NavLinkItem } from "@/components/layout/Sidebar/SidebarNavLink";
+import type { NavLinkItem } from "@/components/shared/Sidebar/SidebarNavLink";
 import { navIcon } from "@/utils/navIcon";
 
 export const studentDashboardPath = "/student/dashboard";
@@ -6,7 +6,10 @@ export const studentDashboardPath = "/student/dashboard";
 export const studentNavItems: NavLinkItem[] = [
   { to: "/student/dashboard", label: "Dashboard", icon: navIcon("dashboard") },
   { to: "/student/roadmap", label: "Roadmap", icon: navIcon("map") },
-  { to: "/student/study-hub", label: "Study Hub", icon: navIcon("groups") },
-  { to: "/student/exams", label: "Exams", icon: navIcon("quiz") },
-  { to: "/student/profile", label: "Profile", icon: navIcon("person") },
+  { to: "/student/study-hub", label: "Sessions", icon: navIcon("groups") },
+  { to: "/student/analytics", label: "Analytics", icon: navIcon("analytics") },
+  { to: "/student/assignments", label: "Assignments", icon: navIcon("assignment") },
+  { to: "/student/quizzes", label: "Quizzes", icon: navIcon("quiz") },
+  { to: "/student/ranking", label: "Ranking", icon: navIcon("leaderboard") },
+  { to: "/student/results", label: "Results", icon: navIcon("star") },
 ];
