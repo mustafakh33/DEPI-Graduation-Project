@@ -27,3 +27,23 @@ export interface StudentDashboardData {
   stats: StudentStats;
   currentCourse: CurrentCourse;
 }
+export type RoadmapLessonStatus = "completed" | "active" | "locked";
+
+export interface RoadmapLesson {
+  id: string;
+  title: string;
+  description: string;
+  status: RoadmapLessonStatus;
+}
+
+export interface RoadmapModule {
+  id: string;
+  title: string;
+  lessons: RoadmapLesson[];
+}
+
+export interface RoadmapData {
+  trackId: string;
+  trackTitle: string;
+  modules: RoadmapModule[];
+}
