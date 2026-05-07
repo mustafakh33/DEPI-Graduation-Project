@@ -47,3 +47,29 @@ export interface RoadmapData {
   trackTitle: string;
   modules: RoadmapModule[];
 }
+export interface UpcomingSession {
+  id: string;
+  title: string;
+  description: string;
+  startsAt: string;
+  durationMinutes: number;
+  meetingUrl: string;
+}
+
+export interface RecordedSession {
+  id: string;
+  title: string;
+  description: string;
+  moduleTitle: string;
+  durationMinutes: number;
+  recordedAt: string;
+  thumbnailUrl: string;
+  materialPath: string;
+}
+
+export interface SessionsData {
+  trackId: string;
+  trackTitle: string;
+  upcomingSession: UpcomingSession;
+  recordings: RecordedSession[];
+}

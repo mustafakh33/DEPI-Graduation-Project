@@ -26,7 +26,7 @@ import { OnboardingRouteGuard } from "@/guards/OnboardingRouteGuard";
 // Student pages
 import StudentDashboard from "@/features/student/pages/Dashboard";
 import Roadmap from "@/features/student/pages/Roadmap";
-import StudyHub from "@/features/student/pages/StudyHub";
+import StudentSessions from "@/features/student/pages/Sessions";
 import StudyRoom from "@/features/student/pages/StudyRoom";
 import Exams from "@/features/student/pages/Exams";
 import StudentProfile from "@/features/student/pages/StudentProfile";
@@ -148,7 +148,7 @@ const AppRouter = () => {
             <Route element={<StudentLayout />}>
               <Route path="/student/dashboard" element={<StudentDashboard />} />
               <Route path="/student/roadmap" element={<Roadmap />} />
-              <Route path="/student/study-hub" element={<StudyHub />} />
+              <Route path="/student/Sessions" element={<StudentSessions />} />
               <Route path="/student/study-room/:id" element={<StudyRoom />} />
               <Route path="/student/exams" element={<Exams />} />
               <Route path="/student/profile" element={<StudentProfile />} />
