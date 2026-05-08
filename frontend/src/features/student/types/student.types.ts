@@ -91,3 +91,22 @@ export interface AnalyticsData {
   weeklyStudyHours: StudyHourDay[];
   studyDays: string[];
 }
+export type AssignmentStatus = "open" | "missed" | "submitted" | "graded";
+
+export interface StudentAssignment {
+  id: string;
+  assignmentNumber: number;
+  isPublished: boolean;
+  title: string;
+  lessonId: string;
+  lessonTitle: string;
+  trackId: string;
+  description: string;
+  publishedAt: string;
+  deadline: string;
+  status: AssignmentStatus;
+  grade?: number;
+  totalGrade?: number;
+  assignmentPath: string;
+  gradePath?: string;
+}

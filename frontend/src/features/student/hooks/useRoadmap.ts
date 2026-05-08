@@ -19,7 +19,8 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "html-forms",
             title: "Forms & Inputs",
-            description: "Build forms using inputs, labels, buttons, and validation basics.",
+            description:
+              "Build forms using inputs, labels, buttons, and validation basics.",
             status: "completed",
           },
         ],
@@ -31,7 +32,8 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "css-basics",
             title: "CSS Fundamentals",
-            description: "Learn selectors, colors, spacing, typography, and layout basics.",
+            description:
+              "Learn selectors, colors, spacing, typography, and layout basics.",
             status: "active",
           },
           {
@@ -49,13 +51,15 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "js-basics",
             title: "JavaScript Basics",
-            description: "Learn variables, conditions, loops, functions, and arrays.",
+            description:
+              "Learn variables, conditions, loops, functions, and arrays.",
             status: "locked",
           },
           {
             id: "js-dom",
             title: "DOM & Events",
-            description: "Interact with the page using DOM selection and events.",
+            description:
+              "Interact with the page using DOM selection and events.",
             status: "locked",
           },
         ],
@@ -73,7 +77,8 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "react-routing",
             title: "Routing & Pages",
-            description: "Create multi-page experiences and organize app routes.",
+            description:
+              "Create multi-page experiences and organize app routes.",
             status: "locked",
           },
         ],
@@ -92,14 +97,16 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "python-basics",
             title: "Python Basics",
-            description: "Learn syntax, variables, functions, lists, and dictionaries.",
+            description:
+              "Learn syntax, variables, functions, lists, and dictionaries.",
             status: "completed",
           },
           {
             id: "python-data",
             title: "Working with Data",
-            description: "Use Python to clean, read, and prepare simple datasets.",
-            status: "active",
+            description:
+              "Use Python to clean, read, and prepare simple datasets.",
+            status: "completed",
           },
         ],
       },
@@ -110,8 +117,9 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "stats-basics",
             title: "Statistics Basics",
-            description: "Understand mean, median, variance, distributions, and probability.",
-            status: "locked",
+            description:
+              "Understand mean, median, variance, distributions, and probability.",
+            status: "active",
           },
           {
             id: "data-visualization",
@@ -128,13 +136,15 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "ml-intro",
             title: "Machine Learning Intro",
-            description: "Learn supervised learning, features, labels, and model training.",
+            description:
+              "Learn supervised learning, features, labels, and model training.",
             status: "locked",
           },
           {
             id: "ml-models",
             title: "Core ML Models",
-            description: "Explore regression, classification, and evaluation metrics.",
+            description:
+              "Explore regression, classification, and evaluation metrics.",
             status: "locked",
           },
         ],
@@ -153,13 +163,15 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "mobile-ui",
             title: "Mobile UI Fundamentals",
-            description: "Learn screens, navigation, layout, and mobile-first design.",
+            description:
+              "Learn screens, navigation, layout, and mobile-first design.",
             status: "completed",
           },
           {
             id: "mobile-js",
             title: "JavaScript for Mobile",
-            description: "Review JavaScript concepts used in mobile app development.",
+            description:
+              "Review JavaScript concepts used in mobile app development.",
             status: "active",
           },
         ],
@@ -214,13 +226,15 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "security-intro",
             title: "Cybersecurity Intro",
-            description: "Learn core security concepts, threats, and protection goals.",
+            description:
+              "Learn core security concepts, threats, and protection goals.",
             status: "completed",
           },
           {
             id: "network-basics",
             title: "Networking Basics",
-            description: "Understand IP addresses, ports, protocols, and network layers.",
+            description:
+              "Understand IP addresses, ports, protocols, and network layers.",
             status: "active",
           },
         ],
@@ -232,13 +246,15 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "owasp",
             title: "OWASP Basics",
-            description: "Learn common web vulnerabilities and safe coding practices.",
+            description:
+              "Learn common web vulnerabilities and safe coding practices.",
             status: "locked",
           },
           {
             id: "auth-security",
             title: "Authentication Security",
-            description: "Understand passwords, sessions, tokens, and access control.",
+            description:
+              "Understand passwords, sessions, tokens, and access control.",
             status: "locked",
           },
         ],
@@ -256,7 +272,8 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
           {
             id: "incident-response",
             title: "Incident Response",
-            description: "Learn basic steps to respond to security incidents.",
+            description:
+              "Learn basic steps to respond to security incidents.",
             status: "locked",
           },
         ],
