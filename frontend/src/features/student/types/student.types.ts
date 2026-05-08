@@ -73,3 +73,21 @@ export interface SessionsData {
   upcomingSession: UpcomingSession;
   recordings: RecordedSession[];
 }
+export interface AnalyticsMetric {
+  id: string;
+  title: string;
+  value: string;
+  percentage: number;
+  helperText: string;
+}
+
+export interface StudyHourDay {
+  day: string;
+  hours: number;
+}
+
+export interface AnalyticsData {
+  metrics: AnalyticsMetric[];
+  weeklyStudyHours: StudyHourDay[];
+  studyDays: string[];
+}
