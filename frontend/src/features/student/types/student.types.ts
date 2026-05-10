@@ -110,3 +110,19 @@ export interface StudentAssignment {
   assignmentPath: string;
   gradePath?: string;
 }
+export interface StudentQuiz {
+  id: string;
+  quizNumber: number;
+  title: string;
+  lessonId: string;
+  lessonTitle: string;
+  trackId: string;
+  description: string;
+  scheduledAt: string;
+  durationMinutes: number;
+  totalGrade: number;
+  score?: number;
+  hasAttempted: boolean;
+  isPublished: boolean;
+  quizPath: string;
+}
