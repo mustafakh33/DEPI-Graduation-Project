@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { mockChatData } from "./mockChatData";
+import { mockChatData } from "../data/mockChatData";
 
 export const useChat = () => {
   const { studentId } = useParams();

@@ -1,11 +1,40 @@
-import React from "react";
-import { DashboardPageShell } from "@/components/shared/DashboardPageShell";
 
-const Progress: React.FC = () => (
-  <DashboardPageShell
-    title="Student progress"
-    description="Academic progress across your students."
-  />
-);
 
-export default Progress;
+import { useAnalytics } from "../hooks/useAnalytics";
+
+import AnalyticsHeader from "../components/analytics/AnalyticsHeader";
+import AnalyticsStats from "../components/analytics/AnalysticsStats";
+import AnalyticsFilters from "../components/analytics/AnalyticsFilters";
+import BatchAnalyticsTable from "../components/analytics/BatchAnalyticsTable";
+
+import "../style/analytics.css";
+
+export default function AnalyticsPage() {
+  const {
+    filters,
+    setFilters,
+
+    stats,
+
+    filteredBatches,
+  } = useAnalytics();
+
+  return (
+    <div className="analytics-page">
+
+      <AnalyticsHeader />
+
+      <AnalyticsStats stats={stats} />
+
+      <AnalyticsFilters
+        filters={filters}
+        setFilters={setFilters}
+      />
+
+      <BatchAnalyticsTable
+        batches={filteredBatches}
+      />
+
+    </div>
+  );
+}
