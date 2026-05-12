@@ -1,0 +1,159 @@
+.lecture-page {
+    min-height: 100vh;
+  
+    background: #020617;
+  
+    color: white;
+  
+    padding: 24px;
+  }
+  
+  .lecture-header {
+    display: flex;
+  
+    justify-content: space-between;
+  
+    align-items: center;
+  
+    margin-bottom: 24px;
+  }
+  
+  .preview-btn {
+    background: #1d4ed8;
+  
+    border: none;
+  
+    color: white;
+  
+    padding: 12px 18px;
+  
+    border-radius: 12px;
+  
+    cursor: pointer;
+  }
+  
+  .upload-section,
+  .quiz-section {
+    background: #0f172a;
+  
+    border-radius: 20px;
+  
+    padding: 24px;
+  
+    margin-bottom: 24px;
+  }
+  
+  .section-title {
+    font-size: 22px;
+  
+    font-weight: 700;
+  
+    margin-bottom: 20px;
+  }
+  
+  .upload-layout {
+    display: grid;
+  
+    grid-template-columns: 1fr 380px;
+  
+    gap: 20px;
+  }
+  
+  .dropzone {
+    border: 2px dashed #334155;
+  
+    border-radius: 20px;
+  
+    min-height: 320px;
+  
+    display: flex;
+  
+    flex-direction: column;
+  
+    justify-content: center;
+  
+    align-items: center;
+  
+    text-align: center;
+  
+    padding: 24px;
+  }
+  
+  .dropzone input {
+    margin-top: 20px;
+  }
+  
+  .upload-icon {
+    font-size: 48px;
+  
+    margin-bottom: 16px;
+  }
+  
+  .uploaded-files {
+    display: flex;
+  
+    flex-direction: column;
+  
+    gap: 16px;
+  }
+  
+  .uploaded-file-card {
+    background: #111827;
+  
+    border-radius: 16px;
+  
+    padding: 18px;
+  
+    display: flex;
+  
+    justify-content: space-between;
+  
+    align-items: center;
+  }
+  
+  .quiz-description {
+    color: #94a3b8;
+  
+    margin-bottom: 20px;
+  }
+  
+  .quiz-actions {
+    display: flex;
+  
+    gap: 16px;
+  
+    margin-bottom: 20px;
+  }
+  
+  .quiz-actions button,
+  .choose-file-btn {
+    background: #1e293b;
+  
+    border: none;
+  
+    color: white;
+  
+    padding: 12px 16px;
+  
+    border-radius: 12px;
+  
+    cursor: pointer;
+  }
+  
+  .quiz-upload-row {
+    display: flex;
+  
+    justify-content: space-between;
+  
+    align-items: center;
+  
+    background: #111827;
+  
+    border-radius: 14px;
+  
+    padding: 16px;
+  }
+  
+  .quiz-file-preview {
+    color: #94a3b8;
+  }
