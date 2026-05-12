@@ -1,9 +1,7 @@
-import { ArrowRight } from "lucide-react";
-
-import { BatchAssignmentNote } from "@/components/test-result/BatchAssignmentNote";
-import { ProfileSummaryGrid } from "@/components/test-result/ProfileSummaryGrid";
-import { ResultHero } from "@/components/test-result/ResultHero";
-import { ScoreSection } from "@/components/test-result/ScoreSection";
+import { BatchAssignmentNote } from "@/features/onboarding/components/test-result/BatchAssignmentNote";
+import { ProfileSummaryGrid } from "@/features/onboarding/components/test-result/ProfileSummaryGrid";
+import { ResultHero } from "@/features/onboarding/components/test-result/ResultHero";
+import { ScoreSection } from "@/features/onboarding/components/test-result/ScoreSection";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type {

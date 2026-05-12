@@ -3,9 +3,7 @@ import { Navigate, useNavigate } from "react-router";
 import {
   Clock,
   Flag,
-  ArrowRight,
   SkipForward,
-  AlertCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 

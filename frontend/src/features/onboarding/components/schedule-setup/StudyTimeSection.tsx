@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { CheckCircle2, Clock, Moon, Sun, Sunrise, Sunset } from "lucide-react";
 
-import { ScheduleSection } from "@/components/schedule-setup/ScheduleSection";
+import { ScheduleSection } from "@/features/onboarding/components/schedule-setup/ScheduleSection";
 import { cn } from "@/utils/cn";
 
 type StudyTime = {

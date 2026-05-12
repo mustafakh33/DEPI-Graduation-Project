@@ -1,7 +1,7 @@
 import { CalendarDays } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ScheduleSection } from "@/components/schedule-setup/ScheduleSection";
+import { ScheduleSection } from "@/features/onboarding/components/schedule-setup/ScheduleSection";
 import { cn } from "@/utils/cn";
 
 type AvailableDaysSectionProps = {

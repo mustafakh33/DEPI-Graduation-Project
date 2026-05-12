@@ -3,8 +3,6 @@ import {
   Trophy,
   Calendar,
   Target,
-  ArrowRight,
-  BookOpen,
   Star,
 } from "lucide-react";
 import { motion } from "framer-motion";

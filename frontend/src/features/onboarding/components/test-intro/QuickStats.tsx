@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { CircleAlert, ListOrdered, Timer } from "lucide-react";
+import { ListOrdered, Timer } from "lucide-react";
 
-import { GlassCard } from "@/components/test-intro/GlassCard";
+import { GlassCard } from "@/features/onboarding/components/test-intro/GlassCard";
 import { cn } from "@/utils/cn";
 
 type StatItem = {

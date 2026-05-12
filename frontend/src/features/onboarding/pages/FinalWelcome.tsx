@@ -2,7 +2,6 @@ import { Navigate, useNavigate } from "react-router";
 import {
   CheckCircle2,
   Rocket,
-  ArrowRight,
   Target,
   Clock,
   BookOpen,

@@ -1,6 +1,6 @@
-import { CheckCircle2, ListChecks } from "lucide-react";
+import { ListChecks } from "lucide-react";
 
-import { GlassCard } from "@/components/test-intro/GlassCard";
+import { GlassCard } from "@/features/onboarding/components/test-intro/GlassCard";
 
 const rules = [
   "Ensure a stable internet connection for the duration of the test.",

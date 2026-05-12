@@ -1,6 +1,6 @@
-import { BatchPreviewCard } from "@/components/final-welcome/BatchPreviewCard";
-import { RoadmapPreviewCard } from "@/components/final-welcome/RoadmapPreviewCard";
-import { WeekPlanPreviewCard } from "@/components/final-welcome/WeekPlanPreviewCard";
+import { BatchPreviewCard } from "@/features/onboarding/components/final-welcome/BatchPreviewCard";
+import { RoadmapPreviewCard } from "@/features/onboarding/components/final-welcome/RoadmapPreviewCard";
+import { WeekPlanPreviewCard } from "@/features/onboarding/components/final-welcome/WeekPlanPreviewCard";
 
 export function FeaturePreviewGrid() {
   return (
