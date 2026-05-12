@@ -1,8 +1,45 @@
-import React from "react";
-import { DashboardPageShell } from "@/components/shared/DashboardPageShell";
 
-const MyCourses: React.FC = () => (
-  <DashboardPageShell title="My courses" description="Courses you teach." />
-);
+import LectureHeader from "../components/courses/LectureHeader.tsx";
+import UploadMaterialsSection from "../components/courses/UploadMaterialSection";
+import UploadQuizSection from "../components/courses/UploadQuizSection";
+import { useLectureMaterials } from "../hooks/useLectureMaterials";
+import "../styles/lectureMaterials.css";
 
-export default MyCourses;
+export default function LectureMaterialsPage() {
+  const {
+    files,
+
+    quizFile,
+
+    handleSelectFiles,
+
+    handleRemoveFile,
+
+    setQuizFile,
+  } = useLectureMaterials();
+
+  return (
+    <div className="lecture-page">
+
+      <LectureHeader />
+
+      <UploadMaterialsSection
+        files={files}
+        onSelectFiles={
+          handleSelectFiles
+        }
+        onRemoveFile={
+          handleRemoveFile
+        }
+      />
+
+      <UploadQuizSection
+        quizFile={quizFile}
+        onSelectQuizFile={
+          setQuizFile
+        }
+      />
+
+    </div>
+  );
+}
