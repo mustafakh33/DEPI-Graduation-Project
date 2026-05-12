@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
-import {
-  Clock,
-  Flag,
-  SkipForward,
-} from "lucide-react";
+import { Clock, Flag, SkipForward } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";

@@ -1,11 +1,5 @@
 import { Navigate, useNavigate } from "react-router";
-import {
-  CheckCircle2,
-  Rocket,
-  Target,
-  Clock,
-  BookOpen,
-} from "lucide-react";
+import { CheckCircle2, Rocket, Target, Clock, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";

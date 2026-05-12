@@ -40,8 +40,16 @@ export function QuickStats() {
   return (
     <div className="col-span-12 space-y-4 lg:col-span-4">
       {stats.map(({ icon: Icon, iconBox, iconColor, label, value }) => (
-        <GlassCard className="flex items-center gap-4 rounded-xl p-stack-md" key={label}>
-          <div className={cn("flex size-12 items-center justify-center rounded-lg", iconBox)}>
+        <GlassCard
+          className="flex items-center gap-4 rounded-xl p-stack-md"
+          key={label}
+        >
+          <div
+            className={cn(
+              "flex size-12 items-center justify-center rounded-lg",
+              iconBox,
+            )}
+          >
             <Icon className={cn("size-6", iconColor)} />
           </div>
           <div>
