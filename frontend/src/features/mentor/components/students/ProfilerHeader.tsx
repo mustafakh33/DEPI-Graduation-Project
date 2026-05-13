@@ -1,5 +1,13 @@
 
-export default function ProfileHeader({ student }) {
+type Student = {
+  name: string;
+  status: string;
+  id: number | string;
+  major: string;
+  semester?: string;
+};
+
+export default function ProfileHeader({ student }: { student: Student }) {
     return (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div>

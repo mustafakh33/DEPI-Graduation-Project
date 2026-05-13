@@ -1,6 +1,6 @@
 import { Info } from "lucide-react";
 
-import { AnswerOption } from "@/components/active-test/AnswerOption";
+import { AnswerOption } from "@/features/onboarding/components/active-test/AnswerOption";
 import type { PlacementQuestion } from "@/features/onboarding/data/questions";
 
 type AnswerPanelProps = {

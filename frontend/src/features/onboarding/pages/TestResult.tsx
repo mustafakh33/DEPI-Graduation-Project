@@ -1,5 +1,5 @@
 import { Navigate, useNavigate } from "react-router";
-import { Trophy, Calendar, Target, Star } from "lucide-react";
+import { Trophy, Calendar, Target, Star, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 import OnboardingLayout from "@/layouts/OnboardingLayout";

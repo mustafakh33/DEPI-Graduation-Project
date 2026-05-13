@@ -1,6 +1,12 @@
-import React from "react";
+type StatCardProps = {
+  title: string;
+  value: string | number;
+  unit?: string;
+  trend?: string;
+  status?: string;
+};
 
-export default function StatCard({ title, value, unit, trend, status }) {
+export default function StatCard({ title, value, unit, trend, status }: StatCardProps) {
   return (
     <div className="card">
       <p>{title}</p>

@@ -4,6 +4,7 @@ import { ResultHero } from "@/features/onboarding/components/test-result/ResultH
 import { ScoreSection } from "@/features/onboarding/components/test-result/ScoreSection";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 import type {
   ScheduleState,
   SelectedTrack,

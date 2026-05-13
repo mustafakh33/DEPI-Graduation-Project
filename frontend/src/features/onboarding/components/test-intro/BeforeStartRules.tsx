@@ -1,4 +1,4 @@
-import { ListChecks } from "lucide-react";
+import { ListChecks, CheckCircle2 } from "lucide-react";
 
 import { GlassCard } from "@/features/onboarding/components/test-intro/GlassCard";
 

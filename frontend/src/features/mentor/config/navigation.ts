@@ -1,4 +1,4 @@
-import type { NavLinkItem } from "@/components/layout/Sidebar/SidebarNavLink"; 
+import type { NavLinkItem } from "@/components/shared/Sidebar/SidebarNavLink"; 
 import { navIcon } from "@/utils/navIcon";
 
 export const mentorDashboardPath = "/mentor/dashboard";

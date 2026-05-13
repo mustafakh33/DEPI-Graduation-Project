@@ -20,6 +20,8 @@ export default function MentorDashboardPage() {
     riskStudents,
   } = useMentorDashboard();
 
+  if (!selectedBatch) return null;
+
   return (
     <div className="mentor-dashboard">
       <div className="dashboard-main">
