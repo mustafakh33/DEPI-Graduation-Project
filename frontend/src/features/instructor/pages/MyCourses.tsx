@@ -3,7 +3,7 @@ import LectureHeader from "../components/courses/LectureHeader.tsx";
 import UploadMaterialsSection from "../components/courses/UploadMaterialSection";
 import UploadQuizSection from "../components/courses/UploadQuizSection";
 import { useLectureMaterials } from "../hooks/useLectureMaterials";
-import "../styles/lectureMaterials.css";
+import "../styles/LectureMaterials.css";
 
 export default function LectureMaterialsPage() {
   const {

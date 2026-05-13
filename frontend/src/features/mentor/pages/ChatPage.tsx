@@ -5,7 +5,7 @@ import MessageBubble from "../components/chat/MessageBubble";
 import MessageInput from "../components/chat/MessageInput";
 import StudentInfoPanel from "../components/chat/StudentInfoPanel";
 
-import "../style/chat.css";
+import "../style/Chat.css";
 
 export default function ChatPage() {
   const { conversations, messages, student } = useChat();
