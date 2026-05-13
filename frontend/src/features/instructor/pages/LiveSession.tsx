@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+// useNavigate reserved for future navigation actions
 import { useLiveSessions,} from "../hooks/useLiveSessions";
 import UpcomingSessionCard from "../components/liveSessions/UpcomingSessionCard";
 import SessionActivityCard from "../components/liveSessions/SessionActivityCard";

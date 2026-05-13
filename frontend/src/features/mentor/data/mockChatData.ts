@@ -1,9 +1,12 @@
 export const mockChatData = {
     student: {
+      id: 2,
       name: "Sarah Williams",
       major: "CS Student",
-      level: "Senior",
-      gpa: "3.9 GPA",
+      year: "Senior",
+      gpa: 3.9,
+      attendanceRate: 92,
+      risk: false,
     },
   
     conversations: [
