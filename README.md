@@ -1,179 +1,70 @@
-# 🎓 UniHub – Structured Digital Learning Platform
+# UniHub
 
+UniHub is a role-based learning platform prototype built for the DEPI graduation project. The repository currently contains a substantial React frontend and backend planning documents, but it does not yet include an implemented server.
 
-> 🚀 Transforming self-learning into a structured, accountable academic experience
+## Current Status
 
----
+- `frontend/` is the active application and can be run locally.
+- Authentication and onboarding are currently mocked in the browser with `localStorage`.
+- `backend/` contains architecture and schema notes only. There is no backend source code or `package.json` yet.
+- The frontend already includes an API client and route guards, so it is prepared for backend integration once the server is implemented.
 
-## 📌 Overview
+## Implemented Frontend Areas
 
-**UniHub** is a next-generation digital learning platform designed to replicate the discipline and structure of traditional university systems — while leveraging modern technology, AI, and collaborative learning environments.
+- Public landing page
+- Authentication screens: login, register, forgot password, verify code, reset password
+- Student onboarding flow: track selection, schedule setup, placement test, result, final welcome
+- Role-based dashboards and navigation for `student`, `instructor`, `mentor`, and `admin`
+- Student modules: roadmap, sessions, study room, analytics, assignments, quizzes, ranking, results, profile
+- Instructor modules: dashboard, courses, students, grades, quizzes, live session
+- Mentor modules: dashboard, students, chat, check-ins, progress
+- Admin modules: dashboard, users, students, sessions, batches, courses, reports, feedback, settings
 
-It addresses one of the biggest challenges in online education:
-
-> ❌ Lack of commitment, structure, and accountability
-
-By introducing:
-
-* 📅 Semester-based learning
-* 👥 Smart peer grouping
-* ⏱ Real-time study tracking
-* 🤖 AI-powered evaluation
-* 🎯 Project-based assessment
-
-👉 UniHub transforms passive learning into **measurable academic progression**.
-
----
-
-## 🌍 Vision
-
-> Build a scalable digital academic ecosystem that reduces dropout rates, enforces consistency, and enables real skill acquisition through structure, accountability, and collaboration.
-
----
-
-## 🎯 Core Values
-
-| Value                 | Description                                                   |
-| --------------------- | ------------------------------------------------------------- |
-| **Accountability**    | Enforced attendance, study-hour tracking, visible performance |
-| **Peer Alignment**    | Smart grouping based on level, goals, and availability        |
-| **Structured Growth** | Clear semester roadmap with progressive unlocking             |
-| **AI Intelligence**   | Adaptive quizzes, prediction models, and smart feedback       |
-| **Real Evaluation**   | Project-based grading over theoretical testing                |
-
----
-
-## 🧠 Problem Statement
-
-Modern self-learning platforms suffer from:
-
-* ❌ Low commitment & high dropout rates
-* ❌ Lack of structured academic progression
-* ❌ No real accountability system
-* ❌ Difficulty finding peers with similar goals
-* ❌ Weak performance tracking & evaluation
-
-👉 Result: **Incomplete learning journeys & weak skill outcomes**
-
----
-
-## 💡 Solution
-
-UniHub introduces a **hybrid academic model** combining:
-
-* 🎓 University-like structure
-* 🤝 Social learning environments
-* 📊 Behavioral tracking
-* 🤖 AI-driven insights
-
-👉 Creating a **disciplined, data-driven learning experience**
-
----
-
-## 🚀 Key Features
-
-### 🧩 1. Smart Admission & Batch System
-
-* Mandatory placement test (Beginner / Intermediate / Advanced)
-* Intelligent batch assignment based on skill level, schedule, and goals
-* Prerequisite system to control progression
-
-### 📚 2. Semester-Based Academic Structure
-
-* 16-week structured semesters
-* Midterm + Final Project system
-* Interactive roadmap with locked/unlocked courses, completion tracking, and progress visualization
-
-### 👥 3. Collaborative Study Hub
-
-* Private study rooms per batch
-* Real-time features: ⏱ Study timer, 💬 Chat, 🎥 Voice/Video, 🖥 Screen sharing, 🎯 Focus mode
-* Automated attendance tracking, study-hour analytics, and group performance insights
-
-### 📊 4. Accountability System
-
-* Weekly study goals (user-defined)
-* Real-time progress tracking
-* Streak system 🔥
-* Public commitment status: ✅ On Track / ⚠ Under Minimum / 🔥 Streak Active
-
-### 🤖 5. AI-Powered Learning System
-
-* AI-generated quizzes from course content
-* Weakness detection & personalized improvement plans
-* Performance prediction & risk alerts
-* AI academic assistant
-
-### 📝 6. Evaluation System
-
-| Component     | Weight |
-| ------------- | ------ |
-| Attendance    | 15%    |
-| Study Hours   | 10%    |
-| Midterm Exam  | 25%    |
-| Final Project | 50%    |
-
-### 🏆 7. Gamification (Optional)
-
-* XP system, achievement badges, study ranking
-* Weekly leaderboard resets & progress celebration 🎉
-
----
-
-## 🏗 Project Structure
-
-```
-DEPI-Graduation-Project/
-├── frontend/          → React.js Application
-│   ├── src/
-│   ├── public/
-│   └── package.json
-├── backend/           → Node.js API Server
-│   ├── src/
-│   └── package.json
-└── README.md
-```
-
----
-
-## 🏗 Tech Stack
+## Tech Stack
 
 ### Frontend
-* React.js
-* Tailwind CSS
-* Redux
-* React Hook Form
-* Axios
-* Sonner (Toast Notifications)
 
-### Backend
-* Node.js
-* Express.js
-* MongoDB
+- React 19
+- TypeScript
+- Vite
+- Redux Toolkit
+- React Router
+- Tailwind CSS 4
+- Radix UI
+- React Hook Form
+- Zod
+- Recharts
 
-### Real-Time
-* Socket.io
+### Backend Plan
 
-### AI / ML
-* OpenAI API
+- Node.js
+- Express
+- MongoDB
+- JWT-based authentication
 
----
+## Repository Layout
 
-## ⚙️ Installation & Setup
-
-### Prerequisites
-* Node.js >= 18
-* npm >= 9
-* MongoDB running locally or connection string ready
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/mustafakh33/DEPI-Graduation-Project.git
-cd DEPI-Graduation-Project
+```text
+DEPI-Graduation-Project/
+|-- frontend/                # React application
+|   |-- src/
+|   |-- public/
+|   `-- README.md
+|-- backend/                 # Documentation for planned API and data model
+|   |-- README.md
+|   |-- SCHEMA.md
+|   `-- ANALYSIS.md
+`-- README.md
 ```
 
-### 2. Setup Frontend
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18 or newer
+- npm 9 or newer
+
+### Run the Frontend
 
 ```bash
 cd frontend
@@ -181,100 +72,44 @@ npm install
 npm run dev
 ```
 
-### 3. Setup Backend
+The Vite dev server will print the local URL, typically `http://localhost:5173`.
 
-```bash
-cd backend
-npm install
-npm run dev
-```
+### Frontend Environment Variables
 
----
-
-## 🔐 Environment Variables
-
-Create a `.env` file inside the `backend/` folder:
+Create `frontend/.env` if you want to point the app at a real API later:
 
 ```env
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-OPENAI_API_KEY=your_openai_api_key
+VITE_API_BASE_URL=http://localhost:5000
 ```
 
-Create a `.env` file inside the `frontend/` folder:
+At the moment, the app still works without this variable because most flows are mocked.
 
-```env
-VITE_API_URL=http://localhost:5000
-```
+## Authentication and Data Flow
 
-> ⚠️ Never commit `.env` files to GitHub. Make sure `.env` is listed in `.gitignore`.
+- Session state is stored in `localStorage` under `user`.
+- Onboarding state is stored in `localStorage` under `unihub:onboarding`.
+- The shared API client is in `frontend/src/services/api/client.ts`.
+- The API client already supports reading a JWT from `localStorage.getItem("access_token")`.
+- The current login flow does not call an API yet; it creates a fake user object based on a development role selector.
 
----
+## Documentation Map
 
-## 🔄 System Loops
+- [Frontend documentation](frontend/README.md)
+- [Backend overview](backend/README.md)
+- [Proposed backend schema](backend/SCHEMA.md)
+- [Frontend-to-backend integration analysis](backend/ANALYSIS.md)
 
-UniHub operates on 3 core behavioral loops:
+## Known Limitations
 
-* **Academic Loop:** `Learn → Practice → Evaluate → Progress`
-* **Study Loop:** `Study Room → Timer → Quiz → Improvement`
-* **Accountability Loop:** `Goal → Tracking → Feedback → Behavior Adjustment`
+- No backend implementation is present in this repository yet.
+- No database schema or API is enforced by code yet; only documentation exists.
+- Login, role switching, and onboarding completion are client-side only.
+- Some route and label casing is inconsistent because the project is still in prototype form.
 
----
+## Recommended Next Steps
 
-## 🧭 Platform Architecture (UX Navigation)
-
-| Section   | Description                             |
-| --------- | --------------------------------------- |
-| Dashboard | Goals, progress, streaks, notifications |
-| Roadmap   | Learning path & course progression      |
-| Study Hub | Live sessions & collaboration           |
-| Exams     | Quizzes, midterms, projects             |
-| Profile   | Analytics, achievements, mentor info    |
-
----
-
-## 📈 Future Enhancements
-
-* 🎓 Certification system
-* 🧠 Advanced AI tutor (1-on-1)
-* 💼 Internship matching
-* 📊 Adaptive semester pacing
-* 📱 Native mobile apps
-* 🤝 Corporate partnerships
-
----
-
-## 📊 Key Metrics (KPIs)
-
-* Weekly Active Users
-* Average Study Hours / User
-* Completion Rate
-* Dropout Reduction
-* Project Performance Scores
-* Group Consistency Score
-
----
-
-## ⚠️ Challenges & Mitigation
-
-| Challenge        | Solution                             |
-| ---------------- | ------------------------------------ |
-| User burnout     | Balanced workload + mentor check-ins |
-| Fake study time  | Activity tracking & validation       |
-| Strict penalties | Flexible warning system              |
-| AI inaccuracies  | Human moderation layer               |
-
----
-
-## 📄 License
-
-This project is for educational purposes (Graduation Project).
-
----
-
-## 🔚 Final Note
-
-UniHub is not just another learning platform.
-
-> 💥 It is a **behavior-driven academic system** designed to enforce discipline, build consistency, and deliver real outcomes.
+1. Implement the backend auth module and `GET /api/auth/me`.
+2. Replace mock login and onboarding persistence with real API calls.
+3. Add database models for users, tracks, batches, and student onboarding.
+4. Connect dashboard pages to server-backed data instead of mock data.
+5. Add automated tests for auth, onboarding, and route protection.

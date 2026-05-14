@@ -1,73 +1,190 @@
-# React + TypeScript + Vite
+# Frontend Documentation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This frontend is the active part of the UniHub project. It is a Vite + React + TypeScript application that implements the user experience, role-based routing, onboarding flow, and dashboard prototypes for the platform.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript
+- Vite
+- Redux Toolkit
+- React Router
+- Tailwind CSS 4
+- Radix UI
+- React Hook Form
+- Zod
+- Recharts
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Optional `frontend/.env`:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_BASE_URL=http://localhost:5000
 ```
+
+The API base URL is consumed by `src/services/api/client.ts`. If it is omitted, API requests fall back to relative paths.
+
+## Application Structure
+
+### Providers and bootstrap
+
+- Entry point: `src/main.tsx`
+- Global providers:
+  - Redux `Provider`
+  - `AuthProvider`
+  - `OnboardingProvider`
+  - Radix `Theme`
+
+### Routing
+
+Routes are defined in `src/router/AppRouter.tsx`.
+
+- Public routes:
+  - `/`
+  - `/login`
+  - `/signup`
+  - `/forgot-password`
+  - `/forgot-password/verify-code`
+  - `/forgot-password/reset`
+- Onboarding routes:
+  - `/track-selection`
+  - `/schedule`
+  - `/placement-intro`
+  - `/placement-test`
+  - `/result`
+  - `/onboarding-complete`
+  - `/dashboard`
+- Protected role routes:
+  - `/student/*`
+  - `/instructor/*`
+  - `/mentor/*`
+  - `/admin/*`
+
+### Guards
+
+- `AuthGuard` blocks protected routes when no user exists in auth context.
+- `RoleGuard` restricts routes by role.
+- `OnboardingRouteGuard` enforces the multi-step onboarding sequence.
+
+## Current Auth Behavior
+
+Auth is still mocked.
+
+- `AuthProvider` stores a `user` object in `localStorage`.
+- `Login.tsx` currently logs in by role through a development-only selector.
+- No real API request is made during login.
+- No JWT is issued yet.
+
+The API client is already prepared for real auth:
+
+- It reads `access_token` from `localStorage`.
+- It sends `Authorization: Bearer <token>` automatically.
+- It exposes `apiGet`, `apiPost`, `apiPut`, `apiPatch`, and `apiDelete`.
+
+## Onboarding Flow
+
+The onboarding experience is managed by `src/features/onboarding/context/OnboardingContext.tsx`.
+
+Current behavior:
+
+- State is persisted in `localStorage` under `unihub:onboarding`.
+- Placement questions are loaded from local mock data in `src/features/onboarding/data/questions.ts`.
+- Test scoring is calculated on the client.
+- Completion state is local only and not validated against a server.
+
+### Tracks currently exposed in the UI
+
+- Web Development
+- AI and Data Science
+- Mobile Development
+- Cybersecurity
+
+## Role Modules
+
+### Student
+
+- Dashboard
+- Roadmap
+- Sessions
+- Study Room
+- Analytics
+- Assignments
+- Quizzes
+- Ranking
+- Results
+- Profile
+
+### Instructor
+
+- Dashboard
+- My Courses
+- Students
+- Grades
+- Quizzes
+- Live Session
+
+### Mentor
+
+- Dashboard
+- My Students
+- Chat
+- Check-Ins
+- Progress
+
+### Admin
+
+- Dashboard
+- User Management
+- Students
+- Sessions
+- Courses
+- Batches
+- Feedback
+- Settings
+
+## Directory Guide
+
+```text
+src/
+|-- components/        # Shared and UI components
+|-- context/           # Auth and theme context
+|-- features/          # Role-based feature modules
+|-- guards/            # Route protection
+|-- hooks/             # Shared hooks
+|-- layouts/           # Layout shells per role
+|-- pages/             # Shared public pages
+|-- router/            # App routing
+|-- services/          # API client
+|-- store/             # Redux store
+|-- styles/            # Global styles
+|-- types/             # Shared types
+`-- utils/             # Formatting and helper utilities
+```
+
+## Integration Notes
+
+The frontend is ready to be connected to a backend, but these pieces still need implementation:
+
+- Replace mock login with `POST /api/auth/login`
+- Restore sessions with `GET /api/auth/me`
+- Move placement test scoring to the backend
+- Persist onboarding steps server-side
+- Replace mock dashboard data with API-backed hooks and thunks
+
+## Known Limitations
+
+- Frontend-only prototype
+- No server validation for auth or onboarding
+- No automated tests are present in this repository
+- Some data and dashboards still depend on mock objects
