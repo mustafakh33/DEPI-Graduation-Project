@@ -126,3 +126,27 @@ export interface StudentQuiz {
   isPublished: boolean;
   quizPath: string;
 }
+export type RankingStatus = "rising" | "stable";
+
+export interface RankingStudent {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  coins: number;
+  previousCoins: number;
+  trackId: string;
+  groupName: string;
+  isCurrentStudent?: boolean;
+}
+
+export interface RankedStudent extends RankingStudent {
+  rank: number;
+  status: RankingStatus;
+}
+
+export interface RankingData {
+  currentStudent: RankedStudent;
+  topStudents: RankedStudent[];
+  rankedStudents: RankedStudent[];
+  coinsToNextRank: number;
+}
