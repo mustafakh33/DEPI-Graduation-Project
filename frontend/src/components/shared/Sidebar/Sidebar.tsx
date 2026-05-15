@@ -42,10 +42,14 @@ const Sidebar: React.FC<SidebarProps> = ({
     className={cn(
       "flex shrink-0 flex-col border-r border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-[#0b0f1a]",
       "sticky top-0 h-screen w-64",
-      className,
+      className
     )}
   >
-    <SidebarHeader logo={logo} appName={appName} portalSubtitle={portalSubtitle} />
+    <SidebarHeader
+      logo={logo}
+      appName={appName}
+      portalSubtitle={portalSubtitle}
+    />
 
     <ScrollArea className="min-h-0 flex-1">
       <nav className="flex flex-col space-y-1 px-4 py-4">
@@ -81,12 +85,12 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Avatar>
 
             <div className="min-w-0 flex-1 overflow-hidden">
-              <p className="truncate text-xs font-semibold text-slate-900 dark:text-white">
+              <p className="truncate text-xs font-semibold text-white">
                 {userName}
               </p>
 
               {showUserRole && userRole ? (
-                <p className="truncate text-[10px] capitalize text-slate-500 dark:text-slate-400">
+                <p className="truncate text-[10px] capitalize text-slate-300">
                   {userRole}
                 </p>
               ) : null}

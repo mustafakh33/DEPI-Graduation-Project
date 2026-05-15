@@ -150,3 +150,61 @@ export interface RankingData {
   rankedStudents: RankedStudent[];
   coinsToNextRank: number;
 }
+export interface LessonMaterial {
+  id: string;
+  title: string;
+  description: string;
+  fileName: string;
+  fileUrl: string;
+}
+
+export interface StudentSupportPerson {
+  id: string;
+  name: string;
+  role: "instructor" | "mentor";
+  avatarUrl?: string;
+  chatPath: string;
+}
+
+export interface StudentLessonDetails {
+  id: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  material: LessonMaterial;
+  instructor: StudentSupportPerson;
+  mentor: StudentSupportPerson;
+}
+export interface SoloStudyTask {
+  id: number;
+  title: string;
+  isCompleted: boolean;
+}
+
+export interface SoloStudyMaterial {
+  id: string;
+  lessonTitle: string;
+  fileName: string;
+  fileUrl: string;
+}
+
+export interface SoloFocusStats {
+  weeklySeconds: number;
+  dailySeconds: number;
+  breakCount: number;
+  streakDays: number;
+  isRunning: boolean;
+  lastStartedAt: number | null;
+  lastStudyDate: string | null;
+  currentDayKey: string;
+  currentWeekKey: string;
+}
+
+export type SoloFocusActivePanel =
+  | "note"
+  | "calendar"
+  | "materials"
+  | "quiz"
+  | null;
+
+export type SoloFocusMusicTrackId = "lofi" | "rain";

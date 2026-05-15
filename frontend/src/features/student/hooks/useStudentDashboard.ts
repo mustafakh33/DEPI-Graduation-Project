@@ -1,4 +1,5 @@
 import { useOnboarding } from "@/features/onboarding/context/OnboardingContext";
+import { useAuth } from "@/hooks/useAuth";
 import type { StudentDashboardData } from "../types/student.types";
 
 const calculateWeeklyGoalPercentage = (
@@ -13,13 +14,19 @@ const calculateWeeklyGoalPercentage = (
 };
 
 export const useStudentDashboard = (): StudentDashboardData => {
-  const { user, selectedTrack, schedule } = useOnboarding();
+  const { user: onboardingUser, selectedTrack, schedule } = useOnboarding();
+  const { user: authUser } = useAuth();
+
+  const studentName =
+    onboardingUser?.name?.trim() ||
+    authUser?.name?.trim() ||
+    "Student";
 
   const weeklyGoalTargetHours = schedule?.weeklyCommitment ?? 10;
   const completedStudyHours = 7.5;
 
   return {
-    studentName: user?.name ?? "Student",
+    studentName,
     weeklyGoal: {
       targetHours: weeklyGoalTargetHours,
       completedHours: completedStudyHours,
@@ -39,7 +46,9 @@ export const useStudentDashboard = (): StudentDashboardData => {
       title: selectedTrack?.title ?? "Web Development",
       status: "in-progress",
       progress: 68,
-      lastLessonPath: `/student/subject/${selectedTrack?.id ?? "web-development"}`,
+      lastLessonPath: `/student/subject/${
+        selectedTrack?.id ?? "web-development"
+      }`,
     },
   };
 };

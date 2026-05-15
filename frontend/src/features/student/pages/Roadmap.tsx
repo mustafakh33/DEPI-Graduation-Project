@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import CourseNode from "../components/roadmap/CourseNode";
 import StudentPageContainer from "../components/shared/StudentPageContainer";
 import { useRoadmap } from "../hooks/useRoadmap";
@@ -54,9 +55,30 @@ const Roadmap = () => {
             <div className="absolute left-1/2 top-0 hidden h-full w-1 -translate-x-1/2 rounded-full bg-blue-500/70 md:block" />
 
             <div className="space-y-8">
-              {lessons.map((lesson, index) => (
-                <CourseNode key={lesson.id} lesson={lesson} index={index} />
-              ))}
+              {lessons.map((lesson, index) => {
+                const isLessonOpen =
+                  lesson.status === "completed" || lesson.status === "active";
+
+                if (isLessonOpen) {
+                  return (
+                    <Link
+                      key={lesson.id}
+                      to={`/student/lesson/${lesson.id}`}
+                      className="block transition hover:scale-[1.01]"
+                    >
+                      <CourseNode lesson={lesson} index={index} />
+                    </Link>
+                  );
+                }
+
+                return (
+                  <CourseNode
+                    key={lesson.id}
+                    lesson={lesson}
+                    index={index}
+                  />
+                );
+              })}
 
               <div className="relative flex justify-center pt-4">
                 <div className="w-full max-w-[240px] rounded-2xl border border-slate-700 bg-slate-900/60 px-4 py-5 text-center opacity-80">
@@ -95,12 +117,12 @@ const Roadmap = () => {
               </p>
             </div>
 
-            <button
-              type="button"
+            <Link
+              to="/student/study-club"
               className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500"
             >
               Join Club
-            </button>
+            </Link>
           </div>
         </section>
       </div>

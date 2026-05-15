@@ -7,126 +7,80 @@ import type {
 } from "../types/student.types";
 import { useStudentDashboard } from "./useStudentDashboard";
 
-const rankingStudents: RankingStudent[] = [
-  {
-    id: "student-1",
-    name: "Tames Chen",
-    avatarUrl: "https://i.pravatar.cc/120?img=12",
-    coins: 15820,
-    previousCoins: 15400,
-    trackId: "ai-data-science",
-    groupName: "AI Group A",
-  },
-  {
-    id: "student-2",
-    name: "Sarah Williams",
-    avatarUrl: "https://i.pravatar.cc/120?img=47",
-    coins: 14350,
-    previousCoins: 14350,
-    trackId: "ai-data-science",
-    groupName: "AI Group B",
-  },
-  {
-    id: "student-3",
-    name: "Alex Johnson",
-    avatarUrl: "https://i.pravatar.cc/120?img=32",
-    coins: 13200,
-    previousCoins: 13000,
-    trackId: "ai-data-science",
-    groupName: "AI Group A",
-  },
-  {
-    id: "student-4",
-    name: "Michael Ross",
-    avatarUrl: "https://i.pravatar.cc/120?img=15",
-    coins: 11420,
-    previousCoins: 11200,
-    trackId: "ai-data-science",
-    groupName: "AI Group C",
-  },
-  {
-    id: "student-5",
-    name: "Emily Blunt",
-    avatarUrl: "https://i.pravatar.cc/120?img=25",
-    coins: 9800,
-    previousCoins: 9700,
-    trackId: "ai-data-science",
-    groupName: "AI Group B",
-  },
-  {
-    id: "student-6",
-    name: "Sophia Lee",
-    avatarUrl: "https://i.pravatar.cc/120?img=44",
-    coins: 9450,
-    previousCoins: 9450,
-    trackId: "ai-data-science",
-    groupName: "AI Group C",
-  },
-  {
-    id: "student-7",
-    name: "Mariam Hassan",
-    avatarUrl: "https://i.pravatar.cc/120?img=10",
-    coins: 8200,
-    previousCoins: 8100,
-    trackId: "ai-data-science",
-    groupName: "AI Group A",
-  },
-  {
-    id: "student-8",
-    name: "Omar Khaled",
-    avatarUrl: "https://i.pravatar.cc/120?img=14",
-    coins: 6500,
-    previousCoins: 6500,
-    trackId: "ai-data-science",
-    groupName: "AI Group B",
-  },
-  {
-    id: "student-9",
-    name: "Laila Samir",
-    avatarUrl: "https://i.pravatar.cc/120?img=23",
-    coins: 4100,
-    previousCoins: 3900,
-    trackId: "ai-data-science",
-    groupName: "AI Group C",
-  },
-  {
-    id: "student-10",
-    name: "Youssef Ali",
-    avatarUrl: "https://i.pravatar.cc/120?img=33",
-    coins: 1200,
-    previousCoins: 1200,
-    trackId: "ai-data-science",
-    groupName: "AI Group A",
-  },
-  {
-    id: "student-11",
-    name: "Nour Adel",
-    avatarUrl: "https://i.pravatar.cc/120?img=40",
-    coins: 700,
-    previousCoins: 600,
-    trackId: "ai-data-science",
-    groupName: "AI Group B",
-  },
+const buildMockStudentsAboveCurrent = (
+  trackId: string,
+  rank: number,
+  currentCoins: number,
+  trackTitle: string
+): RankingStudent[] => {
+  const studentsCountAboveCurrent = Math.max(rank - 1, 0);
 
-  {
-    id: "web-student-1",
-    name: "Mona Adel",
-    avatarUrl: "https://i.pravatar.cc/120?img=20",
-    coins: 12500,
-    previousCoins: 12400,
-    trackId: "web-development",
-    groupName: "Web Group A",
-  },
-  {
-    id: "web-student-2",
-    name: "Ahmed Hany",
-    avatarUrl: "https://i.pravatar.cc/120?img=18",
-    coins: 860,
-    previousCoins: 800,
-    trackId: "web-development",
-    groupName: "Web Group B",
-  },
-];
+  return Array.from({ length: studentsCountAboveCurrent }, (_, index) => {
+    const studentRank = index + 1;
+    const coinsGap = (studentsCountAboveCurrent - index) * 350;
+
+    return {
+      id: `${trackId}-student-${studentRank}`,
+      name: [
+        "Tames Chen",
+        "Sarah Williams",
+        "Alex Johnson",
+        "Michael Ross",
+        "Emily Blunt",
+        "Sophia Lee",
+        "Mariam Hassan",
+        "Omar Khaled",
+        "Laila Samir",
+        "Youssef Ali",
+        "Nour Adel",
+      ][index] ?? `Student ${studentRank}`,
+      avatarUrl: `https://i.pravatar.cc/120?img=${index + 12}`,
+      coins: currentCoins + coinsGap,
+      previousCoins:
+        index % 2 === 0
+          ? currentCoins + coinsGap - 120
+          : currentCoins + coinsGap,
+      trackId,
+      groupName: `${trackTitle} Group ${index % 3 === 0 ? "A" : index % 3 === 1 ? "B" : "C"}`,
+    };
+  });
+};
+
+const buildMockStudentsBelowCurrent = (
+  trackId: string,
+  currentCoins: number,
+  trackTitle: string
+): RankingStudent[] => {
+  return [
+    {
+      id: `${trackId}-below-1`,
+      name: "Farah Nabil",
+      avatarUrl: "https://i.pravatar.cc/120?img=41",
+      coins: Math.max(currentCoins - 120, 0),
+      previousCoins: Math.max(currentCoins - 120, 0),
+      trackId,
+      groupName: `${trackTitle} Group B`,
+    },
+    {
+      id: `${trackId}-below-2`,
+      name: "Kareem Samy",
+      avatarUrl: "https://i.pravatar.cc/120?img=42",
+      coins: Math.max(currentCoins - 260, 0),
+      previousCoins: Math.max(currentCoins - 300, 0),
+      trackId,
+      groupName: `${trackTitle} Group C`,
+    },
+    {
+      id: `${trackId}-below-3`,
+      name: "Hana Mostafa",
+      avatarUrl: "https://i.pravatar.cc/120?img=43",
+      coins: Math.max(currentCoins - 430, 0),
+      previousCoins: Math.max(currentCoins - 430, 0),
+      trackId,
+      groupName: `${trackTitle} Group A`,
+    },
+  ];
+};
 
 const getRankingStatus = (student: RankingStudent): RankingStatus => {
   return student.coins > student.previousCoins ? "rising" : "stable";
@@ -167,7 +121,8 @@ export const useRanking = (): RankingData => {
   const { selectedTrack, user } = useOnboarding();
   const dashboard = useStudentDashboard();
 
-  const selectedTrackId = selectedTrack?.id ?? "ai-data-science";
+  const selectedTrackId = selectedTrack?.id ?? "web-development";
+  const selectedTrackTitle = selectedTrack?.title ?? "Student";
 
   const currentStudentFromNavbar: RankingStudent = {
     id: "current-student",
@@ -176,17 +131,27 @@ export const useRanking = (): RankingData => {
     coins: dashboard.stats.coins,
     previousCoins: dashboard.stats.coins,
     trackId: selectedTrackId,
-    groupName: `${selectedTrack?.title ?? "Student"} Group`,
+    groupName: `${selectedTrackTitle} Group`,
     isCurrentStudent: true,
   };
 
-  const studentsInTrack = rankingStudents.filter(
-    (student) => student.trackId === selectedTrackId
+  const studentsAboveCurrent = buildMockStudentsAboveCurrent(
+    selectedTrackId,
+    dashboard.stats.rank,
+    dashboard.stats.coins,
+    selectedTrackTitle
+  );
+
+  const studentsBelowCurrent = buildMockStudentsBelowCurrent(
+    selectedTrackId,
+    dashboard.stats.coins,
+    selectedTrackTitle
   );
 
   const rankedStudents = rankStudents([
-    ...studentsInTrack,
+    ...studentsAboveCurrent,
     currentStudentFromNavbar,
+    ...studentsBelowCurrent,
   ]);
 
   const currentStudent =

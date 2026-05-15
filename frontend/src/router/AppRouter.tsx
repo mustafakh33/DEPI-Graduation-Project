@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import "@/styles/global.css";
+
 // Public pages
 import LandingPage from "@/features/landing/pages/Landing";
 import Unauthorized from "@/pages/public/Unauthorized";
@@ -12,7 +13,7 @@ import ForgotPassword from "@/features/auth/pages/ForgotPassword";
 import VerifyCode from "@/features/auth/pages/VerifyCode";
 import ResetPassword from "@/features/auth/pages/ResetPassword";
 
-// onboarding pages
+// Onboarding pages
 import TrackSelection from "@/features/onboarding/pages/TrackSelection";
 import ScheduleSetup from "@/features/onboarding/pages/ScheduleSetup";
 import TestIntro from "@/features/onboarding/pages/TestIntro";
@@ -23,7 +24,6 @@ import OnboardingDashboard from "@/features/onboarding/pages/OnboardingDashboard
 import { OnboardingRouteGuard } from "@/guards/OnboardingRouteGuard";
 
 // Student pages
-// Student pages
 import StudentDashboard from "@/features/student/pages/Dashboard";
 import Roadmap from "@/features/student/pages/Roadmap";
 import StudentSessions from "@/features/student/pages/Sessions";
@@ -31,16 +31,15 @@ import StudyRoom from "@/features/student/pages/StudyRoom";
 import Exams from "@/features/student/pages/Exams";
 import StudentProfile from "@/features/student/pages/StudentProfile";
 import Subject from "@/features/student/pages/Subject";
-import StudentLayout from "@/layouts/StudentLayout";
 import Analytics from "@/features/student/pages/Analytics";
 import Assignments from "@/features/student/pages/Assignments";
 import StudentQuizzes from "@/features/student/pages/Quizzes";
 import Ranking from "@/features/student/pages/Ranking";
 import Results from "@/features/student/pages/Results";
-
-
-
-
+import LessonDetails from "@/features/student/pages/LessonDetails";
+import StudyClub from "@/features/student/pages/StudyClub";
+import SoloFocusRoom from "@/features/student/pages/SoloFocusRoom";
+import StudentLayout from "@/layouts/StudentLayout";
 
 // Instructor pages
 import InstructorDashboard from "@/features/instructor/pages/Dashboard";
@@ -59,8 +58,6 @@ import CheckIns from "@/features/mentor/pages/CheckIns";
 import Progress from "@/features/mentor/pages/Progress";
 import MentorLayout from "@/layouts/MentorLayout";
 
-
-
 // Admin pages
 import AdminDashboard from "@/features/admin/pages/Dashboard";
 import Users from "@/features/admin/pages/Users";
@@ -72,6 +69,7 @@ import Sessions from "@/features/admin/pages/Sessions";
 import Feedback from "@/features/admin/pages/Feedback";
 import AdminStudents from "@/features/admin/pages/Students";
 import AdminLayout from "@/layouts/AdminLayout";
+
 import { adminDashboardPath } from "@/features/admin/config/navigation";
 import { instructorDashboardPath } from "@/features/instructor/config/navigation";
 import { mentorDashboardPath } from "@/features/mentor/config/navigation";
@@ -82,8 +80,6 @@ import AuthGuard from "@/guards/AuthGuard";
 import RoleGuard from "@/guards/RoleGuard";
 import { useAuth } from "@/hooks/useAuth";
 
-
-// After login, redirect each role to its dashboard (paths match feature nav config)
 const roleRedirects = {
   student: studentDashboardPath,
   instructor: instructorDashboardPath,
@@ -106,34 +102,39 @@ const AppRouter = () => {
         <Route path="/forgot-password/verify-code" element={<VerifyCode />} />
         <Route path="/forgot-password/reset" element={<ResetPassword />} />
 
-        {/* onboarding routes */}
+        {/* Onboarding routes */}
         <Route element={<OnboardingRouteGuard step="track" />}>
           <Route path="/track-selection" element={<TrackSelection />} />
         </Route>
+
         <Route element={<OnboardingRouteGuard step="schedule" />}>
           <Route path="/schedule" element={<ScheduleSetup />} />
         </Route>
+
         <Route element={<OnboardingRouteGuard step="intro" />}>
           <Route path="/placement-intro" element={<TestIntro />} />
         </Route>
+
         <Route element={<OnboardingRouteGuard step="test" />}>
           <Route path="/placement-test" element={<ActiveTest />} />
         </Route>
+
         <Route element={<OnboardingRouteGuard step="result" />}>
           <Route path="/result" element={<TestResult />} />
         </Route>
+
         <Route element={<OnboardingRouteGuard step="complete" />}>
           <Route path="/onboarding-complete" element={<FinalWelcome />} />
         </Route>
+
         <Route element={<OnboardingRouteGuard step="dashboard" />}>
           <Route path="/dashboard" element={<OnboardingDashboard />} />
         </Route>
 
         <Route path="/unauthorized" element={<Unauthorized />} />
 
-        {/* Protected routes (authentication required) */}
+        {/* Protected routes */}
         <Route element={<AuthGuard />}>
-          {/* Redirect /home to the correct dashboard based on user role */}
           <Route
             path="/home"
             element={
@@ -147,6 +148,12 @@ const AppRouter = () => {
 
           {/* Student routes */}
           <Route element={<RoleGuard allowedRoles={["student"]} />}>
+            {/* Internal student pages without sidebar */}
+            <Route path="/student/lesson/:lessonId" element={<LessonDetails />} />
+            <Route path="/student/study-club" element={<StudyClub />} />
+            <Route path="/student/solo-focus" element={<SoloFocusRoom />} />
+
+            {/* Student pages with sidebar layout */}
             <Route element={<StudentLayout />}>
               <Route path="/student/dashboard" element={<StudentDashboard />} />
               <Route path="/student/roadmap" element={<Roadmap />} />
@@ -160,7 +167,6 @@ const AppRouter = () => {
               <Route path="/student/quizzes" element={<StudentQuizzes />} />
               <Route path="/student/ranking" element={<Ranking />} />
               <Route path="/student/results" element={<Results />} />
-                            
             </Route>
           </Route>
 
@@ -175,10 +181,7 @@ const AppRouter = () => {
               <Route path="/instructor/students" element={<Students />} />
               <Route path="/instructor/grades" element={<Grades />} />
               <Route path="/instructor/quizzes" element={<Quizzes />} />
-              <Route
-                path="/instructor/live-session"
-                element={<LiveSession />}
-              />
+              <Route path="/instructor/live-session" element={<LiveSession />} />
             </Route>
           </Route>
 
@@ -187,7 +190,7 @@ const AppRouter = () => {
             <Route element={<MentorLayout />}>
               <Route path="/mentor/dashboard" element={<MentorDashboard />} />
               <Route path="/mentor/my-students" element={<MyStudents />} />
-              <Route path="/mentor/ChatPage" element={<ChatPage/>} />
+              <Route path="/mentor/ChatPage" element={<ChatPage />} />
               <Route path="/mentor/chat/:studentId" element={<ChatPage />} />
               <Route path="/mentor/check-ins" element={<CheckIns />} />
               <Route path="/mentor/progress/:id" element={<Progress />} />
