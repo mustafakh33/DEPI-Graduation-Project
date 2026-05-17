@@ -1,5 +1,5 @@
 import { useOnboarding } from "@/features/onboarding/context/OnboardingContext";
-import type { RoadmapData } from "../types/student.types";
+import type { RoadmapData, RoadmapLesson } from "../types/student.types";
 
 const roadmapsByTrack: Record<string, RoadmapData> = {
   "web-development": {
@@ -282,10 +282,95 @@ const roadmapsByTrack: Record<string, RoadmapData> = {
   },
 };
 
+export const getRoadmapLessons = (roadmap: RoadmapData): RoadmapLesson[] => {
+  return roadmap.modules.flatMap((module) => module.lessons);
+};
+
+export const calculateRoadmapProgress = (roadmap: RoadmapData): number => {
+  const lessons = getRoadmapLessons(roadmap);
+
+  if (lessons.length === 0) {
+    return 0;
+  }
+
+  const completedLessons = lessons.filter(
+    (lesson) => lesson.status === "completed"
+  ).length;
+
+  return Math.round((completedLessons / lessons.length) * 100);
+};
+
+export const getContinueLearningLesson = (
+  roadmap: RoadmapData
+): RoadmapLesson | null => {
+  const lessons = getRoadmapLessons(roadmap);
+
+  const activeLesson = lessons.find((lesson) => lesson.status === "active");
+
+  if (activeLesson) {
+    return activeLesson;
+  }
+
+  const completedLessons = lessons.filter(
+    (lesson) => lesson.status === "completed"
+  );
+
+  return completedLessons.at(-1) ?? lessons[0] ?? null;
+};
+
+export const getContinueLearningPath = (roadmap: RoadmapData): string => {
+  const continueLesson = getContinueLearningLesson(roadmap);
+
+  if (!continueLesson) {
+    return "/student/roadmap";
+  }
+
+  return `/student/lesson/${continueLesson.id}`;
+};
+
+const getStoredSelectedTrackId = (): string | null => {
+  try {
+    const storedOnboarding = localStorage.getItem("unihub:onboarding");
+
+    if (!storedOnboarding) {
+      return null;
+    }
+
+    const parsedOnboarding = JSON.parse(storedOnboarding) as {
+      selectedTrack?: {
+        id?: string;
+      } | null;
+    };
+
+    return parsedOnboarding.selectedTrack?.id ?? null;
+  } catch {
+    return null;
+  }
+};
+
+const getSelectedTrackId = (
+  selectedTrackIdFromContext: string | undefined
+): string => {
+  if (
+    selectedTrackIdFromContext &&
+    selectedTrackIdFromContext in roadmapsByTrack
+  ) {
+    return selectedTrackIdFromContext;
+  }
+
+  const storedSelectedTrackId = getStoredSelectedTrackId();
+
+  if (storedSelectedTrackId && storedSelectedTrackId in roadmapsByTrack) {
+    return storedSelectedTrackId;
+  }
+
+  return "web-development";
+};
+
 export const useRoadmap = (): RoadmapData => {
   const { selectedTrack } = useOnboarding();
 
-  const selectedTrackId = selectedTrack?.id ?? "web-development";
+  const selectedTrackId = getSelectedTrackId(selectedTrack?.id);
 
-  return roadmapsByTrack[selectedTrackId] ?? roadmapsByTrack["web-development"];
+  return roadmapsByTrack[selectedTrackId];
 };

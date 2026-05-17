@@ -27,6 +27,7 @@ export interface StudentDashboardData {
   stats: StudentStats;
   currentCourse: CurrentCourse;
 }
+
 export type RoadmapLessonStatus = "completed" | "active" | "locked";
 
 export interface RoadmapLesson {
@@ -47,6 +48,7 @@ export interface RoadmapData {
   trackTitle: string;
   modules: RoadmapModule[];
 }
+
 export interface UpcomingSession {
   id: string;
   title: string;
@@ -73,6 +75,7 @@ export interface SessionsData {
   upcomingSession: UpcomingSession;
   recordings: RecordedSession[];
 }
+
 export interface AnalyticsMetric {
   id: string;
   title: string;
@@ -91,6 +94,7 @@ export interface AnalyticsData {
   weeklyStudyHours: StudyHourDay[];
   studyDays: string[];
 }
+
 export type AssignmentStatus = "open" | "missed" | "submitted" | "graded";
 
 export interface StudentAssignment {
@@ -110,6 +114,7 @@ export interface StudentAssignment {
   assignmentPath: string;
   gradePath?: string;
 }
+
 export interface StudentQuiz {
   id: string;
   quizNumber: number;
@@ -126,6 +131,7 @@ export interface StudentQuiz {
   isPublished: boolean;
   quizPath: string;
 }
+
 export type RankingStatus = "rising" | "stable";
 
 export interface RankingStudent {
@@ -150,6 +156,7 @@ export interface RankingData {
   rankedStudents: RankedStudent[];
   coinsToNextRank: number;
 }
+
 export interface LessonMaterial {
   id: string;
   title: string;
@@ -175,6 +182,7 @@ export interface StudentLessonDetails {
   instructor: StudentSupportPerson;
   mentor: StudentSupportPerson;
 }
+
 export interface SoloStudyTask {
   id: number;
   title: string;
@@ -208,3 +216,67 @@ export type SoloFocusActivePanel =
   | null;
 
 export type SoloFocusMusicTrackId = "lofi" | "rain";
+
+export interface GroupStudyMember {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  rank: number;
+  coins: number;
+  isOnline: boolean;
+  isLeader?: boolean;
+  currentActivity: string;
+}
+
+export interface GroupStudyMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  senderAvatarUrl: string;
+  content: string;
+  sentAt: string;
+  isCurrentStudent?: boolean;
+}
+
+export interface GroupStudyRoomData {
+  groupName: string;
+  trackTitle: string;
+  currentStudent: GroupStudyMember;
+  members: GroupStudyMember[];
+  messages: GroupStudyMessage[];
+  meetUrl: string;
+}
+
+export type StudentChatContactRole =
+  | "student"
+  | "instructor"
+  | "mentor";
+
+export interface StudentChatContact {
+  id: string;
+  name: string;
+  role: StudentChatContactRole;
+  avatarUrl: string;
+  isOnline: boolean;
+  lastMessage: string;
+  lastMessageAt: string;
+  unreadCount?: number;
+  isGroupLeader?: boolean;
+}
+
+export interface StudentChatMessage {
+  id: string;
+  contactId: string;
+  senderId: string;
+  senderName: string;
+  senderAvatarUrl: string;
+  content: string;
+  sentAt: string;
+  type: "text" | "file" | "emoji";
+  isCurrentStudent?: boolean;
+}
+
+export interface StudentChatData {
+  contacts: StudentChatContact[];
+  messages: StudentChatMessage[];
+}

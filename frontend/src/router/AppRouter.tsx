@@ -39,6 +39,8 @@ import Results from "@/features/student/pages/Results";
 import LessonDetails from "@/features/student/pages/LessonDetails";
 import StudyClub from "@/features/student/pages/StudyClub";
 import SoloFocusRoom from "@/features/student/pages/SoloFocusRoom";
+import GroupStudyRoom from "@/features/student/pages/GroupStudyRoom";
+import Chat from "@/features/student/pages/Chat";
 import StudentLayout from "@/layouts/StudentLayout";
 
 // Instructor pages
@@ -152,6 +154,7 @@ const AppRouter = () => {
             <Route path="/student/lesson/:lessonId" element={<LessonDetails />} />
             <Route path="/student/study-club" element={<StudyClub />} />
             <Route path="/student/solo-focus" element={<SoloFocusRoom />} />
+            <Route path="/student/group-study" element={<GroupStudyRoom />} />
 
             {/* Student pages with sidebar layout */}
             <Route element={<StudentLayout />}>
@@ -166,7 +169,7 @@ const AppRouter = () => {
               <Route path="/student/assignments" element={<Assignments />} />
               <Route path="/student/quizzes" element={<StudentQuizzes />} />
               <Route path="/student/ranking" element={<Ranking />} />
-              <Route path="/student/results" element={<Results />} />
+              <Route path="/student/chat" element={<Chat />} />
             </Route>
           </Route>
 

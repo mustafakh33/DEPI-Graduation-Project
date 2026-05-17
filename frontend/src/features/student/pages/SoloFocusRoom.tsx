@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
+  Bell,
   BookOpen,
   CalendarDays,
   Check,
   ClipboardCheck,
-  ExternalLink,
+  Coffee,
+  Eye,
   FileText,
   Map,
   Music2,
@@ -30,6 +32,36 @@ const STUDY_NOTE_STORAGE_KEY = "solo-focus-study-note";
 const STUDY_CALENDAR_STORAGE_KEY = "solo-focus-calendar-plans";
 const SELECTED_MATERIALS_STORAGE_KEY = "solo-focus-selected-materials";
 const FOCUS_STATS_STORAGE_KEY = "solo-focus-stats";
+const STUDENT_NOTIFICATIONS_STORAGE_KEY = "student-notifications";
+
+const MIN_AUTO_BREAK_DELAY_MS = 60 * 60 * 1000;
+const MAX_AUTO_BREAK_DELAY_MS = 3 * 60 * 60 * 1000;
+
+interface StudentNotification {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  type: "break" | "quiz" | "assignment" | "login" | "signup";
+  isRead: boolean;
+  createdAt: number;
+}
+
+interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+interface QuizResult {
+  score: number;
+  passed: boolean;
+  correctAnswers: number;
+  totalQuestions: number;
+}
+
+const PASSING_SCORE = 50;
 
 const MUSIC_TRACKS: Record<
   SoloFocusMusicTrackId,
@@ -51,6 +83,75 @@ const getYesterdayDate = () => {
   const date = new Date();
   date.setDate(date.getDate() - 1);
   return date.toISOString().slice(0, 10);
+};
+
+const getCurrentTime = () => {
+  return new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const getRandomAutoBreakDelay = () => {
+  return Math.floor(
+    Math.random() * (MAX_AUTO_BREAK_DELAY_MS - MIN_AUTO_BREAK_DELAY_MS + 1) +
+      MIN_AUTO_BREAK_DELAY_MS
+  );
+};
+
+const saveStudentNotification = (notification: StudentNotification) => {
+  const savedNotifications = localStorage.getItem(
+    STUDENT_NOTIFICATIONS_STORAGE_KEY
+  );
+
+  let notifications: StudentNotification[] = [];
+
+  if (savedNotifications) {
+    try {
+      notifications = JSON.parse(savedNotifications) as StudentNotification[];
+    } catch {
+      notifications = [];
+    }
+  }
+
+  localStorage.setItem(
+    STUDENT_NOTIFICATIONS_STORAGE_KEY,
+    JSON.stringify([notification, ...notifications])
+  );
+};
+
+const requestNotificationPermission = async () => {
+  if (!("Notification" in window)) {
+    return;
+  }
+
+  if (Notification.permission === "default") {
+    await Notification.requestPermission();
+  }
+};
+
+const showBrowserBreakNotification = () => {
+  if (!("Notification" in window)) {
+    return;
+  }
+
+  if (Notification.permission !== "granted") {
+    return;
+  }
+
+  new Notification("Time for a break", {
+    body: "Your focus timer has been paused automatically.",
+  });
+};
+
+const exitFullScreenIfActive = async () => {
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    }
+  } catch {
+    // Fullscreen exit is optional.
+  }
 };
 
 const getWeekKey = (date = new Date()) => {
@@ -81,7 +182,11 @@ const resetCountersIfNeeded = (stats: SoloFocusStats): SoloFocusStats => {
   const today = getTodayDate();
   const currentWeek = getWeekKey();
 
-  let nextStats = { ...stats };
+  let nextStats: SoloFocusStats = {
+    ...stats,
+    isRunning: false,
+    lastStartedAt: null,
+  };
 
   if (nextStats.currentDayKey !== today) {
     nextStats = {
@@ -114,41 +219,18 @@ const resetCountersIfNeeded = (stats: SoloFocusStats): SoloFocusStats => {
   return nextStats;
 };
 
-const updateRunningStats = (stats: SoloFocusStats): SoloFocusStats => {
-  const normalizedStats = resetCountersIfNeeded(stats);
-
-  if (!normalizedStats.isRunning || !normalizedStats.lastStartedAt) {
-    return normalizedStats;
-  }
-
-  const elapsedSeconds = Math.max(
-    0,
-    Math.floor((Date.now() - normalizedStats.lastStartedAt) / 1000)
-  );
-
-  if (elapsedSeconds === 0) {
-    return normalizedStats;
-  }
-
+const updateStreakAfterApprovedSession = (stats: SoloFocusStats) => {
   const today = getTodayDate();
 
-  let nextStreakDays = normalizedStats.streakDays;
-
-  if (normalizedStats.lastStudyDate !== today) {
-    nextStreakDays =
-      normalizedStats.lastStudyDate === getYesterdayDate()
-        ? normalizedStats.streakDays + 1
-        : 1;
+  if (stats.lastStudyDate === today) {
+    return stats.streakDays;
   }
 
-  return resetCountersIfNeeded({
-    ...normalizedStats,
-    weeklySeconds: normalizedStats.weeklySeconds + elapsedSeconds,
-    dailySeconds: normalizedStats.dailySeconds + elapsedSeconds,
-    streakDays: nextStreakDays,
-    lastStudyDate: today,
-    lastStartedAt: Date.now(),
-  });
+  if (stats.lastStudyDate === getYesterdayDate()) {
+    return stats.streakDays + 1;
+  }
+
+  return 1;
 };
 
 const getSavedFocusStats = (): SoloFocusStats => {
@@ -160,7 +242,7 @@ const getSavedFocusStats = (): SoloFocusStats => {
 
   try {
     const parsedStats = JSON.parse(savedStats) as SoloFocusStats;
-    return updateRunningStats(parsedStats);
+    return resetCountersIfNeeded(parsedStats);
   } catch {
     return getDefaultFocusStats();
   }
@@ -218,6 +300,137 @@ const formatTime = (totalSeconds: number) => {
     .join(":");
 };
 
+const getMockQuizQuestions = (trackId: string): QuizQuestion[] => {
+  if (trackId === "ai-data-science") {
+    return [
+      {
+        id: "ai-q1",
+        question: "What is the main goal of data cleaning?",
+        options: [
+          "To make data ready for analysis",
+          "To delete all rows",
+          "To make charts only",
+          "To change the programming language",
+        ],
+        correctAnswer: "To make data ready for analysis",
+      },
+      {
+        id: "ai-q2",
+        question: "Mean, median, and variance are related to which topic?",
+        options: ["HTML", "Statistics", "Routing", "Authentication"],
+        correctAnswer: "Statistics",
+      },
+      {
+        id: "ai-q3",
+        question: "In machine learning, features are used to help the model learn patterns.",
+        options: ["True", "False"],
+        correctAnswer: "True",
+      },
+      {
+        id: "ai-q4",
+        question: "Python dictionaries store data as:",
+        options: [
+          "Key-value pairs",
+          "Only images",
+          "Only CSS styles",
+          "HTML tags",
+        ],
+        correctAnswer: "Key-value pairs",
+      },
+    ];
+  }
+
+  if (trackId === "mobile-development") {
+    return [
+      {
+        id: "mobile-q1",
+        question: "Mobile-first design means starting with which screen size?",
+        options: ["Small screens", "Large TVs", "Projectors", "Printers"],
+        correctAnswer: "Small screens",
+      },
+      {
+        id: "mobile-q2",
+        question: "React Native is used to build mobile app interfaces.",
+        options: ["True", "False"],
+        correctAnswer: "True",
+      },
+      {
+        id: "mobile-q3",
+        question: "Navigation in mobile apps helps users move between:",
+        options: ["Screens", "Fonts only", "Colors only", "Files only"],
+        correctAnswer: "Screens",
+      },
+      {
+        id: "mobile-q4",
+        question: "Local storage is useful for saving small data on the device.",
+        options: ["True", "False"],
+        correctAnswer: "True",
+      },
+    ];
+  }
+
+  if (trackId === "cybersecurity") {
+    return [
+      {
+        id: "cyber-q1",
+        question: "Ports and protocols are part of networking basics.",
+        options: ["True", "False"],
+        correctAnswer: "True",
+      },
+      {
+        id: "cyber-q2",
+        question: "OWASP focuses on common security risks, especially in:",
+        options: ["Web applications", "Cooking", "Video editing", "Typography"],
+        correctAnswer: "Web applications",
+      },
+      {
+        id: "cyber-q3",
+        question: "Authentication is related to checking user identity.",
+        options: ["True", "False"],
+        correctAnswer: "True",
+      },
+      {
+        id: "cyber-q4",
+        question: "Logs can help detect suspicious activity.",
+        options: ["True", "False"],
+        correctAnswer: "True",
+      },
+    ];
+  }
+
+  return [
+    {
+      id: "web-q1",
+      question: "HTML is mainly used for:",
+      options: [
+        "Page structure",
+        "Database hosting",
+        "Operating systems",
+        "Image compression",
+      ],
+      correctAnswer: "Page structure",
+    },
+    {
+      id: "web-q2",
+      question: "CSS is used to style web pages.",
+      options: ["True", "False"],
+      correctAnswer: "True",
+    },
+    {
+      id: "web-q3",
+      question: "Flexbox and Grid are used for:",
+      options: ["Layout", "Authentication", "Databases", "Audio editing"],
+      correctAnswer: "Layout",
+    },
+    {
+      id: "web-q4",
+      question: "React components help build reusable UI parts.",
+      options: ["True", "False"],
+      correctAnswer: "True",
+    },
+  ];
+};
+
 const SoloFocusRoom = () => {
   const roadmap = useRoadmap();
 
@@ -225,14 +438,18 @@ const SoloFocusRoom = () => {
     useState<SoloFocusStats>(getSavedFocusStats);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const autoBreakTimeoutRef = useRef<number | null>(null);
+
+  const [isSessionRunning, setIsSessionRunning] = useState(false);
+  const [sessionSeconds, setSessionSeconds] = useState(0);
+
   const [activeTrack, setActiveTrack] =
     useState<SoloFocusMusicTrackId | null>(null);
 
   const [tasks, setTasks] = useState<SoloStudyTask[]>(getSavedTasks);
   const [newTask, setNewTask] = useState("");
 
-  const [activePanel, setActivePanel] =
-    useState<SoloFocusActivePanel>(null);
+  const [activePanel, setActivePanel] = useState<SoloFocusActivePanel>(null);
 
   const [note, setNote] = useState(
     () => localStorage.getItem(STUDY_NOTE_STORAGE_KEY) ?? ""
@@ -247,6 +464,19 @@ const SoloFocusRoom = () => {
     useState<SoloStudyMaterial[]>(getSavedSelectedMaterials);
 
   const [quizMaterials, setQuizMaterials] = useState<SoloStudyMaterial[]>([]);
+  const [openedMaterial, setOpenedMaterial] =
+    useState<SoloStudyMaterial | null>(null);
+
+  const [timerWarning, setTimerWarning] = useState("");
+  const [autoBreakMessage, setAutoBreakMessage] = useState("");
+  const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
+
+  const quizQuestions = getMockQuizQuestions(roadmap.trackId);
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, string>>({});
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  const [quizWarning, setQuizWarning] = useState("");
+
+  const hasSelectedMaterials = selectedMaterials.length > 0;
 
   const availableMaterials: SoloStudyMaterial[] = roadmap.modules.flatMap(
     (module) =>
@@ -264,16 +494,64 @@ const SoloFocusRoom = () => {
   );
 
   useEffect(() => {
-    if (!focusStats.isRunning) {
+    if (!isSessionRunning) {
       return;
     }
 
     const timer = window.setInterval(() => {
-      setFocusStats((prev) => updateRunningStats(prev));
+      setSessionSeconds((prev) => prev + 1);
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, [focusStats.isRunning]);
+  }, [isSessionRunning]);
+
+  useEffect(() => {
+    if (!isSessionRunning || !hasSelectedMaterials) {
+      if (autoBreakTimeoutRef.current) {
+        window.clearTimeout(autoBreakTimeoutRef.current);
+        autoBreakTimeoutRef.current = null;
+      }
+
+      return;
+    }
+
+    const autoBreakDelay = getRandomAutoBreakDelay();
+
+    autoBreakTimeoutRef.current = window.setTimeout(() => {
+      const notification: StudentNotification = {
+        id: `break-${Date.now()}`,
+        title: "Time for a break",
+        description:
+          "Your focus timer has been paused automatically. Take a short break or resume when you are ready.",
+        time: getCurrentTime(),
+        type: "break",
+        isRead: false,
+        createdAt: Date.now(),
+      };
+
+      saveStudentNotification(notification);
+      showBrowserBreakNotification();
+      void exitFullScreenIfActive();
+
+      setAutoBreakMessage(
+        "Time for a break. The timer has been paused automatically."
+      );
+      setIsBreakModalOpen(true);
+      setIsSessionRunning(false);
+
+      setFocusStats((prev) => ({
+        ...resetCountersIfNeeded(prev),
+        breakCount: resetCountersIfNeeded(prev).breakCount + 1,
+      }));
+    }, autoBreakDelay);
+
+    return () => {
+      if (autoBreakTimeoutRef.current) {
+        window.clearTimeout(autoBreakTimeoutRef.current);
+        autoBreakTimeoutRef.current = null;
+      }
+    };
+  }, [isSessionRunning, hasSelectedMaterials]);
 
   useEffect(() => {
     localStorage.setItem(FOCUS_STATS_STORAGE_KEY, JSON.stringify(focusStats));
@@ -304,41 +582,149 @@ const SoloFocusRoom = () => {
   useEffect(() => {
     return () => {
       audioRef.current?.pause();
+
+      if (autoBreakTimeoutRef.current) {
+        window.clearTimeout(autoBreakTimeoutRef.current);
+      }
     };
   }, []);
 
-  const handleToggleTimer = () => {
-    setFocusStats((prev) => {
-      const updatedStats = updateRunningStats(prev);
-
-      if (updatedStats.isRunning) {
-        return {
-          ...updatedStats,
-          isRunning: false,
-          lastStartedAt: null,
-          breakCount: updatedStats.breakCount + 1,
-        };
-      }
-
-      return {
-        ...resetCountersIfNeeded(updatedStats),
-        isRunning: true,
-        lastStartedAt: Date.now(),
-      };
-    });
+  const startFocusTimer = () => {
+    setTimerWarning("");
+    setAutoBreakMessage("");
+    setIsBreakModalOpen(false);
+    setIsSessionRunning(true);
   };
 
-  const handleEndSession = () => {
-    setFocusStats((prev) => ({
-      ...updateRunningStats(prev),
-      isRunning: false,
-      lastStartedAt: null,
-    }));
+  const handleToggleTimer = () => {
+    if (!hasSelectedMaterials && !isSessionRunning) {
+      setTimerWarning("Choose at least one material before starting the timer.");
+      setActivePanel("materials");
+      return;
+    }
 
+    if (!isSessionRunning) {
+      void requestNotificationPermission();
+    }
+
+    setTimerWarning("");
+    setAutoBreakMessage("");
+    setIsSessionRunning((prev) => !prev);
+
+    if (isSessionRunning) {
+      setFocusStats((prev) => ({
+        ...resetCountersIfNeeded(prev),
+        breakCount: resetCountersIfNeeded(prev).breakCount + 1,
+      }));
+    }
+  };
+
+  const handleResumeFromBreak = () => {
+    if (!hasSelectedMaterials) {
+      setTimerWarning("Choose at least one material before starting the timer.");
+      setActivePanel("materials");
+      setIsBreakModalOpen(false);
+      return;
+    }
+
+    void requestNotificationPermission();
+    startFocusTimer();
+  };
+
+  const openSessionQuiz = () => {
+    if (sessionSeconds === 0) {
+      setTimerWarning("Start studying first before ending the session.");
+      return;
+    }
+
+    if (selectedMaterials.length === 0) {
+      setTimerWarning("Choose at least one material before ending the session.");
+      setActivePanel("materials");
+      return;
+    }
+
+    setIsSessionRunning(false);
+    setOpenedMaterial(null);
+    setIsBreakModalOpen(false);
     setQuizMaterials(selectedMaterials);
-    setSelectedMaterials([]);
-    localStorage.removeItem(SELECTED_MATERIALS_STORAGE_KEY);
+    setQuizAnswers({});
+    setQuizResult(null);
+    setQuizWarning("");
     setActivePanel("quiz");
+  };
+
+  const approveSessionHours = () => {
+    const approvedSeconds = sessionSeconds;
+
+    setFocusStats((prev) => {
+      const normalizedStats = resetCountersIfNeeded(prev);
+      const today = getTodayDate();
+
+      return {
+        ...normalizedStats,
+        weeklySeconds: normalizedStats.weeklySeconds + approvedSeconds,
+        dailySeconds: normalizedStats.dailySeconds + approvedSeconds,
+        streakDays: updateStreakAfterApprovedSession(normalizedStats),
+        lastStudyDate: today,
+        isRunning: false,
+        lastStartedAt: null,
+      };
+    });
+
+    setSessionSeconds(0);
+    setSelectedMaterials([]);
+    setQuizMaterials([]);
+    setQuizAnswers({});
+    setQuizResult(null);
+    setActivePanel(null);
+    localStorage.removeItem(SELECTED_MATERIALS_STORAGE_KEY);
+  };
+
+  const discardSessionHours = () => {
+    setIsSessionRunning(false);
+    setSessionSeconds(0);
+    setSelectedMaterials([]);
+    setQuizMaterials([]);
+    setQuizAnswers({});
+    setQuizResult(null);
+    setQuizWarning("");
+    setActivePanel(null);
+    localStorage.removeItem(SELECTED_MATERIALS_STORAGE_KEY);
+  };
+
+  const retrySession = () => {
+    setIsSessionRunning(false);
+    setSessionSeconds(0);
+    setQuizAnswers({});
+    setQuizResult(null);
+    setQuizWarning("");
+    setActivePanel(null);
+  };
+
+  const handleSubmitQuiz = () => {
+    const hasAnsweredAllQuestions = quizQuestions.every(
+      (question) => quizAnswers[question.id]
+    );
+
+    if (!hasAnsweredAllQuestions) {
+      setQuizWarning("Please answer all questions before submitting.");
+      return;
+    }
+
+    const correctAnswers = quizQuestions.filter(
+      (question) => quizAnswers[question.id] === question.correctAnswer
+    ).length;
+
+    const score = Math.round((correctAnswers / quizQuestions.length) * 100);
+    const passed = score >= PASSING_SCORE;
+
+    setQuizWarning("");
+    setQuizResult({
+      score,
+      passed,
+      correctAnswers,
+      totalQuestions: quizQuestions.length,
+    });
   };
 
   const handleToggleMusic = (trackId: SoloFocusMusicTrackId) => {
@@ -419,8 +805,13 @@ const SoloFocusRoom = () => {
       return [...prev, material];
     });
 
-    window.open(material.fileUrl, "_blank", "noopener,noreferrer");
+    setOpenedMaterial(material);
+    setTimerWarning("");
     setActivePanel(null);
+  };
+
+  const handleOpenMaterial = (material: SoloStudyMaterial) => {
+    setOpenedMaterial(material);
   };
 
   const weeklyHours = (focusStats.weeklySeconds / 3600).toFixed(1);
@@ -444,7 +835,7 @@ const SoloFocusRoom = () => {
 
           <button
             type="button"
-            onClick={handleEndSession}
+            onClick={openSessionQuiz}
             className="rounded-xl bg-red-500/80 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-500"
           >
             End Session
@@ -457,11 +848,12 @@ const SoloFocusRoom = () => {
               <p className="text-sm font-bold text-white">Solo Focus Room</p>
 
               <p className="mt-2 text-[11px] leading-5 text-slate-200">
-                Your private study space. Start the timer and keep your focus.
+                Your approved hours only count after passing the session quiz.
               </p>
 
               <div className="mt-4 space-y-2">
-                <StatRow label="Weekly Hours" value={`${weeklyHours}h`} />
+                <StatRow label="Approved Weekly Hours" value={`${weeklyHours}h`} />
+                <StatRow label="Today Approved" value={`${dailyHours}h`} />
                 <StatRow
                   label="Focus Streak"
                   value={`${focusStats.streakDays} Days`}
@@ -506,19 +898,24 @@ const SoloFocusRoom = () => {
           <section className="flex flex-col items-center justify-center gap-4">
             <GlassCard className="w-full max-w-[440px] text-center">
               <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-300">
-                Deep Work Mode
+                Current Session Time
               </p>
 
               <h1 className="mt-4 text-5xl font-black tracking-tight md:text-6xl">
-                {formatTime(focusStats.weeklySeconds)}
+                {formatTime(sessionSeconds)}
               </h1>
 
               <button
                 type="button"
                 onClick={handleToggleTimer}
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-400 px-6 py-3.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+                disabled={!hasSelectedMaterials && !isSessionRunning}
+                className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-bold transition ${
+                  !hasSelectedMaterials && !isSessionRunning
+                    ? "cursor-not-allowed bg-slate-500/70 text-slate-200"
+                    : "bg-cyan-400 text-slate-950 hover:bg-cyan-300"
+                }`}
               >
-                {focusStats.isRunning ? (
+                {isSessionRunning ? (
                   <>
                     <Pause className="size-5" />
                     Take Break
@@ -531,8 +928,29 @@ const SoloFocusRoom = () => {
                 )}
               </button>
 
+              {autoBreakMessage ? (
+                <div className="mt-3 rounded-xl bg-yellow-400/15 px-3 py-3 text-left">
+                  <p className="text-xs font-bold text-yellow-200">
+                    {autoBreakMessage}
+                  </p>
+
+                  <p className="mt-1 text-[11px] leading-5 text-yellow-100/80">
+                    Your current session time is still pending until you pass the
+                    quiz.
+                  </p>
+                </div>
+              ) : timerWarning ? (
+                <p className="mt-3 rounded-xl bg-red-500/15 px-3 py-2 text-xs font-semibold text-red-200">
+                  {timerWarning}
+                </p>
+              ) : !hasSelectedMaterials ? (
+                <p className="mt-3 rounded-xl bg-cyan-400/10 px-3 py-2 text-xs font-semibold text-cyan-100">
+                  Choose a material first to unlock the timer.
+                </p>
+              ) : null}
+
               <div className="mt-4 flex justify-center gap-5 text-xs text-slate-200">
-                <span>Today: {dailyHours}h</span>
+                <span>Pending: {formatTime(sessionSeconds)}</span>
                 <span>Breaks: {focusStats.breakCount}</span>
               </div>
             </GlassCard>
@@ -577,17 +995,11 @@ const SoloFocusRoom = () => {
 
                       <button
                         type="button"
-                        onClick={() =>
-                          window.open(
-                            material.fileUrl,
-                            "_blank",
-                            "noopener,noreferrer"
-                          )
-                        }
+                        onClick={() => handleOpenMaterial(material)}
                         className="text-cyan-300 transition hover:text-cyan-100"
-                        title="Open PDF"
+                        title="Open material"
                       >
-                        <ExternalLink className="size-4" />
+                        <Eye className="size-4" />
                       </button>
                     </div>
                   ))}
@@ -705,6 +1117,45 @@ const SoloFocusRoom = () => {
         </div>
       </div>
 
+      {openedMaterial ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+          <div className="flex h-[92vh] w-full max-w-6xl flex-col rounded-[28px] border border-white/15 bg-slate-950/95 text-white shadow-2xl">
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-300">
+                  Material Viewer
+                </p>
+
+                <h2 className="mt-1 truncate text-lg font-bold text-white">
+                  {openedMaterial.lessonTitle}
+                </h2>
+
+                <p className="mt-1 truncate text-xs text-slate-300">
+                  {openedMaterial.fileName}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setOpenedMaterial(null)}
+                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-slate-200 transition hover:bg-white/20 hover:text-white"
+                aria-label="Close material viewer"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 bg-slate-950">
+              <iframe
+                src={openedMaterial.fileUrl}
+                title={openedMaterial.lessonTitle}
+                className="h-full w-full"
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {activePanel ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4 backdrop-blur-sm">
           <div className="w-full max-w-lg rounded-[28px] border border-white/15 bg-slate-950/80 p-5 text-white shadow-2xl backdrop-blur-xl">
@@ -727,7 +1178,7 @@ const SoloFocusRoom = () => {
                       ? "Plan your study day"
                       : activePanel === "materials"
                         ? "Choose material"
-                        : "Review what you studied"}
+                        : "Pass the quiz to save your time"}
                 </h2>
               </div>
 
@@ -789,7 +1240,7 @@ const SoloFocusRoom = () => {
               <div>
                 <p className="mb-4 text-xs leading-5 text-slate-300">
                   These materials are collected from your opened roadmap lessons.
-                  Choose one to add it to your session and open its PDF.
+                  Choose one to add it to your session.
                 </p>
 
                 <div className="max-h-[300px] space-y-2 overflow-y-auto pr-1">
@@ -839,55 +1290,205 @@ const SoloFocusRoom = () => {
               </div>
             ) : (
               <div>
-                <div className="rounded-2xl bg-white/10 p-4">
+                <div className="mb-4 rounded-2xl bg-white/10 p-4">
                   <div className="flex items-center gap-3">
                     <ClipboardCheck className="size-6 text-cyan-300" />
 
                     <div>
                       <p className="text-sm font-bold text-white">
-                        Quiz will be generated from your selected materials.
+                        Session Quiz
                       </p>
 
                       <p className="mt-1 text-xs leading-5 text-slate-300">
-                        This is a temporary preview until backend quiz
-                        generation is connected.
+                        You must score at least {PASSING_SCORE}% to save{" "}
+                        {formatTime(sessionSeconds)} as approved study time.
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 space-y-2">
-                  {quizMaterials.length > 0 ? (
-                    quizMaterials.map((material) => (
-                      <div
-                        key={material.id}
-                        className="rounded-xl bg-white/10 px-4 py-3"
-                      >
-                        <p className="text-xs font-semibold text-white">
-                          {material.lessonTitle}
+                <div className="mb-4 space-y-2">
+                  {quizMaterials.map((material) => (
+                    <div
+                      key={material.id}
+                      className="rounded-xl bg-white/10 px-4 py-3"
+                    >
+                      <p className="text-xs font-semibold text-white">
+                        {material.lessonTitle}
+                      </p>
+
+                      <p className="mt-1 text-[10px] text-slate-300">
+                        {material.fileName}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {quizResult ? (
+                  <div
+                    className={`rounded-2xl p-4 ${
+                      quizResult.passed ? "bg-emerald-500/15" : "bg-red-500/15"
+                    }`}
+                  >
+                    <p
+                      className={`text-sm font-bold ${
+                        quizResult.passed ? "text-emerald-200" : "text-red-200"
+                      }`}
+                    >
+                      Your score: {quizResult.score}%
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-slate-300">
+                      You answered {quizResult.correctAnswers} of{" "}
+                      {quizResult.totalQuestions} questions correctly.
+                    </p>
+
+                    {quizResult.passed ? (
+                      <div className="mt-4">
+                        <p className="text-xs leading-5 text-emerald-100">
+                          Great job. Your session time will now be saved to your
+                          approved weekly hours.
                         </p>
 
-                        <p className="mt-1 text-[10px] text-slate-300">
-                          {material.fileName}
-                        </p>
+                        <button
+                          type="button"
+                          onClick={approveSessionHours}
+                          className="mt-4 w-full rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300"
+                        >
+                          Save Hours & Finish Session
+                        </button>
                       </div>
-                    ))
-                  ) : (
-                    <div className="rounded-xl bg-white/10 px-4 py-3 text-xs text-slate-300">
-                      No materials selected for this session.
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div className="mt-4 space-y-2">
+                        <p className="text-xs leading-5 text-red-100">
+                          You did not pass. This session time will not be added
+                          to your approved hours unless you study again and pass.
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={retrySession}
+                          className="w-full rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+                        >
+                          Retry Session
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={discardSessionHours}
+                          className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/10"
+                        >
+                          Exit Without Saving
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="max-h-[360px] space-y-4 overflow-y-auto pr-1">
+                    {quizQuestions.map((question, questionIndex) => (
+                      <div
+                        key={question.id}
+                        className="rounded-2xl bg-white/10 p-4"
+                      >
+                        <p className="text-sm font-bold text-white">
+                          {questionIndex + 1}. {question.question}
+                        </p>
+
+                        <div className="mt-3 space-y-2">
+                          {question.options.map((option) => (
+                            <label
+                              key={option}
+                              className="flex cursor-pointer items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/10"
+                            >
+                              <input
+                                type="radio"
+                                name={question.id}
+                                value={option}
+                                checked={quizAnswers[question.id] === option}
+                                onChange={() =>
+                                  setQuizAnswers((prev) => ({
+                                    ...prev,
+                                    [question.id]: option,
+                                  }))
+                                }
+                              />
+
+                              <span>{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+
+                    {quizWarning ? (
+                      <p className="rounded-xl bg-red-500/15 px-3 py-2 text-xs font-semibold text-red-200">
+                        {quizWarning}
+                      </p>
+                    ) : null}
+
+                    <button
+                      type="button"
+                      onClick={handleSubmitQuiz}
+                      className="w-full rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+                    >
+                      Submit Quiz
+                    </button>
+                  </div>
+                )}
               </div>
             )}
+          </div>
+        </div>
+      ) : null}
 
-            <div className="mt-5 flex justify-end">
+      {isBreakModalOpen ? (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 px-4 backdrop-blur-md">
+          <div className="w-full max-w-md rounded-[28px] border border-yellow-300/30 bg-slate-950 p-6 text-white shadow-2xl shadow-yellow-500/10">
+            <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-yellow-300 text-slate-950">
+              <Coffee className="size-8" />
+            </div>
+
+            <div className="mt-5 text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-yellow-300">
+                Break Reminder
+              </p>
+
+              <h2 className="mt-3 text-2xl font-black text-white">
+                Time for a break
+              </h2>
+
+              <p className="mt-3 text-sm leading-6 text-slate-300">
+                Your focus timer has been paused automatically. Take a short
+                break, then resume when you are ready.
+              </p>
+            </div>
+
+            <div className="mt-5 rounded-2xl bg-yellow-300/10 p-4">
+              <div className="flex items-start gap-3">
+                <Bell className="mt-0.5 size-5 shrink-0 text-yellow-300" />
+
+                <p className="text-xs leading-5 text-yellow-100">
+                  This reminder appears above the material viewer and other
+                  panels so you do not miss that the timer has stopped.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
-                onClick={() => setActivePanel(null)}
-                className="rounded-xl bg-cyan-400 px-6 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+                onClick={() => setIsBreakModalOpen(false)}
+                className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
               >
-                OK
+                Take Break
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResumeFromBreak}
+                className="rounded-2xl bg-yellow-300 px-5 py-3 text-sm font-black text-slate-950 transition hover:bg-yellow-200"
+              >
+                Resume Session
               </button>
             </div>
           </div>

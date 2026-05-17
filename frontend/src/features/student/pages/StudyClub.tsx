@@ -53,7 +53,7 @@ const StudyClub = () => {
             </Link>
 
             <Link
-              to="/student/study-room/group"
+              to="/student/group-study"
               className="group rounded-[28px] border border-slate-800 bg-[#101827] p-8 transition hover:-translate-y-1 hover:border-blue-500/60 hover:bg-[#13213a]"
             >
               <div className="flex size-16 items-center justify-center rounded-2xl bg-blue-600/15 text-blue-400 transition group-hover:bg-blue-600 group-hover:text-white">

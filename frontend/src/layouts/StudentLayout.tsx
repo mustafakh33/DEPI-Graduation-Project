@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   studentDashboardPath,
   studentNavItems,
@@ -8,6 +9,12 @@ import AppShellLayout from "@/layouts/AppShellLayout";
 
 const StudentLayout = () => {
   const dashboard = useStudentDashboard();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("student-profile-avatar");
+    navigate("/login");
+  };
 
   return (
     <AppShellLayout
@@ -19,6 +26,7 @@ const StudentLayout = () => {
       sidebarUserName={dashboard.studentName}
       sidebarUserAvatarUrl="https://i.pravatar.cc/80?img=5"
       showSidebarUserRole={false}
+      onLogout={handleLogout}
     />
   );
 };

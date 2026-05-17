@@ -1,20 +1,12 @@
 import { Link } from "react-router";
 import CourseNode from "../components/roadmap/CourseNode";
 import StudentPageContainer from "../components/shared/StudentPageContainer";
-import { useRoadmap } from "../hooks/useRoadmap";
+import { calculateRoadmapProgress, getRoadmapLessons, useRoadmap } from "../hooks/useRoadmap";
 
 const Roadmap = () => {
   const roadmap = useRoadmap();
-  const lessons = roadmap.modules.flatMap((module) => module.lessons);
-
-  const completedLessons = lessons.filter(
-    (lesson) => lesson.status === "completed"
-  ).length;
-
-  const progressPercentage =
-    lessons.length > 0
-      ? Math.round((completedLessons / lessons.length) * 100)
-      : 0;
+  const lessons = getRoadmapLessons(roadmap);
+  const progressPercentage = calculateRoadmapProgress(roadmap);
 
   return (
     <StudentPageContainer>

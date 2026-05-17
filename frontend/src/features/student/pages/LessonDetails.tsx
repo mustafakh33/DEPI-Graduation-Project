@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Download, MessageCircle } from "lucide-react";
+import { ArrowLeft, Eye, MessageCircle, X } from "lucide-react";
 import { useLessonDetails } from "@/features/student/hooks/useLessonDetails";
 
 const LessonDetails = () => {
   const { lessonId } = useParams();
   const lesson = useLessonDetails(lessonId);
+  const [isMaterialOpen, setIsMaterialOpen] = useState(false);
 
   return (
     <main className="min-h-screen bg-[#08090d] text-white">
@@ -61,16 +63,57 @@ const LessonDetails = () => {
                   </p>
                 </div>
 
-                <a
-                  href={lesson.material.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  onClick={() => setIsMaterialOpen((prev) => !prev)}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
                 >
-                  <Download className="size-4" />
-                  Open PDF
-                </a>
+                  {isMaterialOpen ? (
+                    <>
+                      <X className="size-4" />
+                      Close PDF
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="size-4" />
+                      Open PDF
+                    </>
+                  )}
+                </button>
               </div>
+
+              {isMaterialOpen ? (
+                <div className="mt-5 overflow-hidden rounded-2xl border border-slate-700 bg-slate-950">
+                  <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-blue-400">
+                        Material Viewer
+                      </p>
+
+                      <h3 className="mt-1 text-sm font-semibold text-white">
+                        {lesson.material.title}
+                      </h3>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsMaterialOpen(false)}
+                      className="flex size-9 items-center justify-center rounded-xl bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+                      aria-label="Close material viewer"
+                    >
+                      <X className="size-4" />
+                    </button>
+                  </div>
+
+                  <div className="h-[650px] bg-slate-950">
+                    <iframe
+                      src={lesson.material.fileUrl}
+                      title={lesson.material.title}
+                      className="h-full w-full"
+                    />
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
 

@@ -77,6 +77,13 @@ const initialState: OnboardingState = {
   user: null,
 };
 
+const validTrackIds: TrackId[] = [
+  "web-development",
+  "ai-data-science",
+  "mobile-development",
+  "cybersecurity",
+];
+
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
 
 function shuffleArray<T>(items: T[]) {
@@ -92,7 +99,7 @@ function prepareQuestions() {
 
 function calculateLevel(
   score: number,
-  total: number,
+  total: number
 ): TestResultState["level"] {
   const percentage = score / total;
 
@@ -107,12 +114,31 @@ function calculateLevel(
   return "Beginner";
 }
 
+function isValidTrack(track: SelectedTrack | null): track is SelectedTrack {
+  return Boolean(track && validTrackIds.includes(track.id));
+}
+
+function normalizeStoredState(state: OnboardingState): OnboardingState {
+  return {
+    ...state,
+    selectedTrack: isValidTrack(state.selectedTrack)
+      ? state.selectedTrack
+      : null,
+  };
+}
+
 function loadStoredState() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored
-      ? ({ ...initialState, ...JSON.parse(stored) } as OnboardingState)
-      : initialState;
+
+    if (!stored) {
+      return initialState;
+    }
+
+    return normalizeStoredState({
+      ...initialState,
+      ...JSON.parse(stored),
+    } as OnboardingState);
   } catch {
     return initialState;
   }
@@ -163,7 +189,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
     state.testQuestions.forEach((question) => {
       const selectedAnswerId = state.testAnswers[question.id];
       const selectedAnswer = question.answers.find(
-        (answer) => answer.id === selectedAnswerId,
+        (answer) => answer.id === selectedAnswerId
       );
 
       if (selectedAnswer?.isCorrect) {
@@ -174,7 +200,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
     const result: TestResultState = {
       level: calculateLevel(
         score,
-        state.testQuestions.length || placementQuestions.length,
+        state.testQuestions.length || placementQuestions.length
       ),
       score,
       total: state.testQuestions.length || placementQuestions.length,
@@ -220,7 +246,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
       startPlacementTest,
       state,
       submitPlacementTest,
-    ],
+    ]
   );
 
   return (

@@ -1,4 +1,4 @@
-
+import { Link } from "react-router";
 import type { CurrentCourse } from "../../types/student.types";
 import CourseProgressBar from "./CourseProgressBar";
 
@@ -23,19 +23,17 @@ const CurrentCourseCard = ({ course }: CurrentCourseCardProps) => {
             <h2 className="mt-1 text-xl font-bold text-foreground">
               {course.title}
             </h2>
-<CourseProgressBar progress={course.progress} />
+
+            <CourseProgressBar progress={course.progress} />
           </div>
         </div>
 
-      <button
-  type="button"
-  onClick={() => {
-    window.location.href = course.lastLessonPath;
-  }}
-  className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
->
-  Continue Learning →
-</button>
+        <Link
+          to={course.lastLessonPath}
+          className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+        >
+          Continue Learning →
+        </Link>
       </div>
     </section>
   );

@@ -11,5 +11,5 @@ export const studentNavItems: NavLinkItem[] = [
   { to: "/student/assignments", label: "Assignments", icon: navIcon("assignment") },
   { to: "/student/quizzes", label: "Quizzes", icon: navIcon("quiz") },
   { to: "/student/ranking", label: "Ranking", icon: navIcon("leaderboard") },
-  { to: "/student/results", label: "Results", icon: navIcon("star") },
+  { to: "/student/chat", label: "Chat", icon: navIcon("message") },
 ];

@@ -7,77 +7,101 @@ import type {
 } from "../types/student.types";
 import { useStudentDashboard } from "./useStudentDashboard";
 
-const buildMockStudentsAboveCurrent = (
-  trackId: string,
-  rank: number,
-  currentCoins: number,
-  trackTitle: string
-): RankingStudent[] => {
-  const studentsCountAboveCurrent = Math.max(rank - 1, 0);
+const buildMockRankingStudents = (trackId: string): RankingStudent[] => {
+  const groupA = "Group 1";
+  const groupB = "Group 2";
+  const groupC = "Group 3";
 
-  return Array.from({ length: studentsCountAboveCurrent }, (_, index) => {
-    const studentRank = index + 1;
-    const coinsGap = (studentsCountAboveCurrent - index) * 350;
-
-    return {
-      id: `${trackId}-student-${studentRank}`,
-      name: [
-        "Tames Chen",
-        "Sarah Williams",
-        "Alex Johnson",
-        "Michael Ross",
-        "Emily Blunt",
-        "Sophia Lee",
-        "Mariam Hassan",
-        "Omar Khaled",
-        "Laila Samir",
-        "Youssef Ali",
-        "Nour Adel",
-      ][index] ?? `Student ${studentRank}`,
-      avatarUrl: `https://i.pravatar.cc/120?img=${index + 12}`,
-      coins: currentCoins + coinsGap,
-      previousCoins:
-        index % 2 === 0
-          ? currentCoins + coinsGap - 120
-          : currentCoins + coinsGap,
-      trackId,
-      groupName: `${trackTitle} Group ${index % 3 === 0 ? "A" : index % 3 === 1 ? "B" : "C"}`,
-    };
-  });
-};
-
-const buildMockStudentsBelowCurrent = (
-  trackId: string,
-  currentCoins: number,
-  trackTitle: string
-): RankingStudent[] => {
   return [
     {
-      id: `${trackId}-below-1`,
-      name: "Farah Nabil",
-      avatarUrl: "https://i.pravatar.cc/120?img=41",
-      coins: Math.max(currentCoins - 120, 0),
-      previousCoins: Math.max(currentCoins - 120, 0),
+      id: `${trackId}-student-1`,
+      name: "Tames Chen",
+      avatarUrl: "https://i.pravatar.cc/120?img=12",
+      coins: 950,
+      previousCoins: 830,
       trackId,
-      groupName: `${trackTitle} Group B`,
+      groupName: groupA,
     },
     {
-      id: `${trackId}-below-2`,
-      name: "Kareem Samy",
-      avatarUrl: "https://i.pravatar.cc/120?img=42",
-      coins: Math.max(currentCoins - 260, 0),
-      previousCoins: Math.max(currentCoins - 300, 0),
+      id: `${trackId}-student-2`,
+      name: "Sarah Williams",
+      avatarUrl: "https://i.pravatar.cc/120?img=13",
+      coins: 820,
+      previousCoins: 820,
       trackId,
-      groupName: `${trackTitle} Group C`,
+      groupName: groupA,
     },
     {
-      id: `${trackId}-below-3`,
-      name: "Hana Mostafa",
-      avatarUrl: "https://i.pravatar.cc/120?img=43",
-      coins: Math.max(currentCoins - 430, 0),
-      previousCoins: Math.max(currentCoins - 430, 0),
+      id: `${trackId}-student-3`,
+      name: "Alex Johnson",
+      avatarUrl: "https://i.pravatar.cc/120?img=14",
+      coins: 740,
+      previousCoins: 620,
       trackId,
-      groupName: `${trackTitle} Group A`,
+      groupName: groupA,
+    },
+    {
+      id: `${trackId}-student-4`,
+      name: "Michael Ross",
+      avatarUrl: "https://i.pravatar.cc/120?img=15",
+      coins: 610,
+      previousCoins: 610,
+      trackId,
+      groupName: groupB,
+    },
+    {
+      id: `${trackId}-student-5`,
+      name: "Emily Blunt",
+      avatarUrl: "https://i.pravatar.cc/120?img=16",
+      coins: 520,
+      previousCoins: 470,
+      trackId,
+      groupName: groupB,
+    },
+    {
+      id: `${trackId}-student-6`,
+      name: "Sophia Lee",
+      avatarUrl: "https://i.pravatar.cc/120?img=17",
+      coins: 430,
+      previousCoins: 430,
+      trackId,
+      groupName: groupC,
+    },
+    {
+      id: `${trackId}-student-7`,
+      name: "Mariam Hassan",
+      avatarUrl: "https://i.pravatar.cc/120?img=18",
+      coins: 350,
+      previousCoins: 300,
+      trackId,
+      groupName: groupA,
+    },
+    {
+      id: `${trackId}-student-8`,
+      name: "Omar Khaled",
+      avatarUrl: "https://i.pravatar.cc/120?img=19",
+      coins: 260,
+      previousCoins: 260,
+      trackId,
+      groupName: groupA,
+    },
+    {
+      id: `${trackId}-student-9`,
+      name: "Laila Samir",
+      avatarUrl: "https://i.pravatar.cc/120?img=20",
+      coins: 180,
+      previousCoins: 120,
+      trackId,
+      groupName: groupB,
+    },
+    {
+      id: `${trackId}-student-10`,
+      name: "Youssef Ali",
+      avatarUrl: "https://i.pravatar.cc/120?img=21",
+      coins: 90,
+      previousCoins: 90,
+      trackId,
+      groupName: groupC,
     },
   ];
 };
@@ -89,7 +113,11 @@ const getRankingStatus = (student: RankingStudent): RankingStatus => {
 const rankStudents = (students: RankingStudent[]): RankedStudent[] => {
   return [...students]
     .sort((firstStudent, secondStudent) => {
-      return secondStudent.coins - firstStudent.coins;
+      if (secondStudent.coins !== firstStudent.coins) {
+        return secondStudent.coins - firstStudent.coins;
+      }
+
+      return firstStudent.name.localeCompare(secondStudent.name);
     })
     .map((student, index) => ({
       ...student,
@@ -122,46 +150,32 @@ export const useRanking = (): RankingData => {
   const dashboard = useStudentDashboard();
 
   const selectedTrackId = selectedTrack?.id ?? "web-development";
-  const selectedTrackTitle = selectedTrack?.title ?? "Student";
 
-  const currentStudentFromNavbar: RankingStudent = {
+  const currentStudent: RankingStudent = {
     id: "current-student",
-    name: user?.name ?? "You",
-    avatarUrl: "https://i.pravatar.cc/120?img=5",
+    name: user?.name?.trim() || dashboard.studentName || "You",
+    avatarUrl:
+      localStorage.getItem("student-profile-avatar") ??
+      "https://i.pravatar.cc/120?img=5",
     coins: dashboard.stats.coins,
-    previousCoins: dashboard.stats.coins,
+    previousCoins: Math.max(dashboard.stats.coins - 100, 0),
     trackId: selectedTrackId,
-    groupName: `${selectedTrackTitle} Group`,
+    groupName: "Group 1",
     isCurrentStudent: true,
   };
 
-  const studentsAboveCurrent = buildMockStudentsAboveCurrent(
-    selectedTrackId,
-    dashboard.stats.rank,
-    dashboard.stats.coins,
-    selectedTrackTitle
-  );
+  const mockStudents = buildMockRankingStudents(selectedTrackId);
 
-  const studentsBelowCurrent = buildMockStudentsBelowCurrent(
-    selectedTrackId,
-    dashboard.stats.coins,
-    selectedTrackTitle
-  );
+  const rankedStudents = rankStudents([currentStudent, ...mockStudents]);
 
-  const rankedStudents = rankStudents([
-    ...studentsAboveCurrent,
-    currentStudentFromNavbar,
-    ...studentsBelowCurrent,
-  ]);
-
-  const currentStudent =
+  const rankedCurrentStudent =
     rankedStudents.find((student) => student.isCurrentStudent) ??
     rankedStudents[0];
 
   return {
-    currentStudent,
+    currentStudent: rankedCurrentStudent,
     topStudents: rankedStudents.slice(0, 3),
     rankedStudents,
-    coinsToNextRank: getCoinsToNextRank(currentStudent, rankedStudents),
+    coinsToNextRank: getCoinsToNextRank(rankedCurrentStudent, rankedStudents),
   };
 };
