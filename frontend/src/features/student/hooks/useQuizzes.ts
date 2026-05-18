@@ -1,5 +1,9 @@
 import { useOnboarding } from "@/features/onboarding/context/OnboardingContext";
-import type { RoadmapData, RoadmapLesson, StudentQuiz } from "../types/student.types";
+import type {
+  RoadmapData,
+  RoadmapLesson,
+  StudentQuiz,
+} from "../types/student.types";
 import { useRoadmap } from "./useRoadmap";
 
 const quizzesByTrack: Record<string, StudentQuiz[]> = {
@@ -11,7 +15,8 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "html-intro",
       lessonTitle: "HTML Basics",
       trackId: "web-development",
-      description: "Test your understanding of HTML structure and semantic tags.",
+      description:
+        "Test your understanding of HTML structure and semantic tags.",
       scheduledAt: "2026-05-05T18:00:00",
       durationMinutes: 20,
       totalGrade: 10,
@@ -28,7 +33,7 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonTitle: "CSS Fundamentals",
       trackId: "web-development",
       description: "Practice selectors, spacing, colors, and the box model.",
-      scheduledAt: "2026-05-18T18:00:00",
+      scheduledAt: "2026-05-31T18:00:00",
       durationMinutes: 25,
       totalGrade: 10,
       hasAttempted: false,
@@ -45,7 +50,8 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "python-basics",
       lessonTitle: "Python Basics",
       trackId: "ai-data-science",
-      description: "A short quiz about variables, data types, lists, and functions.",
+      description:
+        "A short quiz about variables, data types, lists, and functions.",
       scheduledAt: "2026-05-01T18:00:00",
       durationMinutes: 20,
       totalGrade: 10,
@@ -61,7 +67,8 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "python-data",
       lessonTitle: "Working with Data",
       trackId: "ai-data-science",
-      description: "Review data cleaning basics, missing values, and simple datasets.",
+      description:
+        "Review data cleaning basics, missing values, and simple datasets.",
       scheduledAt: "2026-05-06T18:00:00",
       durationMinutes: 25,
       totalGrade: 10,
@@ -77,8 +84,9 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "stats-basics",
       lessonTitle: "Statistics Basics",
       trackId: "ai-data-science",
-      description: "Test your understanding of mean, median, variance, and probability.",
-      scheduledAt: "2026-05-18T18:00:00",
+      description:
+        "Test your understanding of mean, median, variance, and probability.",
+      scheduledAt: "2026-05-31T18:00:00",
       durationMinutes: 20,
       totalGrade: 10,
       hasAttempted: false,
@@ -92,8 +100,9 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "ml-models",
       lessonTitle: "Core ML Models",
       trackId: "ai-data-science",
-      description: "A quiz about model evaluation, regression, and classification.",
-      scheduledAt: "2026-05-22T18:00:00",
+      description:
+        "A quiz about model evaluation, regression, and classification.",
+      scheduledAt: "2026-05-31T19:00:00",
       durationMinutes: 30,
       totalGrade: 10,
       hasAttempted: false,
@@ -110,7 +119,8 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "mobile-ui",
       lessonTitle: "Mobile UI Fundamentals",
       trackId: "mobile-development",
-      description: "A quiz about screens, layouts, spacing, and mobile-first design.",
+      description:
+        "A quiz about screens, layouts, spacing, and mobile-first design.",
       scheduledAt: "2026-05-04T18:00:00",
       durationMinutes: 20,
       totalGrade: 10,
@@ -127,7 +137,7 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonTitle: "React Native Components",
       trackId: "mobile-development",
       description: "Check your understanding of reusable mobile components.",
-      scheduledAt: "2026-05-20T18:00:00",
+      scheduledAt: "2026-05-31T18:00:00",
       durationMinutes: 25,
       totalGrade: 10,
       hasAttempted: false,
@@ -160,8 +170,9 @@ const quizzesByTrack: Record<string, StudentQuiz[]> = {
       lessonId: "owasp",
       lessonTitle: "OWASP Basics",
       trackId: "cybersecurity",
-      description: "A quiz about common web vulnerabilities and prevention.",
-      scheduledAt: "2026-05-19T18:00:00",
+      description:
+        "A quiz about common web vulnerabilities and prevention.",
+      scheduledAt: "2026-05-31T18:00:00",
       durationMinutes: 25,
       totalGrade: 10,
       hasAttempted: false,
@@ -183,7 +194,9 @@ export const useQuizzes = (): StudentQuiz[] => {
   const roadmap = useRoadmap();
 
   const selectedTrackId = selectedTrack?.id ?? "web-development";
-  const trackQuizzes = quizzesByTrack[selectedTrackId] ?? quizzesByTrack["web-development"];
+  const trackQuizzes =
+    quizzesByTrack[selectedTrackId] ?? quizzesByTrack["web-development"];
+
   const unlockedLessonIds = getUnlockedLessonIds(roadmap);
 
   return trackQuizzes.filter((quiz) => {

@@ -97,6 +97,8 @@ export interface AnalyticsData {
 
 export type AssignmentStatus = "open" | "missed" | "submitted" | "graded";
 
+export type AssignmentDisplayStatus = AssignmentStatus | "missed";
+
 export interface StudentAssignment {
   id: string;
   assignmentNumber: number;
@@ -247,10 +249,7 @@ export interface GroupStudyRoomData {
   meetUrl: string;
 }
 
-export type StudentChatContactRole =
-  | "student"
-  | "instructor"
-  | "mentor";
+export type StudentChatContactRole = "student" | "instructor" | "mentor";
 
 export interface StudentChatContact {
   id: string;

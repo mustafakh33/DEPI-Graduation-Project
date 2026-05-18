@@ -27,15 +27,10 @@ import { OnboardingRouteGuard } from "@/guards/OnboardingRouteGuard";
 import StudentDashboard from "@/features/student/pages/Dashboard";
 import Roadmap from "@/features/student/pages/Roadmap";
 import StudentSessions from "@/features/student/pages/Sessions";
-import StudyRoom from "@/features/student/pages/StudyRoom";
-import Exams from "@/features/student/pages/Exams";
-import StudentProfile from "@/features/student/pages/StudentProfile";
-import Subject from "@/features/student/pages/Subject";
 import Analytics from "@/features/student/pages/Analytics";
 import Assignments from "@/features/student/pages/Assignments";
 import StudentQuizzes from "@/features/student/pages/Quizzes";
 import Ranking from "@/features/student/pages/Ranking";
-import Results from "@/features/student/pages/Results";
 import LessonDetails from "@/features/student/pages/LessonDetails";
 import StudyClub from "@/features/student/pages/StudyClub";
 import SoloFocusRoom from "@/features/student/pages/SoloFocusRoom";
@@ -161,10 +156,6 @@ const AppRouter = () => {
               <Route path="/student/dashboard" element={<StudentDashboard />} />
               <Route path="/student/roadmap" element={<Roadmap />} />
               <Route path="/student/Sessions" element={<StudentSessions />} />
-              <Route path="/student/study-room/:id" element={<StudyRoom />} />
-              <Route path="/student/exams" element={<Exams />} />
-              <Route path="/student/profile" element={<StudentProfile />} />
-              <Route path="/student/subject/:id" element={<Subject />} />
               <Route path="/student/analytics" element={<Analytics />} />
               <Route path="/student/assignments" element={<Assignments />} />
               <Route path="/student/quizzes" element={<StudentQuizzes />} />
