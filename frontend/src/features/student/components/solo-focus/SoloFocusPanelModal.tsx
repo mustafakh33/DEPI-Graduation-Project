@@ -44,7 +44,8 @@ interface SoloFocusPanelModalProps {
   onAnswerChange: (questionId: string, answer: string) => void;
   onSubmitQuiz: () => void;
   onApproveSessionHours: () => void;
-  onRetrySession: () => void;
+  onRetryQuiz: () => void;
+  onContinueStudying: () => void;
   onDiscardSessionHours: () => void;
 }
 
@@ -70,7 +71,8 @@ const SoloFocusPanelModal = ({
   onAnswerChange,
   onSubmitQuiz,
   onApproveSessionHours,
-  onRetrySession,
+  onRetryQuiz,
+  onContinueStudying,
   onDiscardSessionHours,
 }: SoloFocusPanelModalProps) => {
   if (!activePanel) {
@@ -109,7 +111,8 @@ const SoloFocusPanelModal = ({
             onAnswerChange={onAnswerChange}
             onSubmitQuiz={onSubmitQuiz}
             onApproveSessionHours={onApproveSessionHours}
-            onRetrySession={onRetrySession}
+            onRetryQuiz={onRetryQuiz}
+            onContinueStudying={onContinueStudying}
             onDiscardSessionHours={onDiscardSessionHours}
           />
         )}

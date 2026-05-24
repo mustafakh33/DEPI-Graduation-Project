@@ -26,7 +26,8 @@ interface SoloFocusQuizPanelProps {
   onAnswerChange: (questionId: string, answer: string) => void;
   onSubmitQuiz: () => void;
   onApproveSessionHours: () => void;
-  onRetrySession: () => void;
+  onRetryQuiz: () => void;
+  onContinueStudying: () => void;
   onDiscardSessionHours: () => void;
 }
 
@@ -41,7 +42,8 @@ const SoloFocusQuizPanel = ({
   onAnswerChange,
   onSubmitQuiz,
   onApproveSessionHours,
-  onRetrySession,
+  onRetryQuiz,
+  onContinueStudying,
   onDiscardSessionHours,
 }: SoloFocusQuizPanelProps) => {
   return (
@@ -54,8 +56,8 @@ const SoloFocusQuizPanel = ({
             <p className="text-sm font-bold text-white">Session Quiz</p>
 
             <p className="mt-1 text-xs leading-5 text-slate-300">
-              You must score at least {passingScore}% to save {sessionTime} as
-              approved study time.
+              You must score at least {passingScore}% to approve {sessionTime}{" "}
+              of study time.
             </p>
           </div>
         </div>
@@ -97,7 +99,7 @@ const SoloFocusQuizPanel = ({
           {quizResult.passed ? (
             <div className="mt-4">
               <p className="text-xs leading-5 text-emerald-100">
-                Great job. Your session time will now be saved to your approved
+                Great job. Your study time will be added to your approved
                 weekly hours.
               </p>
 
@@ -110,27 +112,37 @@ const SoloFocusQuizPanel = ({
               </button>
             </div>
           ) : (
-            <div className="mt-4 space-y-2">
-              <p className="text-xs leading-5 text-red-100">
-                You did not pass. This session time will not be added to your
-                approved hours unless you study again and pass.
+            <div className="mt-4">
+              <p className="mb-4 text-xs leading-5 text-red-100">
+                Your current study time is not approved yet. Choose what you
+                want to do next.
               </p>
 
-              <button
-                type="button"
-                onClick={onRetrySession}
-                className="w-full rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
-              >
-                Retry Session
-              </button>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={onRetryQuiz}
+                  className="w-full rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+                >
+                  Retry Quiz
+                </button>
 
-              <button
-                type="button"
-                onClick={onDiscardSessionHours}
-                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/10"
-              >
-                Exit Without Saving
-              </button>
+                <button
+                  type="button"
+                  onClick={onContinueStudying}
+                  className="w-full rounded-xl bg-blue-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-blue-400"
+                >
+                  Continue Studying
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onDiscardSessionHours}
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/10"
+                >
+                  End Session Without Saving
+                </button>
+              </div>
             </div>
           )}
         </div>

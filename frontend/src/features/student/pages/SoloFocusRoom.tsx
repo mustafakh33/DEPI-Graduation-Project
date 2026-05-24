@@ -56,9 +56,9 @@ const SoloFocusRoom = () => {
           <section className="flex flex-col items-center justify-center gap-4">
             <SoloFocusTimerCard
               sessionTime={soloFocus.formattedSessionTime}
-              pendingTime={soloFocus.formattedSessionTime}
               breakCount={soloFocus.focusStats.breakCount}
               isSessionRunning={soloFocus.isSessionRunning}
+              hasSessionProgress={soloFocus.hasSessionProgress}
               hasSelectedMaterials={soloFocus.hasSelectedMaterials}
               timerWarning={soloFocus.timerWarning}
               autoBreakMessage={soloFocus.autoBreakMessage}
@@ -119,7 +119,8 @@ const SoloFocusRoom = () => {
           onAnswerChange={soloFocus.handleAnswerChange}
           onSubmitQuiz={soloFocus.handleSubmitQuiz}
           onApproveSessionHours={soloFocus.approveSessionHours}
-          onRetrySession={soloFocus.retrySession}
+          onRetryQuiz={soloFocus.retryQuiz}
+          onContinueStudying={soloFocus.continueStudyingAfterFailedQuiz}
           onDiscardSessionHours={soloFocus.discardSessionHours}
         />
       ) : null}

@@ -3,9 +3,9 @@ import SoloFocusGlassCard from "./SoloFocusGlassCard";
 
 interface SoloFocusTimerCardProps {
   sessionTime: string;
-  pendingTime: string;
   breakCount: number;
   isSessionRunning: boolean;
+  hasSessionProgress: boolean;
   hasSelectedMaterials: boolean;
   timerWarning: string;
   autoBreakMessage: string;
@@ -14,14 +14,20 @@ interface SoloFocusTimerCardProps {
 
 const SoloFocusTimerCard = ({
   sessionTime,
-  pendingTime,
   breakCount,
   isSessionRunning,
+  hasSessionProgress,
   hasSelectedMaterials,
   timerWarning,
   autoBreakMessage,
   onToggleTimer,
 }: SoloFocusTimerCardProps) => {
+  const sessionButtonLabel = isSessionRunning
+    ? "Take Break"
+    : hasSessionProgress
+      ? "Resume Session"
+      : "Start Session";
+
   return (
     <SoloFocusGlassCard className="w-full max-w-[440px] text-center">
       <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-300">
@@ -43,16 +49,12 @@ const SoloFocusTimerCard = ({
         }`}
       >
         {isSessionRunning ? (
-          <>
-            <Pause className="size-5" />
-            Take Break
-          </>
+          <Pause className="size-5" />
         ) : (
-          <>
-            <Play className="size-5" />
-            Start Session
-          </>
+          <Play className="size-5" />
         )}
+
+        {sessionButtonLabel}
       </button>
 
       {autoBreakMessage ? (
@@ -62,7 +64,8 @@ const SoloFocusTimerCard = ({
           </p>
 
           <p className="mt-1 text-[11px] leading-5 text-yellow-100/80">
-            Your current session time is still pending until you pass the quiz.
+            Your current session time is still not approved until you pass the
+            quiz.
           </p>
         </div>
       ) : timerWarning ? (
@@ -75,8 +78,7 @@ const SoloFocusTimerCard = ({
         </p>
       ) : null}
 
-      <div className="mt-4 flex justify-center gap-5 text-xs text-slate-200">
-        <span>Pending: {pendingTime}</span>
+      <div className="mt-4 text-xs text-slate-200">
         <span>Breaks: {breakCount}</span>
       </div>
     </SoloFocusGlassCard>

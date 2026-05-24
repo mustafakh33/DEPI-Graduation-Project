@@ -86,6 +86,7 @@ export const useSoloFocusRoom = () => {
   const [quizWarning, setQuizWarning] = useState("");
 
   const hasSelectedMaterials = selectedMaterials.length > 0;
+  const hasSessionProgress = sessionSeconds > 0;
 
   const availableMaterials = getAvailableSoloStudyMaterials(roadmap);
 
@@ -138,6 +139,8 @@ export const useSoloFocusRoom = () => {
         return {
           ...normalizedStats,
           breakCount: normalizedStats.breakCount + 1,
+          isRunning: false,
+          lastStartedAt: null,
         };
       });
     }, autoBreakDelay);
@@ -186,11 +189,34 @@ export const useSoloFocusRoom = () => {
     };
   }, []);
 
+  const resetSessionUI = () => {
+    setIsSessionRunning(false);
+    setSessionSeconds(0);
+    setSelectedMaterials([]);
+    setQuizMaterials([]);
+    setQuizAnswers({});
+    setQuizResult(null);
+    setQuizWarning("");
+    setTimerWarning("");
+    setAutoBreakMessage("");
+    setIsBreakModalOpen(false);
+    setOpenedMaterial(null);
+    setActivePanel(null);
+
+    localStorage.removeItem(SELECTED_MATERIALS_STORAGE_KEY);
+  };
+
   const startFocusTimer = () => {
     setTimerWarning("");
     setAutoBreakMessage("");
     setIsBreakModalOpen(false);
     setIsSessionRunning(true);
+
+    setFocusStats((prev) => ({
+      ...resetCountersIfNeeded(prev),
+      isRunning: true,
+      lastStartedAt: Date.now(),
+    }));
   };
 
   const handleToggleTimer = () => {
@@ -202,22 +228,42 @@ export const useSoloFocusRoom = () => {
 
     if (!isSessionRunning) {
       void requestNotificationPermission();
+
+      if (sessionSeconds === 0) {
+        setFocusStats((prev) => ({
+          ...resetCountersIfNeeded(prev),
+          breakCount: 0,
+          isRunning: true,
+          lastStartedAt: Date.now(),
+        }));
+      } else {
+        setFocusStats((prev) => ({
+          ...resetCountersIfNeeded(prev),
+          isRunning: true,
+          lastStartedAt: Date.now(),
+        }));
+      }
+
+      setTimerWarning("");
+      setAutoBreakMessage("");
+      setIsSessionRunning(true);
+      return;
     }
 
     setTimerWarning("");
     setAutoBreakMessage("");
-    setIsSessionRunning((prev) => !prev);
+    setIsSessionRunning(false);
 
-    if (isSessionRunning) {
-      setFocusStats((prev) => {
-        const normalizedStats = resetCountersIfNeeded(prev);
+    setFocusStats((prev) => {
+      const normalizedStats = resetCountersIfNeeded(prev);
 
-        return {
-          ...normalizedStats,
-          breakCount: normalizedStats.breakCount + 1,
-        };
-      });
-    }
+      return {
+        ...normalizedStats,
+        breakCount: normalizedStats.breakCount + 1,
+        isRunning: false,
+        lastStartedAt: null,
+      };
+    });
   };
 
   const handleResumeFromBreak = () => {
@@ -256,6 +302,12 @@ export const useSoloFocusRoom = () => {
     setQuizResult(null);
     setQuizWarning("");
     setActivePanel("quiz");
+
+    setFocusStats((prev) => ({
+      ...resetCountersIfNeeded(prev),
+      isRunning: false,
+      lastStartedAt: null,
+    }));
   };
 
   const approveSessionHours = () => {
@@ -277,6 +329,7 @@ export const useSoloFocusRoom = () => {
         ...normalizedStats,
         weeklySeconds: normalizedStats.weeklySeconds + approvedSeconds,
         dailySeconds: normalizedStats.dailySeconds + approvedSeconds,
+        breakCount: 0,
         streakDays: updateStreakAfterApprovedSession(normalizedStats),
         lastStudyDate: today,
         isRunning: false,
@@ -284,33 +337,39 @@ export const useSoloFocusRoom = () => {
       };
     });
 
-    setSessionSeconds(0);
-    setSelectedMaterials([]);
-    setQuizMaterials([]);
-    setQuizAnswers({});
-    setQuizResult(null);
-    setActivePanel(null);
-    localStorage.removeItem(SELECTED_MATERIALS_STORAGE_KEY);
+    resetSessionUI();
   };
 
   const discardSessionHours = () => {
+    setFocusStats((prev) => {
+      const normalizedStats = resetCountersIfNeeded(prev);
+
+      return {
+        ...normalizedStats,
+        breakCount: 0,
+        isRunning: false,
+        lastStartedAt: null,
+      };
+    });
+
+    resetSessionUI();
+  };
+
+  const retryQuiz = () => {
+    setQuizAnswers({});
+    setQuizResult(null);
+    setQuizWarning("");
+  };
+
+  const continueStudyingAfterFailedQuiz = () => {
     setIsSessionRunning(false);
-    setSessionSeconds(0);
-    setSelectedMaterials([]);
     setQuizMaterials([]);
     setQuizAnswers({});
     setQuizResult(null);
     setQuizWarning("");
-    setActivePanel(null);
-    localStorage.removeItem(SELECTED_MATERIALS_STORAGE_KEY);
-  };
-
-  const retrySession = () => {
-    setIsSessionRunning(false);
-    setSessionSeconds(0);
-    setQuizAnswers({});
-    setQuizResult(null);
-    setQuizWarning("");
+    setTimerWarning("");
+    setAutoBreakMessage("");
+    setIsBreakModalOpen(false);
     setActivePanel(null);
   };
 
@@ -451,6 +510,7 @@ export const useSoloFocusRoom = () => {
     isSessionRunning,
     sessionSeconds,
     formattedSessionTime,
+    hasSessionProgress,
     activeTrack,
     tasks,
     newTask,
@@ -485,7 +545,8 @@ export const useSoloFocusRoom = () => {
     openSessionQuiz,
     approveSessionHours,
     discardSessionHours,
-    retrySession,
+    retryQuiz,
+    continueStudyingAfterFailedQuiz,
     handleAnswerChange,
     handleSubmitQuiz,
     handleToggleMusic,
