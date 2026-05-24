@@ -21,7 +21,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       </Avatar>
     )}
     <div className="min-w-0">
-      <h1 className="truncate text-lg font-bold leading-none text-slate-900 dark:text-white">{appName}</h1>
+      <h1 className="truncate text-lg font-bold leading-none text-slate-900 text-white">{appName}</h1>
       {portalSubtitle ? (
         <p className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400">{portalSubtitle}</p>
       ) : null}

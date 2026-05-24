@@ -1,15 +1,11 @@
 export interface UpcomingSession {
     id: string;
-  
     title: string;
-  
     batchName: string;
-  
     lectureNumber: string;
-  
     startsAt: string;
-  
     enrolledStudents: number;
+    meetingLink: string;
   }
   
   export interface SessionActivity {

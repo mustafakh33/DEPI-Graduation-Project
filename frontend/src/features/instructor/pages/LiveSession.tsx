@@ -1,5 +1,4 @@
-// useNavigate reserved for future navigation actions
-import { useLiveSessions,} from "../hooks/useLiveSessions";
+import { useLiveSessions } from "../hooks/useLiveSessions";
 import UpcomingSessionCard from "../components/liveSessions/UpcomingSessionCard";
 import SessionActivityCard from "../components/liveSessions/SessionActivityCard";
 import RewardStudentCard from "../components/liveSessions/RewardStudentCard";
@@ -7,8 +6,6 @@ import UpcomingLecturesList from "../components/liveSessions/UpcomingLecturesLis
 import "../styles/liveSessions.css";
 
 export default function LiveSessionsPage() {
-  //const navigate = useNavigate();
-
   const {
     upcomingSession,
     sessionActivity,
@@ -19,42 +16,23 @@ export default function LiveSessionsPage() {
 
   return (
     <div className="live-sessions-page">
-
       <div className="live-layout">
-
-        <div className="live-main">
-
+        <main className="live-main">
           <UpcomingSessionCard
             session={upcomingSession}
             timeLeft={timeLeft}
             canJoin={canJoin}
-            onJoin={() =>
-              console.log("join")
-            }
+            
           />
 
-          <UpcomingLecturesList
-            lectures={
-              upcomingLectures
-            }
-          />
+          <UpcomingLecturesList lectures={upcomingLectures} />
+        </main>
 
-        </div>
-
-        <div className="live-sidebar">
-
-          <SessionActivityCard
-            activity={
-              sessionActivity
-            }
-          />
-
+        <aside className="live-sidebar">
+          <SessionActivityCard activity={sessionActivity} />
           <RewardStudentCard />
-
-        </div>
-
+        </aside>
       </div>
-
     </div>
   );
 }

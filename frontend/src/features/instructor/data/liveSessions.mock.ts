@@ -7,17 +7,13 @@ import type {
   export const upcomingSession: UpcomingSession =
   {
     id: "1",
-  
     title: "Quantum Mechanics",
-  
     batchName: "Batch: Alpha-2024",
-  
     lectureNumber: "#14",
-  
     startsAt:
-      "2026-05-12T16:00:00",
-  
+      "2026-05-26T16:00:00",
     enrolledStudents: 120,
+    meetingLink: "https://meet.google.com/abc-defg-hij",
   };
   
   export const sessionActivity: SessionActivity =

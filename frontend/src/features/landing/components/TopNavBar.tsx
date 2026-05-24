@@ -45,7 +45,9 @@ const TopNavBar: React.FC = () => {
             Login
           </Link>
           <Link to="/register" className="relative group overflow-hidden bg-white text-black px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-95">
-            <span className="relative z-10">Get Started</span>
+          <span className="relative z-10 text-black">
+  Get Started
+</span>
             <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </Link>
         </div>

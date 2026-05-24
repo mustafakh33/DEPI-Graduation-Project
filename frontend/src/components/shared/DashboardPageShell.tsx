@@ -10,7 +10,7 @@ export interface DashboardPageShellProps {
 export const DashboardPageShell: React.FC<DashboardPageShellProps> = ({ title, description }) => (
   <Card className="border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800/50">
     <CardHeader>
-      <CardTitle className="text-xl text-slate-900 dark:text-white">{title}</CardTitle>
+      <CardTitle className="text-xl text-slate-800 dark:text-white">{title}</CardTitle>
       <CardDescription>
         {description ?? "This section is under construction."}
       </CardDescription>

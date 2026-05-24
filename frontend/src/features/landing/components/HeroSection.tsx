@@ -45,13 +45,13 @@ const HeroSection: React.FC = () => {
           </p>
           
           <div className="flex flex-wrap gap-4 pt-4">
-            <Button className="group relative bg-white text-black hover:bg-gray-100 px-8 py-6 rounded-xl text-base font-semibold shadow-[0_0_40px_rgba(255,255,255,0.1)] transition-all hover:scale-105 active:scale-95" asChild>
+            <Button className="group relative bg-white !text-black hover:bg-gray-100 px-8 py-6 rounded-xl text-base font-semibold shadow-[0_0_40px_rgba(255,255,255,0.1)] transition-all hover:scale-105 active:scale-95" asChild>
               <Link to="/register">
                 Start Learning Free
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button className="px-8 py-6 rounded-xl text-base font-semibold bg-white/5 text-white border border-white/10 hover:bg-white/10 transition-all hover:scale-105 active:scale-95">
+            <Button className="px-8 py-6 rounded-xl text-base font-semibold bg-white/5 text- border border-white/10 hover:bg-white/10 transition-all hover:scale-105 active:scale-95">
               See How It Works
             </Button>
           </div>

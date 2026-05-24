@@ -31,7 +31,7 @@ const PortalDashboardOverview: React.FC<PortalDashboardOverviewProps> = ({ welco
   return (
     <div className="space-y-6 md:space-y-8">
       <header className="mb-6 md:mb-8">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white sm:text-3xl">Dashboard Overview</h2>
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 text-white sm:text-3xl">Dashboard Overview</h2>
         <p className="mt-1 text-slate-500 dark:text-slate-400">
           Welcome back, {welcomeName}. Here is an overview of the university&apos;s performance today.
         </p>
