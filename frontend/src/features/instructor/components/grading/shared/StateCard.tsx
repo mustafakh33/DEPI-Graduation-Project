@@ -19,25 +19,25 @@ export default function StatCard({
 }: Props) {
   return (
     <div className="stat-card">
-      <div className="stat-card-top">
-        <p className="stat-card-label">{title}</p>
-        {icon && (
-          <div
-            className={`stat-card-icon stat-card-icon--${iconVariant}`}
-            aria-hidden
-          >
-            {icon}
-          </div>
-        )}
-      </div>
+      {icon && (
+        <div
+          className={`stat-card-icon stat-card-icon--${iconVariant}`}
+          aria-hidden
+        >
+          {icon}
+        </div>
+      )}
 
-      <div className="stat-card-body">
-        <h2 className="stat-card-value">{value}</h2>
-        {extra && (
-          <span className={`stat-card-extra stat-card-extra--${extraVariant}`}>
-            {extra}
-          </span>
-        )}
+      <div className="stat-card-content">
+        <p className="stat-card-label">{title}</p>
+        <div className="stat-card-body">
+          <h2 className="stat-card-value">{value}</h2>
+          {extra && (
+            <span className={`stat-card-extra stat-card-extra--${extraVariant}`}>
+              {extra}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
