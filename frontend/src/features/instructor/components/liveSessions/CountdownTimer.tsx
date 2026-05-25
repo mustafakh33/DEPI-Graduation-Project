@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 interface Props {
   timeLeft: number;
 }
@@ -10,18 +12,27 @@ export default function CountdownTimer({ timeLeft }: Props) {
 
   const items = [
     { label: "DAYS", value: days },
-    { label: "HRS", value: hours },
+    { label: "HOURS", value: hours },
     { label: "MINS", value: minutes },
     { label: "SECS", value: seconds },
   ];
 
   return (
     <div className="countdown">
-      {items.map((item) => (
-        <div className="countdown-item" key={item.label}>
-          <h2>{String(item.value).padStart(2, "0")}</h2>
-          <p>{item.label}</p>
-        </div>
+      {items.map((item, index) => (
+        <Fragment key={item.label}>
+          <div className="countdown-item">
+            <span className="countdown-value">
+              {String(item.value).padStart(2, "0")}
+            </span>
+            <span className="countdown-label">{item.label}</span>
+          </div>
+          {index < items.length - 1 && (
+            <span className="countdown-separator" aria-hidden>
+              :
+            </span>
+          )}
+        </Fragment>
       ))}
     </div>
   );

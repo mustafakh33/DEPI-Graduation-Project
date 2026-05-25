@@ -1,77 +1,82 @@
-import StatCard from "../shared/StateCard";
-
-import SearchHeader from "../shared/SearchHeader";
-
-import ProjectTable from "./ProjectTable";
-
-import {
-  useProjectGrading,
-} from "../../../hooks/useProjectGrading";
-
+import { CheckCircle, ClipboardClock, Users } from "lucide-react";
 import { useState } from "react";
+import StatCard from "../shared/StateCard";
+import SearchHeader from "../shared/SearchHeader";
+import TablePagination from "../shared/TablePagination";
+import ProjectTable from "./ProjectTable";
+import { useProjectGrading } from "../../../hooks/useProjectGrading";
+import { useTablePagination } from "../../../hooks/useTablePagination";
 
 export default function ProjectSection() {
+  const { students, updateScore, saveGrade } = useProjectGrading();
+  const [search, setSearch] = useState("");
+
+  const filteredStudents = students.filter((student) =>
+    `${student.studentName} ${student.studentId}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
+  const submittedCount = students.filter((s) => s.status === "submitted").length;
+  const pendingCount = students.filter(
+    (s) => s.status === "submitted" && !s.saved
+  ).length;
+
   const {
-    students,
-
-    updateScore,
-
-    saveGrade,
-  } = useProjectGrading();
-
-  const [search, setSearch] =
-    useState("");
-
-  const filteredStudents =
-    students.filter((student) =>
-      student.studentName
-        .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-    );
+    paginatedItems,
+    page,
+    setPage,
+    totalPages,
+    total,
+    pageSize,
+  } = useTablePagination(filteredStudents, search);
 
   return (
-    <div>
-
-      <div className="stats-grid">
-
+    <div className="submission-grading-section">
+      <div className="stats-grid stats-grid--3">
         <StatCard
-          title="Projects"
-          value="24"
+          title="Total Students"
+          value={String(students.length)}
+          icon={<Users size={20} />}
+          iconVariant="blue"
         />
 
         <StatCard
-          title="Submission Rate"
-          value="79%"
+          title="Submitted"
+          value={`${submittedCount} / ${students.length}`}
+          icon={<CheckCircle size={20} />}
+          iconVariant="green"
         />
 
         <StatCard
           title="Pending Review"
-          value="8"
+          value={String(pendingCount)}
+          icon={<ClipboardClock size={20} />}
+          iconVariant="amber"
         />
-
       </div>
 
       <div className="table-card">
-
         <SearchHeader
           search={search}
           setSearch={setSearch}
+          placeholder="Search students by name or ID..."
         />
 
         <ProjectTable
-          students={
-            filteredStudents
-          }
-          updateScore={
-            updateScore
-          }
+          students={paginatedItems}
+          updateScore={updateScore}
           saveGrade={saveGrade}
         />
 
+        <TablePagination
+          total={total}
+          page={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
-
     </div>
   );
 }

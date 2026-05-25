@@ -43,7 +43,6 @@ import InstructorDashboard from "@/features/instructor/pages/Dashboard";
 import MyCourses from "@/features/instructor/pages/MyCourses";
 import Students from "@/features/instructor/pages/Students";
 import Grades from "@/features/instructor/pages/Grades";
-import Quizzes from "@/features/instructor/pages/Quizzes";
 import LiveSession from "@/features/instructor/pages/LiveSession";
 import InstructorLayout from "@/layouts/InstructorLayout";
 
@@ -172,9 +171,8 @@ const AppRouter = () => {
                 element={<InstructorDashboard />}
               />
               <Route path="/instructor/my-courses" element={<MyCourses />} />
-              <Route path="/instructor/students" element={<Students />} />
+              <Route path="/instructor/students/*" element={<Students />} />
               <Route path="/instructor/grades" element={<Grades />} />
-              <Route path="/instructor/quizzes" element={<Quizzes />} />
               <Route path="/instructor/live-session" element={<LiveSession />} />
             </Route>
           </Route>

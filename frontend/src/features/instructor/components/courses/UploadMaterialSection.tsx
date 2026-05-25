@@ -1,40 +1,36 @@
-import type {
-  UploadMaterialsSectionProps,
-} from "../../types/lectureMaterials.types";
-
+import { Check, FileText, Trash2, Upload } from "lucide-react";
+import type { UploadMaterialsSectionProps } from "../../types/lectureMaterials.types";
 import UploadedFileCard from "./UploadedFileCard";
 
 export default function UploadMaterialsSection({
   files,
   onSelectFiles,
-  onRemoveFile,
+  onDeleteAll,
 }: UploadMaterialsSectionProps) {
-
   return (
-    <div className="upload-section">
+    <section className="upload-section">
       <div className="section-header">
         <div className="title-wrap">
-          <div className="section-icon blue">▣</div>
-          <div className="section-title">Section 1: Upload Material</div>
+          <div className="section-icon section-icon--blue">
+            <FileText size={20} aria-hidden />
+          </div>
+          <h2 className="section-title">Section 1: Upload Material</h2>
         </div>
-
-        <span className="step-text">STEP 1 OF 2</span>
+        <span className="step-text">Step 1 of 2</span>
       </div>
 
       <div className="upload-layout">
         <label className="dropzone">
-          <div className="upload-icon">☁</div>
-
+          <div className="upload-icon">
+            <Upload size={28} aria-hidden />
+          </div>
           <h3>Click or drag lecture files</h3>
-
           <p>
             Supported: PDF, MP4, PPTX, ZIP
             <br />
-            (Up to 100MB)
+            (Up to 100MB per file)
           </p>
-
           <span className="browse-btn">Browse Files</span>
-
           <input
             type="file"
             multiple
@@ -45,22 +41,32 @@ export default function UploadMaterialsSection({
         </label>
 
         <div className="uploaded-files">
-          <p className="queue-title">QUEUE ({files.length} FILES)</p>
-
-          {files.map((file) => (
-            <UploadedFileCard
-              key={file.id}
-              file={file}
-              onRemove={onRemoveFile}
-            />
-          ))}
+          <p className="queue-title">Queue ({files.length} files)</p>
+          {files.length === 0 ? (
+            <p className="queue-empty">No files in queue yet.</p>
+          ) : (
+            files.map((file) => (
+              <UploadedFileCard key={file.id} file={file} />
+            ))
+          )}
         </div>
       </div>
 
       <div className="section-footer">
-        <button className="delete-all-btn">Delete All</button>
-        <button className="confirm-btn">Confirm Upload</button>
+        <button
+          type="button"
+          className="delete-all-btn"
+          onClick={onDeleteAll}
+          disabled={files.length === 0}
+        >
+          <Trash2 size={16} aria-hidden />
+          Delete All
+        </button>
+        <button type="button" className="confirm-btn" disabled={files.length === 0}>
+          <Check size={18} aria-hidden />
+          Confirm Upload
+        </button>
       </div>
-    </div>
+    </section>
   );
 }

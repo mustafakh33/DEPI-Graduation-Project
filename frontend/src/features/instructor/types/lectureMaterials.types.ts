@@ -20,22 +20,12 @@ export interface UploadedMaterial {
 
 export interface UploadedFileCardProps {
   file: UploadedMaterial;
-
-  onRemove: (
-    id: string
-  ) => void;
 }
 
 export interface UploadMaterialsSectionProps {
   files: UploadedMaterial[];
-
-  onSelectFiles: (
-    files: FileList | null
-  ) => void;
-
-  onRemoveFile: (
-    id: string
-  ) => void;
+  onSelectFiles: (files: FileList | null) => void;
+  onDeleteAll: () => void;
 }
 
 export interface UploadQuizSectionProps {

@@ -12,13 +12,13 @@ export const useQuizGrading =
 
     const filteredStudents =
       [...gradingMock.quizStudents]
-        .filter((student) =>
-          student.studentName
-            .toLowerCase()
-            .includes(
-              search.toLowerCase()
-            )
-        )
+        .filter((student) => {
+          const q = search.toLowerCase();
+          return (
+            student.studentName.toLowerCase().includes(q) ||
+            student.studentId.toLowerCase().includes(q)
+          );
+        })
         .sort((a, b) =>
           sort === "highest"
             ? b.score - a.score

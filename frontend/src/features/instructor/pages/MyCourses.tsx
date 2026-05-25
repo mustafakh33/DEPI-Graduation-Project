@@ -1,5 +1,4 @@
-
-import LectureHeader from "../components/courses/LectureHeader.tsx";
+import LectureHeader from "../components/courses/LectureHeader";
 import UploadMaterialsSection from "../components/courses/UploadMaterialSection";
 import UploadQuizSection from "../components/courses/UploadQuizSection";
 import { useLectureMaterials } from "../hooks/useLectureMaterials";
@@ -8,38 +7,28 @@ import "../styles/LectureMaterials.css";
 export default function LectureMaterialsPage() {
   const {
     files,
-
     quizFile,
-
     handleSelectFiles,
-
-    handleRemoveFile,
-
+    handleDeleteAll,
     setQuizFile,
   } = useLectureMaterials();
 
   return (
     <div className="lecture-page">
-
       <LectureHeader />
 
-      <UploadMaterialsSection
-        files={files}
-        onSelectFiles={
-          handleSelectFiles
-        }
-        onRemoveFile={
-          handleRemoveFile
-        }
-      />
+      <main className="lecture-content">
+        <UploadMaterialsSection
+          files={files}
+          onSelectFiles={handleSelectFiles}
+          onDeleteAll={handleDeleteAll}
+        />
 
-      <UploadQuizSection
-        quizFile={quizFile}
-        onSelectQuizFile={
-          setQuizFile
-        }
-      />
-
+        <UploadQuizSection
+          quizFile={quizFile}
+          onSelectQuizFile={setQuizFile}
+        />
+      </main>
     </div>
   );
 }

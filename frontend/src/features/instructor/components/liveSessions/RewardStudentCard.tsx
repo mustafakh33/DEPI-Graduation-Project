@@ -1,7 +1,10 @@
+import { ChevronDown, Coins, Search } from "lucide-react";
 import { useState } from "react";
+import { topPerformers } from "../../data/liveSessions.mock";
 
 export default function RewardStudentCard() {
   const [coins, setCoins] = useState(10);
+  const [selectedPerformer, setSelectedPerformer] = useState(topPerformers[0]?.id);
 
   return (
     <div className="reward-card">
@@ -11,60 +14,81 @@ export default function RewardStudentCard() {
       </div>
 
       <div className="reward-form">
-        <div>
+        <div className="reward-field">
           <label>Select Batch</label>
-          <select>
-            <option>Alpha-2024 (120 Students)</option>
-            <option>Beta-2024</option>
-          </select>
+          <div className="reward-select-wrap">
+            <select defaultValue="alpha">
+              <option value="alpha">Alpha-2024 (120 Students)</option>
+              <option value="beta">Beta-2024 (95 Students)</option>
+            </select>
+            <ChevronDown size={16} className="reward-select-icon" aria-hidden />
+          </div>
         </div>
 
-        <div>
+        <div className="reward-field">
           <label>Find Student</label>
-          <input type="text" placeholder="Enter student name or ID..." />
+          <div className="reward-search">
+            <Search size={16} className="reward-search-icon" aria-hidden />
+            <input type="text" placeholder="Enter student name or ID..." />
+          </div>
         </div>
 
         <div className="top-performers">
           <p>Top Performers Today</p>
 
-          <div className="performer-card active">
-            <div className="performer-info">
-              <div className="student-avatar" />
-              <span>Alex Johnson</span>
-            </div>
-            <strong>Active</strong>
-          </div>
-
-          <div className="performer-card">
-            <div className="performer-info">
-              <div className="student-avatar" />
-              <span>Sarah Williams</span>
-            </div>
-            <strong>Idle</strong>
-          </div>
+          {topPerformers.map((performer) => (
+            <button
+              key={performer.id}
+              type="button"
+              className={`performer-card ${
+                selectedPerformer === performer.id ? "performer-card--selected" : ""
+              }`}
+              onClick={() => setSelectedPerformer(performer.id)}
+            >
+              <div className="performer-info">
+                <div className="performer-avatar" />
+                <span>{performer.name}</span>
+              </div>
+              <span
+                className={`performer-status performer-status--${performer.status}`}
+              >
+                {performer.status === "active" ? "Active" : "Idle"}
+              </span>
+            </button>
+          ))}
         </div>
 
         <div className="reward-grid">
-          <div>
+          <div className="reward-field">
             <label>Reward Coins</label>
-            <input
-              type="number"
-              value={coins}
-              onChange={(e) => setCoins(Number(e.target.value))}
-            />
+            <div className="reward-coins-input">
+              <Coins size={16} className="reward-coins-icon" aria-hidden />
+              <input
+                type="number"
+                value={coins}
+                min={1}
+                onChange={(e) => setCoins(Number(e.target.value) || 0)}
+              />
+            </div>
           </div>
 
-          <div>
+          <div className="reward-field">
             <label>Reason</label>
-            <select>
-              <option>Excellent Answer</option>
-              <option>Attendance</option>
-              <option>Participation</option>
-            </select>
+            <div className="reward-select-wrap">
+              <select defaultValue="excellent">
+                <option value="excellent">Excellent Answer</option>
+                <option value="attendance">Attendance</option>
+                <option value="participation">Participation</option>
+              </select>
+              <ChevronDown size={16} className="reward-select-icon" aria-hidden />
+            </div>
           </div>
         </div>
 
-        <button type="button">Grant Reward Coins</button>
+        <button type="button" className="grant-reward-btn">
+          <Coins size={18} aria-hidden />
+          Grant Reward Coins
+        </button>
       </div>
     </div>
   );

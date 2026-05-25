@@ -1,3 +1,4 @@
+import { Clock, Users } from "lucide-react";
 import type { UpcomingLecture } from "../../types/liveSessions.types";
 
 interface Props {
@@ -12,25 +13,36 @@ export default function UpcomingLecturesList({ lectures }: Props) {
         <button type="button">Full Schedule →</button>
       </div>
 
-      {lectures.map((lecture) => (
-        <article key={lecture.id} className="lecture-card">
-          <div className="lecture-date">{lecture.date}</div>
-
-          <div className="lecture-content">
-            <div className="lecture-topline">
-              <span>{lecture.batchName}</span>
-              <small>Lecture {lecture.lectureNumber}</small>
+      <div className="lectures-list">
+        {lectures.map((lecture) => (
+          <article key={lecture.id} className="lecture-card">
+            <div className="lecture-date">
+              <span className="lecture-month">{lecture.month}</span>
+              <span className="lecture-day">{lecture.day}</span>
             </div>
 
-            <h3>{lecture.title}</h3>
+            <div className="lecture-content">
+              <div className="lecture-topline">
+                <span className="batch-tag">{lecture.batchName}</span>
+                <small>Lecture {lecture.lectureNumber}</small>
+              </div>
 
-            <div className="lecture-meta">
-              <span>🕒 {lecture.time}</span>
-              <span>👥 {lecture.enrolledStudents} Enrolled</span>
+              <h3>{lecture.title}</h3>
+
+              <div className="lecture-meta">
+                <span>
+                  <Clock size={14} aria-hidden />
+                  {lecture.time}
+                </span>
+                <span>
+                  <Users size={14} aria-hidden />
+                  {lecture.enrolledStudents} Enrolled
+                </span>
+              </div>
             </div>
-          </div>
-        </article>
-      ))}
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

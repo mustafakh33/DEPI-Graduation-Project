@@ -1,11 +1,18 @@
-import React from "react";
-import { DashboardPageShell } from "@/components/shared/DashboardPageShell";
+import { useLocation, useParams } from "react-router-dom";
+import StudentProfilePage from "../components/students/StudentProfilePage";
+import StudentsListPage from "../components/students/StudentsListPage";
 
-const Students: React.FC = () => (
-  <DashboardPageShell
-    title="Students"
-    description="Roster and performance for your courses."
-  />
-);
+export default function Students() {
+  const { studentId } = useParams();
+  const { pathname } = useLocation();
 
-export default Students;
+  const normalizedPath = pathname.replace(/\/$/, "");
+  const isStudentsListPage = normalizedPath === "/instructor/students";
+
+  if (isStudentsListPage || !studentId) {
+    return <StudentsListPage />;
+  }
+
+  return <StudentProfilePage />;
+}
+
