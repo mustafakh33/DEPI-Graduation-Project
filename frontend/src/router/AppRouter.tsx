@@ -50,7 +50,6 @@ import InstructorLayout from "@/layouts/InstructorLayout";
 import MentorDashboard from "@/features/mentor/pages/Dashboard";
 import MyStudents from "@/features/mentor/pages/MyStudents";
 import ChatPage from "@/features/mentor/pages/ChatPage";
-import CheckIns from "@/features/mentor/pages/CheckIns";
 import Progress from "@/features/mentor/pages/Progress";
 import MentorLayout from "@/layouts/MentorLayout";
 
@@ -184,7 +183,6 @@ const AppRouter = () => {
               <Route path="/mentor/my-students" element={<MyStudents />} />
               <Route path="/mentor/ChatPage" element={<ChatPage />} />
               <Route path="/mentor/chat/:studentId" element={<ChatPage />} />
-              <Route path="/mentor/check-ins" element={<CheckIns />} />
               <Route path="/mentor/progress/:id" element={<Progress />} />
             </Route>
           </Route>
