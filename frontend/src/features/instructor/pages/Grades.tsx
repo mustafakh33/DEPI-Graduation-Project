@@ -1,3 +1,10 @@
+/**
+ * Grades — `/instructor/grades`
+ *
+ * Tabbed grading UI: quiz (read-only list), assignments and projects (local score save).
+ *
+ * @see ../README.md#section-grades
+ */
 import { useState } from "react";
 import GradingTabs from "../components/grading/tabs/GradingTabs";
 import QuizGradingSection from "../components/grading/quiz/QuizGradingSection";

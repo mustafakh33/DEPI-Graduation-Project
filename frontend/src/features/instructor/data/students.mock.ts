@@ -77,13 +77,15 @@ function buildProfile(student: InstructorStudent): StudentProfile {
     tabs: ["Overview", "Academic History", "Documents", "Attendance Log"],
     kpis: defaultKpis(attendance, assignments, quiz),
     performanceTrend: defaultTrend,
-    advisorNote: {
-      date: "Jan 12, 2024",
-      content:
-        student.status === "at_risk"
-          ? "Student flagged for low quiz performance. Recommend weekly check-ins and supplemental materials before mid-terms."
-          : "Showing strong practical skills in lab sessions. Needs more focus on theoretical concepts for upcoming mid-terms.",
-    },
+    advisorNotes: [
+      {
+        date: "Jan 12, 2024",
+        content:
+          student.status === "at_risk"
+            ? "Student flagged for low quiz performance. Recommend weekly check-ins and supplemental materials before mid-terms."
+            : "Showing strong practical skills in lab sessions. Needs more focus on theoretical concepts for upcoming mid-terms.",
+      },
+    ],
   };
 }
 

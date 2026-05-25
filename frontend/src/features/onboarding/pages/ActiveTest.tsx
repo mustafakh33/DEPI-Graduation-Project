@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Clock, Flag, SkipForward, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 

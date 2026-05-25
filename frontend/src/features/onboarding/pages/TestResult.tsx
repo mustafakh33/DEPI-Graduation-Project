@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Trophy, Calendar, Target, Star, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 

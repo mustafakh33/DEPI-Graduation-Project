@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import type { NavLinkItem } from "@/components/shared/Sidebar/SidebarNavLink";
 import Sidebar from "@/components/shared/Sidebar/Sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -19,6 +19,7 @@ export interface AppShellLayoutProps {
   portalSubtitle?: string;
   onLogout?: () => void;
   headerContent?: React.ReactNode;
+  showNewActionButton?: boolean;
   sidebarUserName?: string;
   sidebarUserAvatarUrl?: string;
   showSidebarUserRole?: boolean;
@@ -32,7 +33,8 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
   portalSubtitle = "Portal",
   onLogout,
   headerContent,
-   sidebarUserName,
+  showNewActionButton = true,
+  sidebarUserName,
    sidebarUserAvatarUrl,
   showSidebarUserRole,
 }) => {
@@ -107,10 +109,12 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-3 md:gap-4">
-            <Button variant="primary" size="sm" className="font-bold">
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              <span className="hidden sm:inline">New Action</span>
-            </Button>
+            {showNewActionButton ? (
+              <Button variant="primary" size="sm" className="font-bold">
+                <span className="material-symbols-outlined text-[18px]">add</span>
+                <span className="hidden sm:inline">New Action</span>
+              </Button>
+            ) : null}
             <div className="flex h-8 items-center gap-2 pl-1 md:gap-3">
               <Separator orientation="vertical" className="h-8 bg-slate-700" decorative />
               <Button variant="headerIcon" size="icon" aria-label="Notifications">

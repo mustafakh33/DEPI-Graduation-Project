@@ -1,3 +1,10 @@
+/**
+ * Live Session — `/instructor/live-session`
+ *
+ * Upcoming session countdown, lecture list, session activity, and reward-student UI.
+ *
+ * @see ../README.md#section-live-session
+ */
 import { Search } from "lucide-react";
 import { useLiveSessions } from "../hooks/useLiveSessions";
 import UpcomingSessionCard from "../components/liveSessions/UpcomingSessionCard";

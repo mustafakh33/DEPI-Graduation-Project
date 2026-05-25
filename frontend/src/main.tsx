@@ -6,20 +6,16 @@ import { Theme } from "@radix-ui/themes/dist/cjs/components/index.js";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { OnboardingProvider } from "@/features/onboarding/context/OnboardingContext";
-import { BrowserRouter } from "react-router-dom";
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <AuthProvider>
-          <OnboardingProvider>
-            <Theme>
-              <AppRouter />
-            </Theme>
-          </OnboardingProvider>
-        </AuthProvider>
-      </Provider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <AuthProvider>
+        <OnboardingProvider>
+          <Theme>
+            <AppRouter />
+          </Theme>
+        </OnboardingProvider>
+      </AuthProvider>
+    </Provider>
   </StrictMode>,
 );

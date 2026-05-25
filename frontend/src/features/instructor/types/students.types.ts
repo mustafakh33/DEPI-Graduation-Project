@@ -35,7 +35,7 @@ export interface StudentProfile extends InstructorStudent {
   tabs: string[];
   kpis: StudentKpi[];
   performanceTrend: PerformanceMonth[];
-  advisorNote: AdvisorNote;
+  advisorNotes: AdvisorNote[];
 }
 
 export type StudentProfileTab =

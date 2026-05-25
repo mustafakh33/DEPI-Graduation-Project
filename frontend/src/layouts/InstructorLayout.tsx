@@ -1,3 +1,9 @@
+/**
+ * Shell for all `/instructor/*` routes. Renders sidebar from
+ * `instructorNavItems` and page content via React Router `<Outlet />`.
+ *
+ * @see @/features/instructor/README.md
+ */
 import React from "react";
 import {
   instructorDashboardPath,
@@ -14,6 +20,7 @@ const InstructorLayout: React.FC = () => {
       links={instructorNavItems}
       dashboardPath={instructorDashboardPath}
       portalSubtitle="Instructor Dashboard"
+      showNewActionButton={false}
       onLogout={handleLogout}
     />
   );

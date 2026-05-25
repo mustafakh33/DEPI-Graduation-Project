@@ -1,0 +1,50 @@
+.mentor-chat-header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid #3b82f6;
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mentor-chat-header-btn:hover {
+  background: rgba(59, 130, 246, 0.22);
+  color: #bfdbfe;
+}
+
+.mentor-start-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 24px;
+  padding: 16px 24px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.35);
+}
+
+.mentor-start-chat-btn:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+.student-profile-page .student-kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1200px) {
+  .student-profile-page .student-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

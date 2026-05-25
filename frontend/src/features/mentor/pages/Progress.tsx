@@ -1,40 +1,51 @@
-
-
-import { useAnalytics } from "../hooks/useAnalytics";
-
+/**
+ * Progress (Batch Analytics) — `/mentor/progress/:id`
+ *
+ * Filterable analytics table, summary stats, and client-side CSV export.
+ *
+ * @see ../README.md#section-progress-analytics
+ */
+import AnalyticsFilters from "../components/analytics/AnalyticsFilters";
 import AnalyticsHeader from "../components/analytics/AnalyticsHeader";
 import AnalyticsStats from "../components/analytics/AnalysticsStats";
-import AnalyticsFilters from "../components/analytics/AnalyticsFilters";
 import BatchAnalyticsTable from "../components/analytics/BatchAnalyticsTable";
-
+import { useAnalytics } from "../hooks/useAnalytics";
 import "../style/analytics.css";
 
-export default function AnalyticsPage() {
+export default function Progress() {
   const {
     filters,
     setFilters,
-
     stats,
-
-    filteredBatches,
+    paginatedBatches,
+    page,
+    setPage,
+    pageSize,
+    totalBatches,
+    totalFiltered,
+    totalPages,
+    exportReport,
+    resetFilters,
   } = useAnalytics();
 
   return (
     <div className="analytics-page">
-
-      <AnalyticsHeader />
-
+      <AnalyticsHeader onExport={exportReport} />
       <AnalyticsStats stats={stats} />
-
       <AnalyticsFilters
         filters={filters}
         setFilters={setFilters}
+        onResetFilters={resetFilters}
       />
-
       <BatchAnalyticsTable
-        batches={filteredBatches}
+        batches={paginatedBatches}
+        page={page}
+        pageSize={pageSize}
+        totalFiltered={totalFiltered}
+        totalBatches={totalBatches}
+        totalPages={totalPages}
+        onPageChange={setPage}
       />
-
     </div>
   );
 }

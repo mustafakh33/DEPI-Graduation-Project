@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "@/styles/global.css";
 
 // Public pages
@@ -51,6 +51,7 @@ import MentorDashboard from "@/features/mentor/pages/Dashboard";
 import MyStudents from "@/features/mentor/pages/MyStudents";
 import ChatPage from "@/features/mentor/pages/ChatPage";
 import Progress from "@/features/mentor/pages/Progress";
+import MySessions from "@/features/mentor/pages/MySessions";
 import MentorLayout from "@/layouts/MentorLayout";
 
 // Admin pages
@@ -170,7 +171,11 @@ const AppRouter = () => {
                 element={<InstructorDashboard />}
               />
               <Route path="/instructor/my-courses" element={<MyCourses />} />
-              <Route path="/instructor/students/*" element={<Students />} />
+              <Route path="/instructor/students" element={<Students />} />
+              <Route
+                path="/instructor/students/:studentId"
+                element={<Students />}
+              />
               <Route path="/instructor/grades" element={<Grades />} />
               <Route path="/instructor/live-session" element={<LiveSession />} />
             </Route>
@@ -181,8 +186,16 @@ const AppRouter = () => {
             <Route element={<MentorLayout />}>
               <Route path="/mentor/dashboard" element={<MentorDashboard />} />
               <Route path="/mentor/my-students" element={<MyStudents />} />
-              <Route path="/mentor/ChatPage" element={<ChatPage />} />
+              <Route
+                path="/mentor/my-students/:studentId"
+                element={<MyStudents />}
+              />
+              <Route
+                path="/mentor/ChatPage"
+                element={<Navigate to="/mentor/chat/8" replace />}
+              />
               <Route path="/mentor/chat/:studentId" element={<ChatPage />} />
+              <Route path="/mentor/my-sessions" element={<MySessions />} />
               <Route path="/mentor/progress/:id" element={<Progress />} />
             </Route>
           </Route>

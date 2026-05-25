@@ -16,6 +16,7 @@ export default function StudentProfilePage() {
     isAtRisk,
     putAtRisk,
     clearRisk,
+    addAdvisorNote,
   } = useStudentProfile(studentId);
 
   if (!profile) {
@@ -39,7 +40,10 @@ export default function StudentProfilePage() {
 
           <div className="student-profile-grid">
             <PerformanceTrendCard months={profile.performanceTrend} />
-            <AdvisorNotesCard note={profile.advisorNote} />
+            <AdvisorNotesCard
+              notes={profile.advisorNotes}
+              onAddNote={addAdvisorNote}
+            />
           </div>
         </div>
       ) : (

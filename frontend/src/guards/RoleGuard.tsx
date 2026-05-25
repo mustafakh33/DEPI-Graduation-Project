@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router-dom";
 
 import type { Role } from "../types/global.types";
 import { useAuth } from "../hooks/useAuth";

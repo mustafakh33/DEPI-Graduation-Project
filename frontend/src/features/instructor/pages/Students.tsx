@@ -1,15 +1,18 @@
-import { useLocation, useParams } from "react-router-dom";
+/**
+ * Students — `/instructor/students` and `/instructor/students/:studentId`
+ *
+ * Single route entry: list (`StudentsListPage`) or profile (`StudentProfilePage`) from URL param.
+ *
+ * @see ../README.md#section-students
+ */
+import { useParams } from "react-router-dom";
 import StudentProfilePage from "../components/students/StudentProfilePage";
 import StudentsListPage from "../components/students/StudentsListPage";
 
 export default function Students() {
-  const { studentId } = useParams();
-  const { pathname } = useLocation();
+  const { studentId } = useParams<{ studentId?: string }>();
 
-  const normalizedPath = pathname.replace(/\/$/, "");
-  const isStudentsListPage = normalizedPath === "/instructor/students";
-
-  if (isStudentsListPage || !studentId) {
+  if (!studentId) {
     return <StudentsListPage />;
   }
 

@@ -1,25 +1,28 @@
-import type {
-    AnalyticsFiltersState,
-  } from "../../types/analystics.types";
-  
-  interface Props {
-    filters: AnalyticsFiltersState;
-  
-    setFilters: React.Dispatch<
-      React.SetStateAction<AnalyticsFiltersState>
-    >;
-  }
-  
-  export default function AnalyticsFilters({
-    filters,
-    setFilters,
-  }: Props) {
-    return (
-      <div className="analytics-filters">
-  
+import { Search, SlidersHorizontal } from "lucide-react";
+import {
+  analyticsDepartments,
+  analyticsSemesters,
+} from "../../data/analytics.mock";
+import type { AnalyticsFiltersState } from "../../types/analystics.types";
+
+interface Props {
+  filters: AnalyticsFiltersState;
+  setFilters: React.Dispatch<React.SetStateAction<AnalyticsFiltersState>>;
+  onResetFilters: () => void;
+}
+
+export default function AnalyticsFilters({
+  filters,
+  setFilters,
+  onResetFilters,
+}: Props) {
+  return (
+    <div className="analytics-filters">
+      <div className="analytics-filters__search">
+        <Search size={18} className="analytics-filters__search-icon" aria-hidden />
         <input
-          type="text"
-          placeholder="Search batches..."
+          type="search"
+          placeholder="Search batches by name or instructor..."
           value={filters.search}
           onChange={(e) =>
             setFilters((prev) => ({
@@ -27,52 +30,54 @@ import type {
               search: e.target.value,
             }))
           }
+          aria-label="Search batches"
         />
-  
-        <select
-          value={filters.semester}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              semester: e.target.value,
-            }))
-          }
-        >
-          <option>
-            All Semesters
-          </option>
-  
-          <option>
-            Semester 1
-          </option>
-  
-          <option>
-            Semester 2
-          </option>
-        </select>
-  
-        <select
-          value={filters.batch}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              batch: e.target.value,
-            }))
-          }
-        >
-          <option>
-            All Batches
-          </option>
-  
-          <option>
-            Comp Sci 2024 - A
-          </option>
-  
-          <option>
-            Business Admin 2024
-          </option>
-        </select>
-  
       </div>
-    );
-  }
+
+      <select
+        className="analytics-filters__select"
+        value={filters.semester}
+        onChange={(e) =>
+          setFilters((prev) => ({
+            ...prev,
+            semester: e.target.value,
+          }))
+        }
+        aria-label="Filter by semester"
+      >
+        {analyticsSemesters.map((semester) => (
+          <option key={semester} value={semester}>
+            {semester}
+          </option>
+        ))}
+      </select>
+
+      <select
+        className="analytics-filters__select"
+        value={filters.department}
+        onChange={(e) =>
+          setFilters((prev) => ({
+            ...prev,
+            department: e.target.value,
+          }))
+        }
+        aria-label="Filter by department"
+      >
+        {analyticsDepartments.map((department) => (
+          <option key={department} value={department}>
+            {department}
+          </option>
+        ))}
+      </select>
+
+      <button
+        type="button"
+        className="analytics-filters__icon-btn"
+        aria-label="Reset filters"
+        onClick={onResetFilters}
+      >
+        <SlidersHorizontal size={18} />
+      </button>
+    </div>
+  );
+}

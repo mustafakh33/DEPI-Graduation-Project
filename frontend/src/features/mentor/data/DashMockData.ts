@@ -1,55 +1,169 @@
-import type { Batch } from "../types/mentor.types";
-export const batches: Batch[] = [
-    {
-      id: "batch-a",
-      name: "Batch A",
-  
-      attendance: 94.2,
-      absence: 5.8,
-  
-      students: [
-        {
-          id: 1,
-          name: "Alex Johnson",
-          major: "CS Major",
-          year: "Year 2",
-          attendanceRate: 92,
-          gpa: 3.7,
-          risk: false,
-          image: "",
-        },
-  
-        {
-          id: 2,
-          name: "Sarah Williams",
-          major: "Design Major",
-          year: "Year 1",
-          attendanceRate: 45,
-          gpa: 2.1,
-          risk: true,
-          image: "",
-        },
-  
-        {
-          id: 3,
-          name: "Michael Chen",
-          major: "Physics Major",
-          year: "Year 3",
-          attendanceRate: 88,
-          gpa: 3.9,
-          risk: false,
-          image: "",
-        },
-      ],
+import type { MentorSubject } from "../types/mentor.types";
+
+function sessionStartSoon(): string {
+  return new Date(Date.now() + 6 * 60 * 1000).toISOString();
+}
+
+export const mentorSubjects: MentorSubject[] = [
+  {
+    id: "data-structures",
+    name: "Data Structures",
+    attendance: 94.2,
+    absence: 5.8,
+    upcomingSession: {
+      id: "mentor-ds-1",
+      title: "Mentor Check-in: Trees & Graphs Review",
+      subjectName: "Data Structures",
+      startsAt: sessionStartSoon(),
+      meetingLink: "https://meet.google.com/mentor-ds-checkin",
     },
-  
-    {
-      id: "batch-b",
-      name: "Batch B",
-  
-      attendance: 90.1,
-      absence: 9.9,
-  
-      students: [],
+    students: [
+      {
+        id: 1,
+        studentId: "STU-9402",
+        name: "Alex Johnson",
+        major: "CS Major",
+        year: "Year 2",
+        attendanceRate: 96,
+        gpa: 3.9,
+        risk: false,
+      },
+      {
+        id: 2,
+        studentId: "202402",
+        name: "Sophie Turner",
+        major: "CS Major",
+        year: "Year 3",
+        attendanceRate: 98,
+        gpa: 4.0,
+        risk: false,
+      },
+      {
+        id: 3,
+        studentId: "202403",
+        name: "David Miller",
+        major: "CS Major",
+        year: "Year 2",
+        attendanceRate: 94,
+        gpa: 3.9,
+        risk: false,
+      },
+      {
+        id: 4,
+        studentId: "202404",
+        name: "Marcus Wright",
+        major: "CS Major",
+        year: "Year 1",
+        attendanceRate: 45,
+        gpa: 2.4,
+        risk: true,
+        riskReason: "Attendance: 45%",
+      },
+      {
+        id: 5,
+        studentId: "202405",
+        name: "Elena Rossi",
+        major: "CS Major",
+        year: "Year 2",
+        attendanceRate: 72,
+        gpa: 1.6,
+        risk: true,
+        riskReason: "Low Score: 32/100",
+      },
+    ],
+  },
+  {
+    id: "operating-systems",
+    name: "Operating Systems",
+    attendance: 91.5,
+    absence: 8.5,
+    upcomingSession: {
+      id: "mentor-os-1",
+      title: "Office Hours: Process Synchronization",
+      subjectName: "Operating Systems",
+      startsAt: sessionStartSoon(),
+      meetingLink: "https://meet.google.com/mentor-os-hours",
     },
-  ];
+    students: [
+      {
+        id: 6,
+        studentId: "202406",
+        name: "Isabella Garcia",
+        major: "CS Major",
+        year: "Year 3",
+        attendanceRate: 93,
+        gpa: 3.8,
+        risk: false,
+      },
+      {
+        id: 7,
+        studentId: "202407",
+        name: "Karim Nabil",
+        major: "CS Major",
+        year: "Year 2",
+        attendanceRate: 91,
+        gpa: 3.7,
+        risk: false,
+      },
+      {
+        id: 8,
+        studentId: "202408",
+        name: "Sarah Williams",
+        major: "CS Major",
+        year: "Year 1",
+        attendanceRate: 88,
+        gpa: 3.5,
+        risk: false,
+      },
+    ],
+  },
+  {
+    id: "computer-networks",
+    name: "Computer Networks",
+    attendance: 89.8,
+    absence: 10.2,
+    upcomingSession: {
+      id: "mentor-cn-1",
+      title: "Group Mentoring: Network Protocols Lab",
+      subjectName: "Computer Networks",
+      startsAt: sessionStartSoon(),
+      meetingLink: "https://meet.google.com/mentor-cn-lab",
+    },
+    students: [
+      {
+        id: 9,
+        studentId: "202409",
+        name: "Ahmed Ali",
+        major: "CS Major",
+        year: "Year 2",
+        attendanceRate: 90,
+        gpa: 3.6,
+        risk: false,
+      },
+      {
+        id: 10,
+        studentId: "202410",
+        name: "Mariam Saleh",
+        major: "CS Major",
+        year: "Year 3",
+        attendanceRate: 95,
+        gpa: 3.85,
+        risk: false,
+      },
+      {
+        id: 11,
+        studentId: "202411",
+        name: "Omar Farouk",
+        major: "CS Major",
+        year: "Year 2",
+        attendanceRate: 52,
+        gpa: 2.2,
+        risk: true,
+        riskReason: "Attendance: 52%",
+      },
+    ],
+  },
+];
+
+/** @deprecated Use mentorSubjects */
+export const batches = mentorSubjects;

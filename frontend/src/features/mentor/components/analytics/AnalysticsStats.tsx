@@ -1,49 +1,25 @@
+import type { AnalyticsStats } from "../../types/analystics.types";
+
 interface Props {
-    stats: {
-      avgAttendance: number | string;
-  
-      avgQuizGrade: string;
-  
-      avgStudyHours: number | string;
-  
-      totalActiveStudents: number;
-    };
-  }
-  
-  export default function AnalyticsStats({
-    stats,
-  }: Props) {
-    return (
-      <div className="analytics-stats">
-  
-        <div className="analytics-card">
-          <h4>Active Students</h4>
-          <h2>
-            {stats.totalActiveStudents}
-          </h2>
-        </div>
-  
-        <div className="analytics-card">
-          <h4>Avg Attendance</h4>
-          <h2>
-            {stats.avgAttendance}%
-          </h2>
-        </div>
-  
-        <div className="analytics-card">
-          <h4>Avg Quiz Grade</h4>
-          <h2>
-            {stats.avgQuizGrade}
-          </h2>
-        </div>
-  
-        <div className="analytics-card">
-          <h4>Avg Study Hours</h4>
-          <h2>
-            {stats.avgStudyHours}h
-          </h2>
-        </div>
-  
-      </div>
-    );
-  }
+  stats: AnalyticsStats;
+}
+
+export default function AnalyticsStats({ stats }: Props) {
+  return (
+    <section className="analytics-stats" aria-label="Summary statistics">
+      {stats.cards.map((card) => (
+        <article key={card.label} className="analytics-stat-card">
+          <p className="analytics-stat-card__label">{card.label}</p>
+          <div className="analytics-stat-card__row">
+            <p className="analytics-stat-card__value">{card.value}</p>
+            <span
+              className={`analytics-stat-card__delta analytics-stat-card__delta--${card.deltaVariant}`}
+            >
+              {card.delta}
+            </span>
+          </div>
+        </article>
+      ))}
+    </section>
+  );
+}

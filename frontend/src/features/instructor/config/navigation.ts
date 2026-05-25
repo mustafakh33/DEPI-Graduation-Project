@@ -1,6 +1,16 @@
+/**
+ * Instructor portal navigation.
+ *
+ * Consumed by `InstructorLayout` → `AppShellLayout` sidebar and by `AppRouter`
+ * (`roleRedirects.instructor`). Each `to` path must match a route under
+ * `/instructor/*` in `src/router/AppRouter.tsx`.
+ *
+ * @see ../README.md — full section docs (Dashboard, Courses, Students, Grades, Live Session)
+ */
 import type { NavLinkItem } from "@/components/shared/Sidebar/SidebarNavLink";
 import { navIcon } from "@/utils/navIcon";
 
+/** Post-login and logo home for the instructor role. */
 export const instructorDashboardPath = "/instructor/dashboard";
 
 export const instructorNavItems: NavLinkItem[] = [

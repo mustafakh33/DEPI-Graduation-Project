@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import type { RoadmapLesson } from "../../types/student.types";
 import CourseNode from "./CourseNode";
 import FinalProjectNode from "./FinalProjectNode";

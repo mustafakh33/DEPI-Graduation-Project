@@ -1,69 +1,77 @@
+/**
+ * Mentor Dashboard — `/mentor/dashboard`
+ *
+ * Subject tabs, search, stats, upcoming session, student grid, risk and top-performer widgets.
+ *
+ * @see ../README.md#section-dashboard
+ */
+import { Link } from "react-router-dom";
 import { useMentorDashboard } from "../hooks/useMentorDashboard";
-
-import BatchTabs from "../components/Dashboard/BatchTabs";
 import DashboardHeader from "../components/Dashboard/DashboardHeader";
 import StatsCards from "../components/Dashboard/StatsCards";
+import DashboardUpcomingSession from "../components/Dashboard/DashboardUpcomingSession";
 import StudentGrid from "../components/Dashboard/StudentGrid";
 import RiskStudents from "../components/Dashboard/RiskStudents";
 import TopPerformers from "../components/Dashboard/TopPerformers";
-
 import "../style/mentorDashboard.css";
 
 export default function MentorDashboardPage() {
   const {
-    batches,
-    selectedBatch,
-    selectedBatchId,
-    setSelectedBatchId,
+    subjects,
+    selectedSubject,
+    selectedSubjectId,
+    setSelectedSubjectId,
     students,
     topPerformers,
     riskStudents,
+    searchQuery,
+    setSearchQuery,
+    timeLeft,
+    canJoin,
+    joinSession,
   } = useMentorDashboard();
 
-  if (!selectedBatch) return null;
+  if (!selectedSubject) return null;
 
   return (
     <div className="mentor-dashboard">
-      <div className="dashboard-main">
+      <DashboardHeader
+        subjects={subjects}
+        selectedSubjectId={selectedSubjectId}
+        onSelectSubject={setSelectedSubjectId}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
-        <DashboardHeader />
+      <StatsCards
+        totalStudents={selectedSubject.students.length}
+        attendance={selectedSubject.attendance}
+        absence={selectedSubject.absence}
+      />
 
-        <BatchTabs
-          batches={batches}
-          selectedBatchId={selectedBatchId}
-          onSelect={setSelectedBatchId}
-        />
+      <DashboardUpcomingSession
+        session={selectedSubject.upcomingSession}
+        timeLeft={timeLeft}
+        canJoin={canJoin}
+        onJoin={joinSession}
+      />
 
-        <StatsCards
-          totalStudents={students.length}
-          attendance={selectedBatch.attendance}
-          absence={selectedBatch.absence}
-        />
-
-        <div className="dashboard-content">
-
-          <div className="students-section">
-
-            <div className="section-header">
-              <h2>
-                Student List - {selectedBatch.name}
-              </h2>
-            </div>
-
-            <StudentGrid students={students} />
-
+      <div className="dashboard-content">
+        <div className="students-section">
+          <div className="section-header">
+            <h2>Student List — {selectedSubject.name}</h2>
+            <Link to="/mentor/my-students" className="section-header__link">
+              View All →
+            </Link>
           </div>
 
-          <div className="side-widgets">
-
-            <RiskStudents students={riskStudents} />
-
-            <TopPerformers students={topPerformers} />
-
-          </div>
-
+          <StudentGrid students={students} />
         </div>
 
+        <div className="side-widgets">
+          <RiskStudents students={riskStudents} />
+          <TopPerformers students={topPerformers} />
+        </div>
       </div>
     </div>
   );

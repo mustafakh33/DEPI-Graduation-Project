@@ -1,5 +1,5 @@
 import { Map } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import SoloFocusBreakModal from "../components/solo-focus/SoloFocusBreakModal";
 import SoloFocusMaterialViewerModal from "../components/solo-focus/SoloFocusMaterialViewerModal";
 import SoloFocusMaterialsCard from "../components/solo-focus/SoloFocusMaterialsCard";

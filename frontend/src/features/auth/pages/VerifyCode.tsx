@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { CheckCircle2, RefreshCw, LifeBuoy, Info, ArrowLeft, ArrowRight } from "lucide-react";
 import AuthLayout from "../../../layouts/AuthLayout";
 import { Button } from "@/components/ui/button";

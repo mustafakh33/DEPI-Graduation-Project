@@ -127,20 +127,31 @@ Current behavior:
 
 ### Instructor
 
-- Dashboard
-- My Courses
-- Students
-- Grades
-- Quizzes
-- Live Session
+Full documentation: [`src/features/instructor/README.md`](src/features/instructor/README.md)
+
+| Section | Route | Summary |
+|---------|-------|---------|
+| Dashboard | `/instructor/dashboard` | Subject tabs, metrics, attendance, upcoming session (15 min join window) |
+| My Courses | `/instructor/my-courses` | Upload lecture materials and quiz files (local mock) |
+| Students | `/instructor/students`, `.../:studentId` | Roster with filters; profile with KPIs, chart, advisor notes |
+| Grades | `/instructor/grades` | Tabbed quiz / assignment / project grading |
+| Live Session | `/instructor/live-session` | Upcoming session, lectures, activity sidebar |
+
+Architecture: thin `pages/` → domain `hooks/` → `data/*.mock.ts` → `components/` + `styles/*.css`. Layout: `InstructorLayout` → `AppShellLayout`.
 
 ### Mentor
 
-- Dashboard
-- My Students
-- Chat
-- Check-Ins
-- Progress
+Full documentation: [`src/features/mentor/README.md`](src/features/mentor/README.md)
+
+| Section | Route | Summary |
+|---------|-------|---------|
+| Dashboard | `/mentor/dashboard` | Subject tabs, search, stats, student grid, risk/top widgets |
+| My Students | `/mentor/my-students`, `.../:studentId` | Roster + profile (reuses instructor student UI) |
+| My Sessions | `/mentor/my-sessions` | Study groups, logs, create session form |
+| Chat | `/mentor/chat/:studentId` | 3-column chat; notes in `localStorage` |
+| Progress | `/mentor/progress/:id` | Batch analytics table, filters, CSV export |
+
+`CheckIns` page exists but is not routed yet. Architecture matches instructor; mentor adds `utils/chatStorage.ts` and larger `sessions.css`.
 
 ### Admin
 
