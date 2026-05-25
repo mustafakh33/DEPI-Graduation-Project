@@ -1,15 +1,33 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import type { NavLinkItem } from "@/components/shared/Sidebar/SidebarNavLink";
 import Sidebar from "@/components/shared/Sidebar/Sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Modal } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { useForceDashboardTheme } from "@/hooks/useForceDashboardTheme";
 import { useAuth } from "@/hooks/useAuth";
+
+interface QuickActionItem {
+  description?: string;
+  icon: string;
+  id: string;
+  label: string;
+  onClick: () => void;
+}
+
+interface NotificationItem {
+  description?: string;
+  id: string;
+  onClick?: () => void;
+  timestamp?: string;
+  title: string;
+}
 
 export interface AppShellLayoutProps {
   links: NavLinkItem[];
@@ -23,6 +41,9 @@ export interface AppShellLayoutProps {
   sidebarUserName?: string;
   sidebarUserAvatarUrl?: string;
   showSidebarUserRole?: boolean;
+  quickActions?: QuickActionItem[];
+  notificationItems?: NotificationItem[];
+  notificationsTitle?: string;
 }
 
 const AppShellLayout: React.FC<AppShellLayoutProps> = ({
@@ -35,12 +56,18 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
   headerContent,
   showNewActionButton = true,
   sidebarUserName,
-   sidebarUserAvatarUrl,
+  sidebarUserAvatarUrl,
   showSidebarUserRole,
+  quickActions = [],
+  notificationItems = [],
+  notificationsTitle = "Notifications",
 }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   useForceDashboardTheme();
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
+  const [quickActionsOpen, setQuickActionsOpen] = React.useState(false);
+  const [notificationsOpen, setNotificationsOpen] = React.useState(false);
 
   const handleLogout = React.useCallback(() => {
     setMobileNavOpen(false);
@@ -55,8 +82,8 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
     portalSubtitle,
     userName: sidebarUserName ?? user?.name,
     userRole: user?.role,
-     userAvatarUrl: sidebarUserAvatarUrl,
-  showUserRole: showSidebarUserRole,
+    userAvatarUrl: sidebarUserAvatarUrl,
+    showUserRole: showSidebarUserRole,
     onLogout: handleLogout,
   };
 
@@ -109,15 +136,37 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-3 md:gap-4">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="border-slate-700 bg-slate-900 text-white hover:bg-slate-800 hover:text-white"
+              onClick={() => navigate("/home")}
+            >
+              <span className="material-symbols-outlined text-[18px]">home</span>
+              <span className="hidden sm:inline">Home</span>
+            </Button>
             {showNewActionButton ? (
-              <Button variant="primary" size="sm" className="font-bold">
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                className="font-bold"
+                onClick={() => setQuickActionsOpen(true)}
+              >
                 <span className="material-symbols-outlined text-[18px]">add</span>
                 <span className="hidden sm:inline">New Action</span>
               </Button>
             ) : null}
             <div className="flex h-8 items-center gap-2 pl-1 md:gap-3">
               <Separator orientation="vertical" className="h-8 bg-slate-700" decorative />
-              <Button variant="headerIcon" size="icon" aria-label="Notifications">
+              <Button
+                type="button"
+                variant="headerIcon"
+                size="icon"
+                aria-label="Notifications"
+                onClick={() => setNotificationsOpen(true)}
+              >
                 <span className="material-symbols-outlined">notifications</span>
                 <span className="absolute right-1 top-1 size-2 rounded-full bg-red-500 ring-2 ring-slate-950" />
               </Button>
@@ -145,6 +194,86 @@ const AppShellLayout: React.FC<AppShellLayoutProps> = ({
           </ScrollArea>
         </main>
       </div>
+
+      <Modal
+        open={quickActionsOpen}
+        onOpenChange={setQuickActionsOpen}
+        title="Quick actions"
+        description="Jump straight to common actions from the current dashboard."
+        contentClassName="max-w-2xl"
+      >
+        <div className="grid gap-3 md:grid-cols-2">
+          {quickActions.length > 0 ? (
+            quickActions.map((action) => (
+              <button
+                key={action.id}
+                type="button"
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left transition-colors hover:border-primary/30 hover:bg-primary/5 dark:border-slate-800 dark:bg-slate-950/50 dark:hover:bg-primary/10"
+                onClick={() => {
+                  setQuickActionsOpen(false);
+                  action.onClick();
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    <span className="material-symbols-outlined text-[20px]">{action.icon}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">{action.label}</p>
+                    {action.description ? (
+                      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                        {action.description}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              </button>
+            ))
+          ) : (
+            <Card className="rounded-2xl border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-400 md:col-span-2">
+              No quick actions were configured for this area yet.
+            </Card>
+          )}
+        </div>
+      </Modal>
+
+      <Modal
+        open={notificationsOpen}
+        onOpenChange={setNotificationsOpen}
+        title={notificationsTitle}
+        description="Recent updates related to this workspace."
+        contentClassName="max-w-2xl"
+      >
+        <div className="space-y-3">
+          {notificationItems.length > 0 ? (
+            notificationItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className="block w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left transition-colors hover:border-primary/30 hover:bg-primary/5 dark:border-slate-800 dark:bg-slate-950/50 dark:hover:bg-primary/10"
+                onClick={() => {
+                  setNotificationsOpen(false);
+                  item.onClick?.();
+                }}
+              >
+                <p className="font-semibold text-slate-900 dark:text-slate-100">{item.title}</p>
+                {item.description ? (
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    {item.description}
+                  </p>
+                ) : null}
+                {item.timestamp ? (
+                  <p className="mt-2 text-xs text-slate-400">{item.timestamp}</p>
+                ) : null}
+              </button>
+            ))
+          ) : (
+            <Card className="rounded-2xl border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-400">
+              No notifications right now.
+            </Card>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -1,245 +1,427 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Modal } from "@/components/ui/dialog";
+import AdminStatCard from "@/features/admin/components/shared/AdminStatCard";
+import AdminStatusBadge from "@/features/admin/components/shared/AdminStatusBadge";
+import UserFormDialog from "@/features/admin/components/users/UserFormDialog";
+import { useAdminPortal } from "@/features/admin/context/AdminPortalContext";
+import type { ManagedUser, ManagedUserDraft } from "@/features/admin/types/admin.types";
+import { useAuth } from "@/hooks/useAuth";
+
+const emptyUserForm: ManagedUserDraft = {
+  name: "",
+  email: "",
+  phone: "",
+  role: "student",
+  status: "active",
+  notes: "",
+  batchIds: [],
+  courseIds: [],
+  cvFileName: "",
+  cvUploadedAt: null,
+  cvReviewStatus: "not_required",
+};
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((part) => part.charAt(0))
+    .join("")
+    .toUpperCase();
+}
 
 const Users: React.FC = () => {
-  const [filterOpen, setFilterOpen] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { user: currentUser, switchRole } = useAuth();
+  const {
+    users,
+    batches,
+    courses,
+    saveUser,
+    deleteUser,
+    toggleUserStatus,
+    reviewInstructorCv,
+    getUserAssignments,
+  } = useAdminPortal();
+
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [form, setForm] = useState<ManagedUserDraft>(emptyUserForm);
+
+  const filteredUsers = users.filter((managedUser) => {
+    const query = search.trim().toLowerCase();
+    const matchesQuery =
+      query.length === 0 ||
+      managedUser.name.toLowerCase().includes(query) ||
+      managedUser.email.toLowerCase().includes(query) ||
+      managedUser.phone.toLowerCase().includes(query);
+    const matchesRole = roleFilter === "all" || managedUser.role === roleFilter;
+    const matchesStatus = statusFilter === "all" || managedUser.status === statusFilter;
+
+    return matchesQuery && matchesRole && matchesStatus;
+  });
+
+  const openCreateDialog = () => {
+    setForm(emptyUserForm);
+    setDialogOpen(true);
+  };
+
+  useEffect(() => {
+    if (searchParams.get("action") !== "create") {
+      return;
+    }
+
+    openCreateDialog();
+    setSearchParams({});
+  }, [searchParams, setSearchParams]);
+
+  const openEditDialog = (managedUser: ManagedUser) => {
+    const assignments = getUserAssignments(managedUser.id);
+    setForm({
+      id: managedUser.id,
+      name: managedUser.name,
+      email: managedUser.email,
+      phone: managedUser.phone,
+      role: managedUser.role,
+      status: managedUser.status,
+      notes: managedUser.notes,
+      batchIds: assignments.batchIds,
+      courseIds: assignments.courseIds,
+      cvFileName: managedUser.cvFileName,
+      cvUploadedAt: managedUser.cvUploadedAt,
+      cvReviewStatus: managedUser.cvReviewStatus,
+    });
+    setDialogOpen(true);
+  };
+
+  const handleSave = () => {
+    if (!form.name.trim() || !form.email.trim()) {
+      return;
+    }
+
+    if (form.role === "instructor" && !form.cvFileName.trim()) {
+      return;
+    }
+
+    saveUser(form);
+    setDialogOpen(false);
+    setForm(emptyUserForm);
+  };
+
+  const activeUsers = users.filter((managedUser) => managedUser.status === "active").length;
+  const pendingUsers = users.filter((managedUser) => managedUser.status === "pending").length;
+  const adminUsers = users.filter((managedUser) => managedUser.role === "admin").length;
+  const pendingInstructorCvReviews = users.filter(
+    (managedUser) => managedUser.role === "instructor" && managedUser.cvReviewStatus === "pending",
+  ).length;
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-      {/* Page Title Area */}
-      <div className="flex flex-col gap-4 p-4 sm:p-6 md:flex-row md:items-end md:justify-between md:p-8">
+    <div className="space-y-6">
+      <section className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h2 className="mb-2 text-2xl font-black tracking-tight sm:text-3xl">User Management</h2>
-          <p className="text-slate-500 dark:text-slate-400 max-w-xl">
-            Manage university instructors, mentors, and their assigned batches. Overview of active faculty and administrative access.
+          <h1 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">
+            User management
+          </h1>
+          <p className="mt-2 max-w-3xl text-sm text-slate-500 dark:text-slate-400">
+            Add admins, instructors, mentors, and students. Assign batches and courses from
+            here, then preview any role when needed.
           </p>
         </div>
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
-          <Button variant="outline" className="justify-center gap-2">
-            <span className="material-symbols-outlined text-sm">download</span>
-            Export Data
+        <div className="flex flex-wrap gap-3">
+          <Button type="button" variant="outline" onClick={() => navigate("/admin/batches")}>
+            <span className="material-symbols-outlined text-[18px]">hub</span>
+            Manage batches
           </Button>
-          <Button type="button" variant="outline" className="justify-center gap-2" onClick={() => setFilterOpen(true)}>
-            <span className="material-symbols-outlined text-sm">filter_list</span>
-            Filter
+          <Button type="button" variant="primary" onClick={openCreateDialog}>
+            <span className="material-symbols-outlined text-[18px]">person_add</span>
+            Add account
           </Button>
         </div>
-      </div>
+      </section>
 
-      {/* Table Container */}
-      <div className="px-4 pb-6 sm:px-6 md:px-8 md:pb-8">
-        <Card className="overflow-hidden">
-          <div className="overflow-x-auto custom-scrollbar">
-            <table className="w-full min-w-[900px] border-collapse text-left xl:min-w-[1000px]">
-              <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800/50">
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Name</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Email</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Phone Number</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Role</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Assigned Batches</th>
-                  <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-                {/* Row 1 */}
-                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="size-9 bg-primary/10 text-primary">
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold">AS</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium text-slate-900 dark:text-slate-100">Dr. Alice Smith</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">alice.s@unihub.edu</td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0101</td>
-                  <td className="px-6 py-4">
-                    <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
-                      Instructor
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">CS101, CS202</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-primary">
-                      <span className="material-symbols-outlined">edit</span>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="ml-2 h-8 w-8 text-slate-400 hover:text-red-500">
-                      <span className="material-symbols-outlined">delete</span>
-                    </Button>
-                  </td>
-                </tr>
-                {/* Row 2 */}
-                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="size-9 bg-emerald-500/10 text-emerald-500">
-                        <AvatarFallback className="bg-emerald-500/10 text-emerald-500 font-bold">MJ</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium text-slate-900 dark:text-slate-100">Mark Johnson</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">mark.j@unihub.edu</td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0102</td>
-                  <td className="px-6 py-4">
-                    <Badge variant="outline" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-500">
-                      Mentor
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">UX Design A</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-primary">
-                      <span className="material-symbols-outlined">edit</span>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="ml-2 h-8 w-8 text-slate-400 hover:text-red-500">
-                      <span className="material-symbols-outlined">delete</span>
-                    </Button>
-                  </td>
-                </tr>
-                {/* Row 3 */}
-                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="size-9 bg-primary/10 text-primary">
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold">RC</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium text-slate-900 dark:text-slate-100">Dr. Robert Chen</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">r.chen@unihub.edu</td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0103</td>
-                  <td className="px-6 py-4">
-                    <Badge variant="outline" className="border-primary/20 bg-primary/10 text-primary">
-                      Instructor
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Data Science 1</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-primary">
-                      <span className="material-symbols-outlined">edit</span>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="ml-2 h-8 w-8 text-slate-400 hover:text-red-500">
-                      <span className="material-symbols-outlined">delete</span>
-                    </Button>
-                  </td>
-                </tr>
-                {/* Row 4 */}
-                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="size-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">SW</div>
-                      <span className="font-medium text-slate-900 dark:text-slate-100">Sarah Williams</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">sarah.w@unihub.edu</td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0104</td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                      Mentor
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">CS101, UX Design B</td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="text-slate-400 hover:text-primary transition-colors">
-                      <span className="material-symbols-outlined">edit</span>
-                    </button>
-                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
-                      <span className="material-symbols-outlined">delete</span>
-                    </button>
-                  </td>
-                </tr>
-                {/* Row 5 */}
-                <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">DT</div>
-                      <span className="font-medium text-slate-900 dark:text-slate-100">David Thompson</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">d.thompson@unihub.edu</td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">+1 555-0105</td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                      Instructor
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Algorithms 101</td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="text-slate-400 hover:text-primary transition-colors">
-                      <span className="material-symbols-outlined">edit</span>
-                    </button>
-                    <button className="text-slate-400 hover:text-red-500 ml-2 transition-colors">
-                      <span className="material-symbols-outlined">delete</span>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          {/* Pagination */}
-          <div className="flex flex-col gap-3 border-t border-slate-200 px-4 py-4 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <p className="text-sm text-slate-500 dark:text-slate-400">Showing 1-5 of 124 users</p>
-            <div className="flex flex-wrap items-center gap-1">
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
-                <span className="material-symbols-outlined">chevron_left</span>
-              </Button>
-              <Button variant="primary" size="icon" className="h-8 w-8 text-sm font-bold">1</Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-sm text-slate-600 dark:text-slate-400">2</Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-sm text-slate-600 dark:text-slate-400">3</Button>
-              <span className="px-2 text-slate-400">...</span>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-sm text-slate-600 dark:text-slate-400">25</Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400">
-                <span className="material-symbols-outlined">chevron_right</span>
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <AdminStatCard
+          title="Accounts"
+          value={users.length}
+          hint="Every role is managed from this screen"
+          icon="groups"
+        />
+        <AdminStatCard
+          title="Active"
+          value={activeUsers}
+          hint="Users currently enabled to access the platform"
+          icon="verified_user"
+        />
+        <AdminStatCard
+          title="Pending"
+          value={pendingUsers}
+          hint="Accounts waiting for approval or activation"
+          icon="hourglass_top"
+        />
+        <AdminStatCard
+          title="Admins"
+          value={adminUsers}
+          hint="Full-access operators for the portal"
+          icon="shield_person"
+        />
+        <AdminStatCard
+          title="CV reviews"
+          value={pendingInstructorCvReviews}
+          hint="Instructor accounts waiting for CV approval"
+          icon="description"
+        />
+      </section>
 
-      {/* Footer Stats */}
-      <div className="grid grid-cols-1 gap-4 px-4 pb-6 sm:px-6 md:grid-cols-3 md:gap-6 md:px-8 md:pb-8">
-        <Card className="rounded-xl border-primary/20 bg-primary/5 p-4 dark:bg-primary/10 sm:p-6">
-          <h3 className="text-sm font-semibold text-primary mb-1 uppercase tracking-wider">Total Faculty</h3>
-          <div className="flex items-center justify-between">
-            <span className="text-3xl font-black">124</span>
-            <span className="material-symbols-outlined text-primary opacity-50 text-4xl">diversity_3</span>
+      <Card className="rounded-2xl border-slate-200 bg-white/95 p-5 dark:border-slate-800 dark:bg-slate-900/70">
+        <div className="grid gap-3 lg:grid-cols-[1.2fr_0.4fr_0.4fr_auto]">
+          <label className="space-y-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+            Search
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search by name, email, or phone"
+              className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            />
+          </label>
+          <label className="space-y-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+            Role
+            <select
+              value={roleFilter}
+              onChange={(event) => setRoleFilter(event.target.value)}
+              className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            >
+              <option value="all">All roles</option>
+              <option value="admin">Admin</option>
+              <option value="instructor">Instructor</option>
+              <option value="mentor">Mentor</option>
+              <option value="student">Student</option>
+            </select>
+          </label>
+          <label className="space-y-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+            Status
+            <select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+              className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none focus:border-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+            >
+              <option value="all">All statuses</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </label>
+          <div className="flex items-end">
+            <Button type="button" variant="outline" className="w-full" onClick={() => {
+              setSearch("");
+              setRoleFilter("all");
+              setStatusFilter("all");
+            }}>
+              Reset filters
+            </Button>
           </div>
-        </Card>
-        <Card className="rounded-xl border-emerald-500/20 bg-emerald-500/5 p-4 dark:bg-emerald-500/10 sm:p-6">
-          <h3 className="text-sm font-semibold text-emerald-500 mb-1 uppercase tracking-wider">Active Mentors</h3>
-          <div className="flex items-center justify-between">
-            <span className="text-3xl font-black">48</span>
-            <span className="material-symbols-outlined text-emerald-500 opacity-50 text-4xl">psychology</span>
-          </div>
-        </Card>
-        <Card className="rounded-xl border-slate-500/20 bg-slate-500/5 p-4 dark:bg-slate-500/10 sm:p-6">
-          <h3 className="text-sm font-semibold text-slate-500 mb-1 uppercase tracking-wider">Pending Approvals</h3>
-          <div className="flex items-center justify-between">
-            <span className="text-3xl font-black">09</span>
-            <span className="material-symbols-outlined text-slate-500 opacity-50 text-4xl">pending_actions</span>
-          </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
 
-      <Modal
-        open={filterOpen}
-        onOpenChange={setFilterOpen}
-        title="Filter users"
-        description="Narrow the list by role, batch, or status. Connect fields to your API when ready."
-        footer={
-          <Button type="button" variant="primary" onClick={() => setFilterOpen(false)}>
-            Done
-          </Button>
-        }
-      >
-        <p className="text-sm text-slate-600 dark:text-slate-300">
-          Placeholder: filter controls will go here.
-        </p>
-      </Modal>
+      <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white/95 dark:border-slate-800 dark:bg-slate-900/70">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1260px] border-collapse text-left">
+            <thead className="bg-slate-50/90 text-xs uppercase tracking-[0.22em] text-slate-500 dark:bg-slate-950/60 dark:text-slate-400">
+              <tr>
+                <th className="px-5 py-4">User</th>
+                <th className="px-5 py-4">Role</th>
+                <th className="px-5 py-4">Contact</th>
+                <th className="px-5 py-4">Batches</th>
+                <th className="px-5 py-4">Courses</th>
+                <th className="px-5 py-4">CV review</th>
+                <th className="px-5 py-4">Status</th>
+                <th className="px-5 py-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+              {filteredUsers.map((managedUser) => {
+                const assignments = getUserAssignments(managedUser.id);
+                const assignedBatches = batches.filter((batch) => assignments.batchIds.includes(batch.id));
+                const assignedCourses = courses.filter((course) => assignments.courseIds.includes(course.id));
+                const isCurrentAdmin = currentUser?.id === managedUser.id;
+
+                return (
+                  <tr
+                    key={managedUser.id}
+                    className="align-top transition-colors hover:bg-slate-50/70 dark:hover:bg-slate-950/40"
+                  >
+                    <td className="px-5 py-4">
+                      <div className="flex items-start gap-3">
+                        <Avatar className="size-11 bg-primary/10 text-primary">
+                          <AvatarFallback className="bg-primary/10 font-bold text-primary">
+                            {initials(managedUser.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-semibold text-slate-900 dark:text-slate-100">
+                            {managedUser.name}
+                          </p>
+                          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            Last active {new Date(managedUser.lastActiveAt).toLocaleString()}
+                          </p>
+                          {managedUser.notes ? (
+                            <p className="mt-2 max-w-sm text-xs text-slate-500 dark:text-slate-400">
+                              {managedUser.notes}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <AdminStatusBadge value={managedUser.role} label={managedUser.role} />
+                    </td>
+                    <td className="px-5 py-4 text-sm text-slate-600 dark:text-slate-300">
+                      <p>{managedUser.email}</p>
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        {managedUser.phone}
+                      </p>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex max-w-xs flex-wrap gap-2">
+                        {assignedBatches.length > 0 ? (
+                          assignedBatches.map((batch) => (
+                            <span
+                              key={batch.id}
+                              className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                            >
+                              {batch.code}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs text-slate-400">No batch assignment</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex max-w-xs flex-wrap gap-2">
+                        {assignedCourses.length > 0 ? (
+                          assignedCourses.map((course) => (
+                            <span
+                              key={course.id}
+                              className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary"
+                            >
+                              {course.title}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs text-slate-400">No course assignment</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      {managedUser.role === "instructor" ? (
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                            {managedUser.cvFileName || "Missing CV"}
+                          </p>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <AdminStatusBadge value={managedUser.cvReviewStatus} />
+                            {managedUser.cvUploadedAt ? (
+                              <span className="text-xs text-slate-500 dark:text-slate-400">
+                                {new Date(managedUser.cvUploadedAt).toLocaleDateString()}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      ) : (
+                        <AdminStatusBadge value="not_required" />
+                      )}
+                    </td>
+                    <td className="px-5 py-4">
+                      <AdminStatusBadge value={managedUser.status} />
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex justify-end gap-2">
+                        {managedUser.role === "instructor" ? (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              disabled={managedUser.cvReviewStatus === "approved" || !managedUser.cvFileName}
+                              onClick={() => reviewInstructorCv(managedUser.id, "approved")}
+                            >
+                              Accept CV
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              disabled={managedUser.cvReviewStatus === "rejected" || !managedUser.cvFileName}
+                              onClick={() => reviewInstructorCv(managedUser.id, "rejected")}
+                            >
+                              Reject CV
+                            </Button>
+                          </>
+                        ) : null}
+                        <Button type="button" variant="outline" size="sm" onClick={() => openEditDialog(managedUser)}>
+                          Edit
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => toggleUserStatus(managedUser.id)}
+                        >
+                          {managedUser.status === "active" ? "Disable" : "Enable"}
+                        </Button>
+                        {managedUser.role !== "admin" ? (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              if (currentUser?.role !== "admin") {
+                                switchRole(managedUser.role);
+                              }
+                              navigate(`/${managedUser.role}/dashboard`);
+                            }}
+                          >
+                            Preview
+                          </Button>
+                        ) : null}
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          disabled={isCurrentAdmin}
+                          onClick={() => deleteUser(managedUser.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      <UserFormDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        form={form}
+        onChange={setForm}
+        onSubmit={handleSave}
+        users={users}
+        batches={batches}
+        courses={courses}
+        title={form.id ? "Edit account" : "Create account"}
+        submitLabel={form.id ? "Save changes" : "Create account"}
+      />
     </div>
   );
 };

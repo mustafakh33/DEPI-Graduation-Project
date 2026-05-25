@@ -1,19 +1,19 @@
-import { useNavigate } from "react-router-dom";
 import {
   studentDashboardPath,
   studentNavItems,
 } from "@/features/student/config/navigation";
 import StudentHeader from "@/features/student/components/layout/StudentHeader";
 import { useStudentDashboard } from "@/features/student/hooks/useStudentDashboard";
+import { useLogout } from "@/hooks/useLogout";
 import AppShellLayout from "@/layouts/AppShellLayout";
 
 const StudentLayout = () => {
   const dashboard = useStudentDashboard();
-  const navigate = useNavigate();
+  const logout = useLogout();
 
   const handleLogout = () => {
     localStorage.removeItem("student-profile-avatar");
-    navigate("/login");
+    logout();
   };
 
   return (

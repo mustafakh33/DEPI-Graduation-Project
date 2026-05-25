@@ -4,11 +4,13 @@ import {
   Clock,
   Coffee,
   FileText,
+  House,
   LogIn,
   Sparkles,
   Video,
   X,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import type { StudentStats } from "../../types/student.types";
 import StudentTopStats from "./StudentTopStats";
@@ -117,6 +119,7 @@ const saveStoredNotifications = (notifications: StudentNotification[]) => {
 };
 
 const StudentHeader = ({ stats }: StudentHeaderProps) => {
+  const navigate = useNavigate();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [storedNotifications, setStoredNotifications] = useState<
     StudentNotification[]
@@ -199,7 +202,17 @@ const StudentHeader = ({ stats }: StudentHeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-end border-b border-border bg-background px-4 md:px-8">
+    <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background px-4 md:px-8">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="border-slate-700 bg-slate-900 text-white hover:bg-slate-800 hover:text-white"
+        onClick={() => navigate("/home")}
+      >
+        <House className="size-4" />
+        <span>Home</span>
+      </Button>
       <div className="flex items-center gap-4">
         <StudentTopStats stats={stats} />
 

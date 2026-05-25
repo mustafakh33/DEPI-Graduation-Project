@@ -10,7 +10,15 @@ interface RoleGuardProps {
 
 const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles }) => {
   const { user } = useAuth();
-  if (!user || !allowedRoles.includes(user.role)) {
+  if (!user) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  if (user.role === "admin") {
+    return <Outlet />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
     return <Navigate to="/unauthorized" replace />;
   }
   return <Outlet />;
